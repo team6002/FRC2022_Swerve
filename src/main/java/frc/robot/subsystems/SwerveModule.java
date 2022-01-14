@@ -27,7 +27,7 @@ public class SwerveModule {
   private static final double kDriveD = 0.1;
   private static final double kDriveF = 0.2;
 
-  private static final double kAngleP = 0.005;
+  private static final double kAngleP = 0.0; //0.005;
   private static final double kAngleI = 0.0;
   private static final double kAngleD = 0.0;
 
@@ -44,19 +44,20 @@ public class SwerveModule {
   private final SparkMaxPIDController m_drivePIDController;
   private final SparkMaxPIDController m_turningPIDController;
  
-  private final AnalogInput m_analogSensor;
+  private final  SparkMaxAnalogSensor m_analogSensor;
 
-  private double m_turningEncoderOffset = 15;
-
-
+  private double m_turningEncoderOffset = 0.0;//15;
+  
   public SwerveModule(
       int driveMotorChannel,
-      int turningMotorChannel) {
+      int turningMotorChannel,
+      double turningOffset) {
 
     m_turningMotorChannel = turningMotorChannel;    
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_driveMotor.setInverted(true);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+    m_turningEncoderOffset = turningOffset;
 
 
      /**
@@ -77,7 +78,7 @@ public class SwerveModule {
     m_turningEncoder.setPositionConversionFactor(22.5);
 
     m_analogSensor = m_turningMotor.getAnalog(SparkMaxAnalogSensor.Mode.kAbsolute);
-   // m_analogSensor.setInverted(true);
+    m_analogSensor.setInverted(true);
     m_analogSensor.setPositionConversionFactor(109.091);
 
     m_turningPIDController = m_turningMotor.getPIDController();
@@ -119,19 +120,25 @@ public class SwerveModule {
   public double getAngle() {
     // Note: This assumes the CANCoders are setup with the default feedback coefficient
     // and the sesnor value reports degrees.
-    // double angleEnc = ((m_turningEncoder.getPosition() - m_turningEncoderOffset) % 360);
-    // if (angleEnc > 180) angleEnc-=360;
+    double angleEnc = ((m_turningEncoder.getPosition() - m_turningEncoderOffset) % 360);
+    if (angleEnc > 180) angleEnc-=360;
     
-    double angle = getAbsAngle();
-    angle -= m_turningEncoderOffset;
-    if (angle > 180) angle -= 360;
+    //double angle = getAbsAngle();
+    //angle -= m_turningEncoderOffset;
+    // if (angle > 180) angle -= 360;
 
-    // SmartDashboard.putNumber("turnRaw:"+m_turningMotorChannel, m_turningEncoder.getPosition());
-    // SmartDashboard.putNumber("turnEnc:"+m_turningMotorChannel, angleEnc);
-    SmartDashboard.putNumber("turnAbs:"+m_turningMotorChannel, angle);
-    // SmartDashboard.putNumber("turnOff:"+m_turningMotorChannel, m_turningEncoderOffset);
+    SmartDashboard.putNumber("turnRaw:"+m_turningMotorChannel, m_turningEncoder.getPosition());
+    SmartDashboard.putNumber("turnEnc:"+m_turningMotorChannel, angleEnc);
+    // SmartDashboard.putNumber("turnAbs:"+m_turningMotorChannel, angle);
+    SmartDashboard.putNumber("turnOff:"+m_turningMotorChannel, m_turningEncoderOffset);
     
-    return angle;
+    return angleEnc;
+  }
+  /**
+   * Resets the realtive encoder to the absolute encoder.
+   */
+  public void resetAngle() {
+    m_turningEncoder.setPosition(getAbsAngle());
   }
 
   public void setAngle(Rotation2d rotation, Rotation2d currentRotation) {

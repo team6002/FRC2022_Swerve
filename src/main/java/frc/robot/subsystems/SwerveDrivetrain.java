@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Constants;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -40,10 +41,10 @@ public class SwerveDrivetrain extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(11.75));
   private final Translation2d m_backRightLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(-11.75));
 
-  private final SwerveModule m_frontLeft = new SwerveModule(1, 2);
-  private final SwerveModule m_frontRight = new SwerveModule(3, 4);
-  private final SwerveModule m_backLeft = new SwerveModule(5, 6);
-  private final SwerveModule m_backRight = new SwerveModule(7, 8);
+  private final SwerveModule m_frontLeft = new SwerveModule(1, 2, Constants.k_frontLeftOffset);
+  private final SwerveModule m_frontRight = new SwerveModule(3, 4, Constants.k_frontRightOffset);
+  private final SwerveModule m_backLeft = new SwerveModule(5, 6, Constants.k_backLeftOffset);
+  private final SwerveModule m_backRight = new SwerveModule(7, 8, Constants.k_backRightOffset);
 
   // private final AnalogGyro m_gyro = new AnalogGyro(0);
   private AHRS m_gyro = new AHRS(Port.kMXP);
@@ -57,6 +58,13 @@ public class SwerveDrivetrain extends SubsystemBase {
 
   public SwerveDrivetrain() {
     m_gyro.reset(); 
+  }
+
+  public void resetAllOffsets() {
+    m_frontLeft.resetAngle();
+    m_frontRight.resetAngle();
+    m_backLeft.resetAngle();
+    m_backRight.resetAngle();
   }
 
     /**
