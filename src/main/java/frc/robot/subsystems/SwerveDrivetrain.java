@@ -11,7 +11,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
-
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.I2C.Port;
 
@@ -41,14 +40,15 @@ public class SwerveDrivetrain extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(11.75));
   private final Translation2d m_backRightLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(-11.75));
 
-  private final SwerveModule m_frontLeft = new SwerveModule(1, 2, Constants.k_frontLeftOffset);
-  private final SwerveModule m_frontRight = new SwerveModule(3, 4, Constants.k_frontRightOffset);
-  private final SwerveModule m_backLeft = new SwerveModule(5, 6, Constants.k_backLeftOffset);
-  private final SwerveModule m_backRight = new SwerveModule(7, 8, Constants.k_backRightOffset);
+  private final SwerveModule m_frontLeft = new SwerveModule(1, 2, Constants.k_frontLeftOffset, false);
+  private final SwerveModule m_frontRight = new SwerveModule(3, 4, Constants.k_frontRightOffset, false);
+  private final SwerveModule m_backLeft = new SwerveModule(5, 6, Constants.k_backLeftOffset, true);
+  private final SwerveModule m_backRight = new SwerveModule(7, 8, Constants.k_backRightOffset, false);
 
+  private double EvasiveX = 0;
+  private double EvasiveY = 0;
   // private final AnalogGyro m_gyro = new AnalogGyro(0);
-  private AHRS m_gyro = new AHRS(Port.kMXP);
-
+  private AHRS m_gyro = new AHRS(Port.kMXP); 
   private final SwerveDriveKinematics m_kinematics =
       new SwerveDriveKinematics(
           m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
@@ -81,7 +81,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         m_kinematics.toSwerveModuleStates(
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
-                : new ChassisSpeeds(xSpeed, ySpeed, rot));
+                : new ChassisSpeeds(xSpeed, ySpeed, rot), new Translation2d(EvasiveX,EvasiveY));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
@@ -89,6 +89,18 @@ public class SwerveDrivetrain extends SubsystemBase {
     m_backRight.setDesiredState(swerveModuleStates[3]);
   }
 
+  public void LeftEvasive(){
+    EvasiveX = Constants.k_LeftEvasiveX;
+    EvasiveY = Constants.k_LeftEvasiveY;
+  }
+  public void RightEvasive(){
+    EvasiveX = Constants.k_RightEvasiveX;
+    EvasiveY = Constants.k_RightEvasiveY;
+  }
+  public void NonEvasive(){
+    EvasiveX = 0;
+    EvasiveY = 0;
+  }
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     m_odometry.update(

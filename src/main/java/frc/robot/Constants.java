@@ -15,9 +15,20 @@ package frc.robot;
 
 
 public final class Constants {
-    public static double k_frontLeftOffset = 15;
-    public static double k_backLeftOffset = 40;
-    public static double k_frontRightOffset = 15;
-    public static double k_backRightOffset = 164;
-
+    public static double k_frontLeftOffset = 0;   // 15;
+    public static double k_backLeftOffset = 0;//40;
+    public static double k_frontRightOffset = 0;
+    public static double k_backRightOffset = 0;// 164;
+    public static double k_LeftEvasiveX = 0.0635;
+    public static double k_LeftEvasiveY = 0.6477;
+    public static double k_RightEvasiveX = 0.6477;
+    public static double k_RightEvasiveY = -0.0635;
+    /**
+     * Gear Ratios for Swerve
+     * Turning: 16-1
+     * Drive  : 5-1
+     * 
+     * Position Conversion Factor
+     * 360/16 = 22.5
+     */
 }

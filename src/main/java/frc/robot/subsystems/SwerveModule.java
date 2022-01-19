@@ -16,7 +16,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAnalogSensor;
-import com.revrobotics.AnalogInput;
+// import com.revrobotics.AnalogInput;
 import com.revrobotics.SparkMaxPIDController;
 
 public class SwerveModule {
@@ -27,7 +27,7 @@ public class SwerveModule {
   private static final double kDriveD = 0.1;
   private static final double kDriveF = 0.2;
 
-  private static final double kAngleP = 0.0; //0.005;
+  private static final double kAngleP = 0.005;
   private static final double kAngleI = 0.0;
   private static final double kAngleD = 0.0;
 
@@ -45,17 +45,18 @@ public class SwerveModule {
   private final SparkMaxPIDController m_turningPIDController;
  
   private final  SparkMaxAnalogSensor m_analogSensor;
-
+  // private final boolean m_driveDirection;
   private double m_turningEncoderOffset = 0.0;//15;
   
   public SwerveModule(
       int driveMotorChannel,
       int turningMotorChannel,
-      double turningOffset) {
+      double turningOffset,
+      boolean driveDirection ) {
 
     m_turningMotorChannel = turningMotorChannel;    
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
-    m_driveMotor.setInverted(true);
+    m_driveMotor.setInverted(driveDirection);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
     m_turningEncoderOffset = turningOffset;
 
@@ -123,13 +124,13 @@ public class SwerveModule {
     double angleEnc = ((m_turningEncoder.getPosition() - m_turningEncoderOffset) % 360);
     if (angleEnc > 180) angleEnc-=360;
     
-    //double angle = getAbsAngle();
-    //angle -= m_turningEncoderOffset;
-    // if (angle > 180) angle -= 360;
+    double angle = getAbsAngle();
+    angle -= m_turningEncoderOffset;
+    if (angle > 180) angle -= 360;
 
     SmartDashboard.putNumber("turnRaw:"+m_turningMotorChannel, m_turningEncoder.getPosition());
     SmartDashboard.putNumber("turnEnc:"+m_turningMotorChannel, angleEnc);
-    // SmartDashboard.putNumber("turnAbs:"+m_turningMotorChannel, angle);
+    SmartDashboard.putNumber("turnAbs:"+m_turningMotorChannel, angle);
     SmartDashboard.putNumber("turnOff:"+m_turningMotorChannel, m_turningEncoderOffset);
     
     return angleEnc;
