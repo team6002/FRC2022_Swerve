@@ -7,11 +7,12 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SUB_Navx extends SubsystemBase {
   /** Creates a new SUB_Navx. */
-  AHRS NavxGyro = new AHRS(Port.kMXP);
+  private AHRS NavxGyro = new AHRS(Port.kMXP);
   public SUB_Navx() {
   
   
@@ -21,5 +22,20 @@ public class SUB_Navx extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("NavxGyroAngle",NavxGyro.getAngle());
     // This method will be called once per scheduler run
+  
   }
+
+  public double getAngle(){
+      return NavxGyro.getAngle();
+  }
+  
+  public Rotation2d getRotation2d(){
+    return NavxGyro.getRotation2d();
+  }
+
+  public void resetNavx(){
+    NavxGyro.reset();
+  }
+
+
 }

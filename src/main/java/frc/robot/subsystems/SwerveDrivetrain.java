@@ -4,16 +4,16 @@
 
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.I2C.Port;
-
 
 
 
@@ -41,30 +41,32 @@ public class SwerveDrivetrain extends SubsystemBase {
   private final Translation2d m_backRightLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(-11.75));
 
   private final SwerveModule m_frontLeft = new SwerveModule(1, 2, Constants.k_frontLeftOffset, false);
-  private final SwerveModule m_frontRight = new SwerveModule(3, 4, Constants.k_frontRightOffset, false);
+  private final SwerveModule m_frontRight = new SwerveModule(3, 4, Constants.k_frontRightOffset, true);
   private final SwerveModule m_backLeft = new SwerveModule(5, 6, Constants.k_backLeftOffset, true);
   private final SwerveModule m_backRight = new SwerveModule(7, 8, Constants.k_backRightOffset, false);
 
+  private final SUB_Navx m_Navx = new SUB_Navx();   
   private double EvasiveX = 0;
   private double EvasiveY = 0;
-  // private final AnalogGyro m_gyro = new AnalogGyro(0);
-  private AHRS m_gyro = new AHRS(Port.kMXP); 
-  private final SwerveDriveKinematics m_kinematics =
+  private boolean fieldMode = false;
+
+  public final SwerveDriveKinematics m_kinematics =
       new SwerveDriveKinematics(
           m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-  private final SwerveDriveOdometry m_odometry =
-      new SwerveDriveOdometry(m_kinematics, m_gyro.getRotation2d());
+  public final SwerveDriveOdometry m_odometry =
+      new SwerveDriveOdometry(m_kinematics, m_Navx.getRotation2d());
 
   public SwerveDrivetrain() {
-    m_gyro.reset(); 
+    m_Navx.resetNavx(); 
+    syncAllAngles();
   }
-
-  public void resetAllOffsets() {
-    m_frontLeft.resetAngle();
-    m_frontRight.resetAngle();
-    m_backLeft.resetAngle();
-    m_backRight.resetAngle();
+  
+  public void syncAllAngles() {
+    m_frontLeft.syncAngle();
+    m_frontRight.syncAngle();
+    m_backLeft.syncAngle();
+    m_backRight.syncAngle();
   }
 
     /**
@@ -80,13 +82,30 @@ public class SwerveDrivetrain extends SubsystemBase {
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_Navx.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot), new Translation2d(EvasiveX,EvasiveY));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
+  }
+  
+  public void setModuleStates(SwerveModuleState[] desiredStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        desiredStates, kMaxSpeed);
+    m_frontLeft.setDesiredState(desiredStates[0]);
+    m_frontRight.setDesiredState(desiredStates[1]);
+    m_backLeft.setDesiredState(desiredStates[2]);
+    m_backRight.setDesiredState(desiredStates[3]);
+  }
+  
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    m_odometry.resetPosition(pose, m_Navx.getRotation2d());
   }
 
   public void LeftEvasive(){
@@ -104,19 +123,29 @@ public class SwerveDrivetrain extends SubsystemBase {
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     m_odometry.update(
-        m_gyro.getRotation2d(),
+        m_Navx.getRotation2d(),
         m_frontLeft.getState(),
         m_frontRight.getState(),
         m_backLeft.getState(),
         m_backRight.getState());
   }
 
+  public void fieldModeChange(){
+    fieldMode = !fieldMode;
+  }
+
+  public boolean getFieldMode(){
+    return fieldMode;
+  }
+  
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("FieldRelative", fieldMode);
+
     // This method will be called once per scheduler run
   }
 
-  @Override
+  @Override       
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }

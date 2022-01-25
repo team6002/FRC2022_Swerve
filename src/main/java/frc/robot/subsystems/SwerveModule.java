@@ -120,30 +120,29 @@ public class SwerveModule {
    */
   public double getAngle() {
     // Note: This assumes the CANCoders are setup with the default feedback coefficient
-    // and the sesnor value reports degrees.
+    // and the sensor value reports degrees.
     double angleEnc = ((m_turningEncoder.getPosition() - m_turningEncoderOffset) % 360);
-    if (angleEnc > 180) angleEnc-=360;
+    // if (angleEnc > 180) angleEnc-=360;
     
     double angle = getAbsAngle();
     angle -= m_turningEncoderOffset;
     if (angle > 180) angle -= 360;
 
-    SmartDashboard.putNumber("turnRaw:"+m_turningMotorChannel, m_turningEncoder.getPosition());
+    // SmartDashboard.putNumber("turnRaw:"+m_turningMotorChannel, m_turningEncoder.getPosition());
     SmartDashboard.putNumber("turnEnc:"+m_turningMotorChannel, angleEnc);
     SmartDashboard.putNumber("turnAbs:"+m_turningMotorChannel, angle);
-    SmartDashboard.putNumber("turnOff:"+m_turningMotorChannel, m_turningEncoderOffset);
+    // SmartDashboard.putNumber("turnOff:"+m_turningMotorChannel, m_turningEncoderOffset);
     
     return angleEnc;
   }
   /**
-   * Resets the realtive encoder to the absolute encoder.
+   * Resets the relative encoder to the absolute encoder.
    */
-  public void resetAngle() {
+  public void syncAngle() {
     m_turningEncoder.setPosition(getAbsAngle());
   }
 
   public void setAngle(Rotation2d rotation, Rotation2d currentRotation) {
-    
     Rotation2d rotationDelta = rotation.minus(currentRotation);
     double position = rotationDelta.getDegrees() + m_turningEncoder.getPosition();
     m_turningPIDController.setReference(position, ControlType.kPosition);
@@ -184,8 +183,8 @@ public class SwerveModule {
     setAngle(state.angle, currentRotation);
     // setAngle(state.angle);
     
-    SmartDashboard.putNumber("TurnC:"+m_turningMotorChannel, currentRotation.getDegrees());
-    SmartDashboard.putNumber("TurnD:"+m_turningMotorChannel, state.angle.getDegrees());
+    // SmartDashboard.putNumber("TurnC:"+m_turningMotorChannel, currentRotation.getDegrees());
+    // SmartDashboard.putNumber("TurnD:"+m_turningMotorChannel, state.angle.getDegrees());
 
 
     // double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
