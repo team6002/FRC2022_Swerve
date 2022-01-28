@@ -4,13 +4,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.CMD_SyncSwerveEncoders;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.*;
 
 
 /**
@@ -31,7 +34,12 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    // double kFF = SmartDashboard.getNumber("kShooterFF", ShooterConstants.kShooterFF);
+    // double kP = SmartDashboard.getNumber("kShooterP", ShooterConstants.kShooterP);
+    // double kD = SmartDashboard.getNumber("kShooterD", ShooterConstants.kShooterD);
+    
     m_robotContainer = new RobotContainer();
+    m_robotContainer.m_drivetrain.syncAllAngles();
     LiveWindow.disableAllTelemetry();
   }
 
@@ -44,11 +52,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
+    // Runs the Scheduler.  This is responsible ands, removing finished or interrupted commands,
+    // and running subsystem periodic() methodsfor polling buttons, adding newly-scheduled
+    // commands, running already-scheduled comm.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_robotContainer.updateOdometry();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -61,8 +70,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -72,11 +80,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    m_robotContainer.updateOdometry();
   }
 
   @Override
   public void teleopInit() {
+    m_robotContainer.m_NavxGyro.resetNavx();
+    m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

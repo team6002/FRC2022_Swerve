@@ -2,25 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SwerveDrivetrain;
 
-public class CMD_NonEvasive extends CommandBase {
-  /** Creates a new CMD_NonEvasive. */
-  private final SwerveDrivetrain drivetrain;
-  public CMD_NonEvasive(SwerveDrivetrain m_Drivetrain) {
+public class AUTO_Forward extends CommandBase {
+  /** Creates a new AUTO_Forward. */
+  public AUTO_Forward() {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.drivetrain = m_Drivetrain;
-    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    drivetrain.NonEvasive();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -33,6 +27,6 @@ public class CMD_NonEvasive extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

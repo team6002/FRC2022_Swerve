@@ -9,10 +9,10 @@ import frc.robot.subsystems.SwerveDrivetrain;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class CMD_ResetSwerveOffset extends InstantCommand {
+public class CMD_ResetSwerveEncoders extends InstantCommand {
 
   private final SwerveDrivetrain drivetrain;
-  public CMD_ResetSwerveOffset(SwerveDrivetrain drivetrain) {
+  public CMD_ResetSwerveEncoders(SwerveDrivetrain drivetrain) {
     this.drivetrain = drivetrain;
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -21,6 +21,6 @@ public class CMD_ResetSwerveOffset extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivetrain.resetAllOffsets();
+    drivetrain.resetAllAngles();
   }
 }
