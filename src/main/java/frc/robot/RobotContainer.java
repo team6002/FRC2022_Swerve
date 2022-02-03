@@ -42,7 +42,6 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     SmartDashboard.putData("SyncAngles", new CMD_SyncSwerveEncoders(m_drivetrain));
-    SmartDashboard.putData("ResetAngles", new CMD_ResetSwerveEncoders(m_drivetrain));
     // Configure the button bindings
     configureButtonBindings();
     // m_FRCGyro.calibrateFRCGyro();
@@ -103,9 +102,9 @@ public class RobotContainer {
                 // Start at the origin facing the +X direction
                 new Pose2d(0, 0, new Rotation2d(0)),
                 // Pass through these two interior waypoints, making an 's' curve path
-                List.of(new Translation2d(1, 0)),/* new Translation2d(0,1)),*/
+                List.of(new Translation2d(1,0),new Translation2d(1,1), new Translation2d(0,1)),/* new Translation2d(0,1)),*/
                 // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(1, 0, new Rotation2d(0)),
+                new Pose2d(0, 0, new Rotation2d(0)),
                 config);
         
 

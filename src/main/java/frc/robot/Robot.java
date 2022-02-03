@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled comm.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    m_robotContainer.updateOdometry();
+    // m_robotContainer.updateOdometry();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -70,6 +70,9 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_robotContainer.m_NavxGyro.resetNavx();
+    m_robotContainer.m_drivetrain.resetDriveEncoder();
+    m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -85,6 +88,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     m_robotContainer.m_NavxGyro.resetNavx();
+    m_robotContainer.m_drivetrain.resetDriveEncoder();
     m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

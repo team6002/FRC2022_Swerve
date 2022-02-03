@@ -19,10 +19,10 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 public final class Constants {
 
     public static final class DriveConstants {
-    public static double k_frontLeftOffset = 0;   // 15;
-    public static double k_backLeftOffset = 0;//40;
-    public static double k_frontRightOffset = 0;
-    public static double k_backRightOffset = 0;// 164;
+    public static double k_frontLeftOffset =0.0;   // 15;
+    public static double k_backLeftOffset = 0.0;//40;
+    public static double k_frontRightOffset = 0.0;
+    public static double k_backRightOffset = 0.0;// 164;
     public static double k_LeftEvasiveX = 0.0635;
     public static double k_LeftEvasiveY = 0.6477;
     public static double k_RightEvasiveX = 0.6477;

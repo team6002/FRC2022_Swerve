@@ -43,7 +43,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
   private final SwerveModule m_frontLeft = new SwerveModule(1, 2, DriveConstants.k_frontLeftOffset, true);
   private final SwerveModule m_frontRight = new SwerveModule(3, 4, DriveConstants.k_frontRightOffset, false);
-  private final SwerveModule m_backLeft = new SwerveModule(5, 6, DriveConstants.k_backLeftOffset, false);
+  private final SwerveModule m_backLeft = new SwerveModule(5, 6, DriveConstants.k_backLeftOffset, true);
   private final SwerveModule m_backRight = new SwerveModule(7, 8, DriveConstants.k_backRightOffset, false);
 
   private final SUB_Navx m_Navx = new SUB_Navx();   
@@ -56,32 +56,25 @@ public class SwerveDrivetrain extends SubsystemBase {
           m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
   public final SwerveDriveOdometry m_odometry =
-      new SwerveDriveOdometry(m_kinematics, m_Navx.getRotation2d());
+      new SwerveDriveOdometry(m_kinematics, m_Navx.getRotation2d(), new Pose2d(0, 0, new Rotation2d()));
 
   public SwerveDrivetrain() {
    
     syncAllAngles();
   }
-  
+
   public void syncAllAngles() {
     m_frontLeft.syncAngle();
     m_frontRight.syncAngle();
     m_backLeft.syncAngle();
     m_backRight.syncAngle();
   }
-  
-  public void resetAllAngles() {
-    m_frontLeft.resetAngle();
-    m_frontRight.resetAngle();
-    m_backLeft.resetAngle();
-    m_backRight.resetAngle();
-  }
  
-    /**
+  /**
    * Method to drive the robot using joystick info.
    *
    * @param xSpeed Speed of the robot in the x direction (forward).
-   * @param ySpeed Speed of the robot in the y direction (sideways).
+  //  * @param ySpeed Speed of the robot in the y direction (sideways).
    * @param rot Angular rate of the robot.
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
@@ -121,7 +114,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     return m_odometry.getPoseMeters().getRotation().getDegrees();
   }
   public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(pose, m_Navx.getRotation2d());
+    // m_odometry.resetPosition(pose, m_Navx.getRotation2d());
+    m_odometry.resetPosition(pose, new Rotation2d(0));
   }
 
   public void LeftEvasive(){
@@ -138,12 +132,21 @@ public class SwerveDrivetrain extends SubsystemBase {
   }
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
+    // var gyroAngle = Rotation2d.fromDegrees(-m_Navx.getAngle());
     m_odometry.update(
-        m_Navx.getRotation2d(),
+        // gyroAngle,
+        // m_Navx.getRotation2d(),
+        new Rotation2d(0),
         m_frontLeft.getState(),
         m_frontRight.getState(),
         m_backLeft.getState(),
         m_backRight.getState());
+  }
+  public void resetDriveEncoder(){
+    m_frontLeft.resetDriveEnc();
+    m_frontRight.resetDriveEnc();
+    m_backLeft.resetDriveEnc();
+    m_backRight.resetDriveEnc();
   }
 
   public void fieldModeChange(){
@@ -156,11 +159,16 @@ public class SwerveDrivetrain extends SubsystemBase {
   
   @Override
   public void periodic() {
+    updateOdometry();
     SmartDashboard.putBoolean("FieldRelative", fieldMode);
     SmartDashboard.putNumber("OdoX", getOdometryX());
     SmartDashboard.putNumber("OdoY", getOdometryY());
     SmartDashboard.putNumber("OdoRotate", getOdometryRotate());
-    SmartDashboard.putNumber("NavxGyroAngleFromSwerveDrive",m_Navx.getAngle());
+    m_frontLeft.updateSmartDashboard();
+    m_frontRight.updateSmartDashboard();
+    m_backLeft.updateSmartDashboard();
+    m_backRight.updateSmartDashboard();
+
     // This method will be called once per scheduler run
   }
 
