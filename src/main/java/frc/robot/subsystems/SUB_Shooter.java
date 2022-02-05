@@ -6,9 +6,8 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
 public class SUB_Shooter extends SubsystemBase{
@@ -16,13 +15,9 @@ public class SUB_Shooter extends SubsystemBase{
     private CANSparkMax m_ShooterSlave = new CANSparkMax(ShooterConstants.kShooterSlave, MotorType.kBrushless);
 
     private RelativeEncoder m_ShooterMasterEncoder = m_ShooterMaster.getEncoder();
-    private RelativeEncoder m_ShooterSlaveEncoder = m_ShooterSlave.getEncoder();
+    // private RelativeEncoder m_ShooterSlaveEncoder = m_ShooterSlave.getEncoder();
 
     private SparkMaxPIDController m_Controller = m_ShooterMaster.getPIDController();
-
-    private double shooterP = ShooterConstants.kShooterP;
-    private double shooterFF = ShooterConstants.kShooterFF;
-    private double shooterD = ShooterConstants.kShooterD;
 
     public SUB_Shooter()
     {
@@ -65,8 +60,8 @@ public class SUB_Shooter extends SubsystemBase{
     }
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("ShooterVelocity",getVelocity());
-        SmartDashboard.putNumber("Shootervelocity",getVelocity());
+        // SmartDashboard.putNumber("ShooterVelocity",getVelocity());
+        // SmartDashboard.putNumber("Shootervelocity",getVelocity());
         // double kFF = SmartDashboard.getNumber("kShooterFF", ShooterConstants.kShooterFF);
         // double kP = SmartDashboard.getNumber("kShooterP", ShooterConstants.kShooterP);
         // double kD = SmartDashboard.getNumber("kShooterD", ShooterConstants.kShooterD);

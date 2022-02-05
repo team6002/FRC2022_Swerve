@@ -2,13 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.autos;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class AUTO_Forward extends CommandBase {
-  /** Creates a new AUTO_Forward. */
-  public AUTO_Forward() {
+public class CMD_Wait extends CommandBase {
+  /** Creates a new CMD_Wait. */
+  public CMD_Wait() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -27,6 +27,6 @@ public class AUTO_Forward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

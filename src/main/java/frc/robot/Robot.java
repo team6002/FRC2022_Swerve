@@ -9,11 +9,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.CMD_SyncSwerveEncoders;
+import frc.robot.autos.AUTO_ForwardWaitBack;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.*;
+
 
 
 /**
@@ -30,6 +31,8 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+  SendableChooser<Command> auto = new SendableChooser<Command>();
+  Command mAutonomousCommand;
   @Override
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -41,6 +44,9 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     m_robotContainer.m_drivetrain.syncAllAngles();
     LiveWindow.disableAllTelemetry();
+
+    auto.addOption("ForwardWaitBack", new AUTO_ForwardWaitBack(m_robotContainer.m_drivetrain,m_robotContainer.trajectory));
+    SmartDashboard.putData("Auto Mode", auto);
   }
 
   /**
@@ -73,10 +79,10 @@ public class Robot extends TimedRobot {
     m_robotContainer.m_NavxGyro.resetNavx();
     m_robotContainer.m_drivetrain.resetDriveEncoder();
     m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    mAutonomousCommand = auto.getSelected();
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+    if (mAutonomousCommand != null) {
+      mAutonomousCommand.schedule();
     }
   }
 

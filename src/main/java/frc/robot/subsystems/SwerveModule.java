@@ -23,10 +23,10 @@ import com.revrobotics.SparkMaxPIDController;
 public class SwerveModule {
 
   // TODO: Tune these PID values for your robot
-  private static final double kDriveP = 15.0;
-  private static final double kDriveI = 0.01;
-  private static final double kDriveD = 0.1;
-  private static final double kDriveF = 0.2;
+  private static final double kDriveP = 0.005;  //15.0;
+  private static final double kDriveI = 0;//0;  //0.01;
+  private static final double kDriveD = 0.1;  //0.1;
+  private static final double kDriveF = 0.2;  //0.2;
 
   private static final double kAngleP = 0.006;
   private static final double kAngleI = 0.0;
@@ -101,7 +101,15 @@ public class SwerveModule {
     m_drivePIDController.setFF(kDriveF);
 }
 
-
+// private final ProfiledPIDController turningPIDController =
+// new ProfiledPIDController(
+//     0.005,
+//     0,
+//     0,
+//     new TrapezoidProfile.Constraints(
+//       kModuleMaxAngularVelocity,
+//       kModuleMaxAngularAcceleration)); // radians per second squared
+  
   /**
    * Gets the relative rotational position of the module
    * @return The relative rotational position of the angle motor in degrees
@@ -175,7 +183,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    double fakeSpeed = -0.16666;
+    // double fakeSpeed = -0.16666;
     return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(getAngle() * (Math.PI / 180.0)));
     // return new SwerveModuleState(fakeSpeed, new Rotation2d(Math.PI / 2));
   }

@@ -82,17 +82,24 @@ public final class Constants {
     
         public static final double kTurnToleranceDeg = 5;
         public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
+
+        // Intake stuff
+        public static final int kIntake = 9;
+
+        public static final double IntakeForward = 0.4;
+        public static final double IntakeOff = 0;
+        public static final double IntakeReverse = -0.4;
     }
      
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = 3;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        public static final double kMaxSpeedMetersPerSecond = 2.5;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 2.5;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
+        public static final double kPXController = 6;
+        public static final double kPYController = 6;
+        public static final double kPThetaController = 2;
     
         // Constraint for the motion profilied robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =

@@ -4,40 +4,52 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.PneumaticsModuleType;
+// import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ShooterConstants;
 
 
 
 /** Add your docs here. */
 public class SUB_Intake extends SubsystemBase {
-    private final Solenoid m_IntakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM,1);
-    private TalonSRX m_IntakeMotor = new TalonSRX(16);
-    
+    // private final Solenoid m_IntakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM,1);
+    private CANSparkMax m_IntakeMotor= new CANSparkMax(ShooterConstants.kIntake,MotorType.kBrushless);
+    private RelativeEncoder m_IntakeEncoder = m_IntakeMotor.getEncoder();
+
     public SUB_Intake() { 
         
     }
     
-    public void setDeployIntake(){
-        m_IntakeSolenoid.set(true);
-    }
+    // public void setDeployIntake(){
+    //     m_IntakeSolenoid.set(true);
+    // }
     
-    public void setRetractIntake(){
-        m_IntakeSolenoid.set(false);
-    }
+    // public void setRetractIntake(){
+    //     m_IntakeSolenoid.set(false);
+    // }
 
     public void setIntakeForward(){
-        m_IntakeMotor.set(ControlMode.PercentOutput,0.3);
+        m_IntakeMotor.set(ShooterConstants.IntakeForward);
     }
 
     public void setIntakeReverse(){
-        m_IntakeMotor.set(ControlMode.PercentOutput,-0.3);
+        m_IntakeMotor.set(ShooterConstants.IntakeReverse);
     }
     public void setIntakeOff(){
-        m_IntakeMotor.set(ControlMode.PercentOutput, 0);
+        m_IntakeMotor.set(ShooterConstants.IntakeOff);
+    }
+    public double getVelocity(){
+        return m_IntakeEncoder.getVelocity();
+    }
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("IntakeRPM",getVelocity());
     }
 }
         

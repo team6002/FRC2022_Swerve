@@ -12,7 +12,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 
@@ -69,7 +68,13 @@ public class SwerveDrivetrain extends SubsystemBase {
     m_backLeft.syncAngle();
     m_backRight.syncAngle();
   }
- 
+  
+  public void resetAllAngles(){
+    m_frontLeft.resetDriveEnc();
+    m_frontRight.resetDriveEnc();
+    m_backLeft.resetDriveEnc();
+    m_backRight.resetDriveEnc();
+  }
   /**
    * Method to drive the robot using joystick info.
    *
@@ -114,8 +119,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     return m_odometry.getPoseMeters().getRotation().getDegrees();
   }
   public void resetOdometry(Pose2d pose) {
-    // m_odometry.resetPosition(pose, m_Navx.getRotation2d());
-    m_odometry.resetPosition(pose, new Rotation2d(0));
+    m_odometry.resetPosition(pose, m_Navx.getRotation2d());
+    // m_odometry.resetPosition(pose, new Rotation2d(0));
   }
 
   public void LeftEvasive(){
@@ -135,8 +140,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     // var gyroAngle = Rotation2d.fromDegrees(-m_Navx.getAngle());
     m_odometry.update(
         // gyroAngle,
-        // m_Navx.getRotation2d(),
-        new Rotation2d(0),
+        m_Navx.getRotation2d(),
+        // new Rotation2d(0),
         m_frontLeft.getState(),
         m_frontRight.getState(),
         m_backLeft.getState(),

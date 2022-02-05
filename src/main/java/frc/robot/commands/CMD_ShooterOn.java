@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Shooter;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.RobotContainer;
 
 public class CMD_ShooterOn extends CommandBase {
     SUB_Shooter m_Shooter;
