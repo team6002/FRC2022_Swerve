@@ -35,13 +35,15 @@ public class AUTO_Trajectory {
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(m_drivetrain.m_kinematics);
 
+
          // three meters and stop
        exampleTrajectory =
             TrajectoryGenerator.generateTrajectory(
                 // Start at the origin facing the +X direction
                 new Pose2d(0, 0, new Rotation2d(0)),
                 // Pass through these two interior waypoints, making an 's' curve path
-                List.of(new Translation2d(1,0)),/* new Translation2d(0,1)),*/
+                List.of(new Translation2d(1,0),
+                new Translation2d (2,0)),/* new Translation2d(0,1)),*/
                 // End 3 meters straight ahead of where we started, facing forward
                 new Pose2d(3, 0, new Rotation2d(0)),
                 config);
@@ -51,7 +53,8 @@ public class AUTO_Trajectory {
                 // Start at the origin facing the +X direction
                 new Pose2d(3, 0, new Rotation2d(0)),
                 // Pass through these two interior waypoints, making an 's' curve path
-                List.of(new Translation2d(2,0)),/* new Translation2d(0,1)),*/
+                List.of(new Translation2d(2, 0.1),
+                new Translation2d(1,0.1)),/* new Translation2d(0,1)),*/
                 // End 3 meters straight ahead of where we started, facing forward
                 new Pose2d(0, 0, new Rotation2d(0)),
                 config);
@@ -100,7 +103,7 @@ public class AUTO_Trajectory {
                 trajectory,
                 m_drivetrain::getPose, // Functional interface to feed supplier
                 m_drivetrain.m_kinematics,
-    
+
                 // Position controllers
                 new PIDController(AutoConstants.kPXController, 0, 0),
                 new PIDController(AutoConstants.kPYController, 0, 0),
@@ -108,10 +111,9 @@ public class AUTO_Trajectory {
                 m_drivetrain::setModuleStates,
                 m_drivetrain);
 
-    
         // Reset odometry to the starting pose of the trajectory.
         m_drivetrain.resetOdometry(exampleTrajectory.getInitialPose());
-    
+
         // Run path following command, then stop at the end.
         return swerveControllerCommand.andThen(() -> m_drivetrain.drive(0, 0, 0, false));
   }

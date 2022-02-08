@@ -4,6 +4,8 @@
 
 package frc.robot.autos;
 
+
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -21,12 +23,13 @@ public class AUTO_ForwardWaitBack extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    trajectory.driveTrajectory(trajectory.exampleTrajectory),
-    // addSequential(new WaitCommand(1000)),
-    trajectory.driveTrajectory(trajectory.exampleTrajectory2)
+    trajectory.driveTrajectory(trajectory.exampleTrajectory)
+
+    // new WaitCommand(2),
+
+    // trajectory.driveTrajectory(trajectory.exampleTrajectory2)
     );
+    
   }
-private Command addSequential(WaitCommand waitCommand) {
-    return null;
-}
+  
 }

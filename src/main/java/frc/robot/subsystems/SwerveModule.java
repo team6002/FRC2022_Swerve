@@ -194,8 +194,6 @@ public class SwerveModule {
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
-
-
     Rotation2d currentRotation = Rotation2d.fromDegrees(getAngle());
 
     // Optimize the reference state to avoid spinning further than 90 degrees
@@ -204,7 +202,7 @@ public class SwerveModule {
 
     setAngle(state.angle, currentRotation);
     // setAngle(state.angle);
-    
+
     // SmartDashboard.putNumber("TurnC:"+m_turningMotorChannel, currentRotation.getDegrees());
     // SmartDashboard.putNumber("TurnD:"+m_turningMotorChannel, state.angle.getDegrees());
 
