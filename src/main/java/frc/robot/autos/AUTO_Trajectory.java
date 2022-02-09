@@ -22,8 +22,9 @@ import frc.robot.subsystems.SwerveDrivetrain;
 
 public class AUTO_Trajectory {
     private SwerveDrivetrain m_drivetrain;
+    public Trajectory threeMetersForwardTrajectory;
+    public Trajectory threeMetersBackwardTrajectory;
     public Trajectory exampleTrajectory;
-    public Trajectory exampleTrajectory2;
 
     public AUTO_Trajectory(SwerveDrivetrain drivetrain){
         m_drivetrain = drivetrain;
@@ -37,55 +38,32 @@ public class AUTO_Trajectory {
 
 
          // three meters and stop
-       exampleTrajectory =
+        threeMetersForwardTrajectory =
             TrajectoryGenerator.generateTrajectory(
-                // Start at the origin facing the +X direction
                 new Pose2d(0, 0, new Rotation2d(0)),
-                // Pass through these two interior waypoints, making an 's' curve path
                 List.of(new Translation2d(1,0),
-                new Translation2d (2,0)),/* new Translation2d(0,1)),*/
-                // End 3 meters straight ahead of where we started, facing forward
+                new Translation2d (2,0)),
                 new Pose2d(3, 0, new Rotation2d(0)),
                 config);
            
-        exampleTrajectory2 =
+        threeMetersBackwardTrajectory =
             TrajectoryGenerator.generateTrajectory(
-                // Start at the origin facing the +X direction
                 new Pose2d(3, 0, new Rotation2d(0)),
-                // Pass through these two interior waypoints, making an 's' curve path
                 List.of(new Translation2d(2, 0.1),
-                new Translation2d(1,0.1)),/* new Translation2d(0,1)),*/
-                // End 3 meters straight ahead of where we started, facing forward
+                new Translation2d(1,0.1)),
                 new Pose2d(0, 0, new Rotation2d(0)),
+                config);
+                
+        exampleTrajectory = 
+        TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0, 0, new Rotation2d(0)),
+                List.of(
+                        new Translation2d(1, 0),
+                        new Translation2d(1, -1)),
+                new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
                 config);
     }
   
-    
-    
-        // An example trajectory to follow.  All units in meters.
-        // Trajectory exampleTrajectory =
-        //     TrajectoryGenerator.generateTrajectory(
-        //         // Start at the origin facing the +X direction
-        //         new Pose2d(0, 0, new Rotation2d(0)),
-        //         // Pass through these two interior waypoints, making an 's' curve path
-        //         List.of(new Translation2d(1, 0), new Translation2d(2,0)),/* new Translation2d(0,1)),*/
-        //         // End 3 meters straight ahead of where we started, facing forward
-        //         new Pose2d(2, 0, new Rotation2d(0)),
-        //         config);
-
-        //square mode
-        // Trajectory exampleTrajectory =
-        // TrajectoryGenerator.generateTrajectory(
-        //     // Start at the origin facing the +X direction
-        //     new Pose2d(0, 0, new Rotation2d(0)),
-        //     // Pass through these two interior waypoints, making an 's' curve path
-        //     List.of(new Translation2d(1,0)
-        // ,new Translation2d(1,1)
-        // , new Translation2d(0,1))
-
-        //     // End 3 meters straight ahead of where we started, facing forward
-        //     new Pose2d(0, 0, new Rotation2d(0)),
-        //     config);
     public Command driveTrajectory(Trajectory trajectory) {
      
         // Create config for trajectory
@@ -112,7 +90,7 @@ public class AUTO_Trajectory {
                 m_drivetrain);
 
         // Reset odometry to the starting pose of the trajectory.
-        m_drivetrain.resetOdometry(exampleTrajectory.getInitialPose());
+        m_drivetrain.resetOdometry(trajectory.getInitialPose());
 
         // Run path following command, then stop at the end.
         return swerveControllerCommand.andThen(() -> m_drivetrain.drive(0, 0, 0, false));

@@ -13,21 +13,17 @@ import frc.robot.subsystems.SwerveDrivetrain;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AUTO_ForwardWaitBack extends SequentialCommandGroup {
+public class AUTO_Example extends SequentialCommandGroup {
   /** Creates a new AUTO_ForwardWaitBack. */
   public final SwerveDrivetrain m_drivetrain;
   public final AUTO_Trajectory m_trajectory;
-  public AUTO_ForwardWaitBack(SwerveDrivetrain drivetrain, AUTO_Trajectory trajectory) {
+  public AUTO_Example(SwerveDrivetrain drivetrain, AUTO_Trajectory trajectory) {
     m_drivetrain = drivetrain;
     m_trajectory = trajectory;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    trajectory.driveTrajectory(trajectory.threeMetersForwardTrajectory),
-
-    new WaitCommand(2),
-
-    trajectory.driveTrajectory(trajectory.threeMetersBackwardTrajectory)
+    trajectory.driveTrajectory(trajectory.exampleTrajectory)
     );
     
   }

@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.autos.AUTO_Example;
 import frc.robot.autos.AUTO_ForwardWaitBack;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -44,7 +45,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     m_robotContainer.m_drivetrain.syncAllAngles();
     LiveWindow.disableAllTelemetry();
-
+    auto.addOption("Example", new AUTO_Example(m_robotContainer.m_drivetrain, m_robotContainer.trajectory));
     auto.addOption("ForwardWaitBack", new AUTO_ForwardWaitBack(m_robotContainer.m_drivetrain,m_robotContainer.trajectory));
     SmartDashboard.putData("Auto Mode", auto);
   }

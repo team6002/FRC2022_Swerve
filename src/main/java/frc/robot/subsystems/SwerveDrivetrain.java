@@ -75,6 +75,12 @@ public class SwerveDrivetrain extends SubsystemBase {
     m_backLeft.resetDriveEnc();
     m_backRight.resetDriveEnc();
   }
+  public void stopModules() {
+    m_frontLeft.stop();
+    m_frontRight.stop();
+    m_backLeft.stop();
+    m_backRight.stop();
+}
   /**
    * Method to drive the robot using joystick info.
    *

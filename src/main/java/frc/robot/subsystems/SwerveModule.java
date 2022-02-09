@@ -87,12 +87,13 @@ public class SwerveModule {
     m_analogSensor.setPositionConversionFactor(109.091);
 
     m_turningPIDController = m_turningMotor.getPIDController();
+    // m_turningPIDController.enableContinuousInput(-Math.PI,Math.PI);
     // m_turningPIDController.setFeedbackDevice(m_analogSensor);
     m_turningPIDController.setP(kAngleP);
     m_turningPIDController.setI(kAngleI);
     m_turningPIDController.setD(kAngleD);
     m_turningPIDController.setFF(kAngleFF);
-    
+
     m_drivePIDController = m_driveMotor.getPIDController();
     m_drivePIDController.setFeedbackDevice(m_driveEncoder);
     m_drivePIDController.setP(kDriveP);
@@ -101,14 +102,6 @@ public class SwerveModule {
     m_drivePIDController.setFF(kDriveF);
 }
 
-// private final ProfiledPIDController turningPIDController =
-// new ProfiledPIDController(
-//     0.005,
-//     0,
-//     0,
-//     new TrapezoidProfile.Constraints(
-//       kModuleMaxAngularVelocity,
-//       kModuleMaxAngularAcceleration)); // radians per second squared
   
   /**
    * Gets the relative rotational position of the module
@@ -200,6 +193,10 @@ public class SwerveModule {
     SwerveModuleState state =
         SwerveModuleState.optimize(desiredState, currentRotation);
 
+      // if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+      //     stop();
+      //     return;
+      // }    
     setAngle(state.angle, currentRotation);
     // setAngle(state.angle);
 
@@ -211,7 +208,11 @@ public class SwerveModule {
     double speed = state.speedMetersPerSecond / SwerveDrivetrain.kMaxSpeed;
     m_driveMotor.set(speed);
         
-  }   
+  }  
+  public void stop() {
+    m_driveMotor.set(0);
+    m_turningMotor.set(0);
+} 
 }
  
  
