@@ -7,10 +7,10 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.autos.AUTO_Example;
-import frc.robot.autos.AUTO_ForwardWaitBack;
+import frc.robot.autos.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  
+  private Timer tim = new Timer();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.m_drivetrain.syncAllAngles();
     LiveWindow.disableAllTelemetry();
     auto.addOption("Example", new AUTO_Example(m_robotContainer.m_drivetrain, m_robotContainer.trajectory));
+    auto.addOption("Nothingn", new AUTO_Nothing());
     auto.addOption("ForwardWaitBack", new AUTO_ForwardWaitBack(m_robotContainer.m_drivetrain,m_robotContainer.trajectory));
     SmartDashboard.putData("Auto Mode", auto);
   }
@@ -84,12 +85,19 @@ public class Robot extends TimedRobot {
     // schedule the autonomous command (example)
     if (mAutonomousCommand != null) {
       mAutonomousCommand.schedule();
+      tim.reset();
+      tim.start();
+      
     }
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    double time = tim.get();
+    if (time <= m_robotContainer.trajectory.threeMetersBackwardTrajectory.getTotalTimeSeconds()) {
+      SmartDashboard.putString("TrajectoryPose", m_robotContainer.trajectory.threeMetersBackwardTrajectory.sample(time).poseMeters.toString());
+    }
   }
 
   @Override
@@ -104,7 +112,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-
+    
   }
 
   /** This function is called periodically during operator control. */

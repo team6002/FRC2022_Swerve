@@ -8,22 +8,25 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.PneumaticsModuleType;
 // import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.IndexerConstants;
+import frc.robot.Util.DigitalSensor;
 
 
 
 /** Add your docs here. */
 public class SUB_Intake extends SubsystemBase {
     // private final Solenoid m_IntakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM,1);
-    private CANSparkMax m_IntakeMotor= new CANSparkMax(ShooterConstants.kIntake,MotorType.kBrushless);
-    private RelativeEncoder m_IntakeEncoder = m_IntakeMotor.getEncoder();
-
+    public CANSparkMax m_FrontIntakeMotor= new CANSparkMax(IndexerConstants.kFrontIntake,MotorType.kBrushless);
+    public CANSparkMax m_BackIntakeMotor= new CANSparkMax(IndexerConstants.kBackIntake,MotorType.kBrushless);
+    private RelativeEncoder m_FrontIntakeEncoder = m_FrontIntakeMotor.getEncoder();
+    private RelativeEncoder m_BackIntakeEncoder = m_BackIntakeMotor.getEncoder();
+    public DigitalSensor m_FrontIntakeSensor = new DigitalSensor(IndexerConstants.kFrontIntakeIR);
+    private DigitalSensor m_BackIntakeSensor = new DigitalSensor(IndexerConstants.kBackIntakeIR);
     public SUB_Intake() { 
-        
+    
     }
     
     // public void setDeployIntake(){
@@ -34,22 +37,56 @@ public class SUB_Intake extends SubsystemBase {
     //     m_IntakeSolenoid.set(false);
     // }
 
-    public void setIntakeForward(){
-        m_IntakeMotor.set(ShooterConstants.IntakeForward);
+    public void setFrontIntakeForward(){
+        m_FrontIntakeMotor.set(IndexerConstants.IntakeForward);
     }
 
-    public void setIntakeReverse(){
-        m_IntakeMotor.set(ShooterConstants.IntakeReverse);
+    public void setFrontIntakeReverse(){
+        m_FrontIntakeMotor.set(IndexerConstants.IntakeReverse);
     }
-    public void setIntakeOff(){
-        m_IntakeMotor.set(ShooterConstants.IntakeOff);
+    public void setFrontIntakeOff(){
+        m_FrontIntakeMotor.set(IndexerConstants.IntakeOff);
     }
-    public double getVelocity(){
-        return m_IntakeEncoder.getVelocity();
+    public double getFrontVelocity(){
+        return m_FrontIntakeEncoder.getVelocity();
     }
+    public boolean getFrontIntakeStatus(){
+        boolean frontIntakeStatus = m_FrontIntakeSensor.get();
+        return frontIntakeStatus;
+      }
+
+      public void setBackIntakeForward(){
+        m_FrontIntakeMotor.set(IndexerConstants.IntakeForward);
+    }
+    public void setBackIntakeReverse(){
+        m_FrontIntakeMotor.set(IndexerConstants.IntakeReverse);
+    }
+    public void setBackIntakeOff(){
+        m_FrontIntakeMotor.set(IndexerConstants.IntakeOff);
+    }
+    public double getBackVelocity(){
+        return m_BackIntakeEncoder.getVelocity();
+    }
+    public boolean getBackIntakeStatus(){
+        boolean backIntakeStatus = m_BackIntakeSensor.get();
+        return backIntakeStatus;
+      }
+    public boolean getIntakeStatus(){
+        boolean intakeStatus;
+        if (getBackIntakeStatus() == true){
+            return true;
+        }else if (getFrontIntakeStatus() == true){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+
+
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("IntakeRPM",getVelocity());
+        // SmartDashboard.putNumber("IntakeRPM",getVelocity());
     }
 }
         

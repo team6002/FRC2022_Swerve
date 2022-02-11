@@ -83,12 +83,33 @@ public final class Constants {
         public static final double kTurnToleranceDeg = 5;
         public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
 
+        
+    }
+    public static final class IndexerConstants{
         // Intake stuff
-        public static final int kIntake = 9;
-
+        public static final int kFrontIntake = 9;
+        public static final int kBackIntake = 17;
+        public static final int kFrontIntakeIR = 1;
+        public static final int kBackIntakeIR=2 ;
+        
         public static final double IntakeForward = 0.4;
         public static final double IntakeOff = 0;
         public static final double IntakeReverse = -0.4;
+
+        //Indexer stuff
+        public static final int kIndexer = 15;
+        public static final int kHopper  = 16;
+        public static final int kHopperIR = 0;
+
+        public static final double HopperForward = 0.4;
+        public static final double HopperOff = 0;
+        public static final double HopperBackward = -0.4;
+
+        public static final double IndexerForward = 0.4;
+        public static final double IndexerOff = 0;
+        public static final double IndexerBackward = -0.4;
+
+
     }
      
     public static final class AutoConstants {

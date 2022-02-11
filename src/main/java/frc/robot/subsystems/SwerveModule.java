@@ -196,7 +196,7 @@ public class SwerveModule {
       // if (Math.abs(state.speedMetersPerSecond) < 0.001) {
       //     stop();
       //     return;
-      // }    
+      // }
     setAngle(state.angle, currentRotation);
     // setAngle(state.angle);
 

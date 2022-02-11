@@ -8,16 +8,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Intake;
 
 /** Add your docs here. */
-public class CMD_IntakeForward extends CommandBase{
+public class CMD_FrontIntakeOff extends CommandBase{
     private SUB_Intake m_Intake;
 
-    public CMD_IntakeForward(SUB_Intake p_Intake){
+    public CMD_FrontIntakeOff(SUB_Intake p_Intake){
         m_Intake = p_Intake;
     }
 
     @Override
     public void initialize() {
-        m_Intake.setIntakeForward();
+        m_Intake.setFrontIntakeOff();
     }
 
 

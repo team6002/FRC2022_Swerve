@@ -4,16 +4,15 @@
 
 package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.*;
-import frc.robot.autos.AUTO_ForwardWaitBack;
+import frc.robot.Util.TRG_Hopper;
 import frc.robot.autos.AUTO_Trajectory;
 import frc.robot.commands.*;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -28,6 +27,8 @@ public class RobotContainer {
   final SUB_Intake m_intake = new SUB_Intake();
   public final SUB_Navx m_NavxGyro = new SUB_Navx();
   public final AUTO_Trajectory trajectory = new AUTO_Trajectory(m_drivetrain);
+  public final SUB_Indexer m_Indexer = new SUB_Indexer();
+  public final FSM_HopperState m_FSMHopperState = new FSM_HopperState();
   // public final SUB_Shooter m_shooter = new SUB_Shooter();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -52,13 +53,15 @@ public class RobotContainer {
     // .whenPressed(new CMD_ShooterReady(m_shooter));
     // new JoystickButton(m_controller, XboxController.Button.kA.value)
     // .whenPressed(new CMD_ShooterOff(m_shooter));
-    new JoystickButton(m_controller, XboxController.Button.kX.value)
-    .whenPressed(new CMD_IntakeForward(m_intake));
-    new JoystickButton(m_controller, XboxController.Button.kY.value)
-    .whenPressed(new CMD_IntakeOff(m_intake));
-    new JoystickButton(m_controller, XboxController.Button.kA.value)
-    .whenPressed(new CMD_IntakeReverse(m_intake));
-
+    // new JoystickButton(m_controller, XboxController.Button.kX.value)
+    // .whenPressed(new CMD_FrontIntakeForward(m_intake));
+    // new JoystickButton(m_controller, XboxController.Button.kY.value)
+    // .whenPressed(new CMD_FrontIntakeOff(m_intake));
+    // new JoystickButton(m_controller, XboxController.Button.kA.value)
+    // .whenPressed(new CMD_FrontIntakeReverse(m_intake));
+      m_intake.m_FrontIntakeSensor
+        .and(new TRG_Hopper(m_FSMHopperState, "ACTIVE"))
+        .whenActive(new CMD_IndexerCheck(m_Indexer, m_intake));
 
   }
 
