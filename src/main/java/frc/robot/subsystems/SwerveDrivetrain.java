@@ -19,7 +19,7 @@ import frc.robot.Constants.DriveConstants;
 
 public class SwerveDrivetrain extends SubsystemBase {
 
-  public static final double kMaxSpeed = Units.feetToMeters(13.6); // 13.6 feet per second
+  public static final double kMaxSpeed = Units.feetToMeters(13.6); // 13.6 feet per second/ 10 feet per second now
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
   /**
@@ -40,10 +40,10 @@ public class SwerveDrivetrain extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(11.75));
   private final Translation2d m_backRightLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(-11.75));
 
-  private final SwerveModule m_frontLeft = new SwerveModule(1, 2, DriveConstants.k_frontLeftOffset, true);
-  private final SwerveModule m_frontRight = new SwerveModule(3, 4, DriveConstants.k_frontRightOffset, false);
-  private final SwerveModule m_backLeft = new SwerveModule(5, 6, DriveConstants.k_backLeftOffset, true);
-  private final SwerveModule m_backRight = new SwerveModule(7, 8, DriveConstants.k_backRightOffset, false);
+  private final SwerveModule m_frontLeft = new SwerveModule(15, 16, DriveConstants.k_frontLeftOffset, true);
+  private final SwerveModule m_frontRight = new SwerveModule(13, 14, DriveConstants.k_frontRightOffset, false);
+  private final SwerveModule m_backLeft = new SwerveModule(3, 4, DriveConstants.k_backLeftOffset, true);
+  private final SwerveModule m_backRight = new SwerveModule(5, 6, DriveConstants.k_backRightOffset, false);
 
   private final SUB_Navx m_Navx = new SUB_Navx();   
   private double EvasiveX = 0;

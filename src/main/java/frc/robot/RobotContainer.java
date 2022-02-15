@@ -6,10 +6,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.*;
-import frc.robot.Util.TRG_Hopper;
+import frc.robot.Constants.IndexerConstants;
+import frc.robot.Util.DigitalSensor;
 import frc.robot.autos.AUTO_Trajectory;
 import frc.robot.commands.*;
 
@@ -22,13 +24,14 @@ import frc.robot.commands.*;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final XboxController m_controller = new XboxController(0);
-  // private final XboxController m_secondController = new XboxController(1);
+  private final XboxController m_secondController = new XboxController(1);
   public final SwerveDrivetrain m_drivetrain = new SwerveDrivetrain();
   final SUB_Intake m_intake = new SUB_Intake();
   public final SUB_Navx m_NavxGyro = new SUB_Navx();
   public final AUTO_Trajectory trajectory = new AUTO_Trajectory(m_drivetrain);
-  public final SUB_Indexer m_Indexer = new SUB_Indexer();
-  public final FSM_HopperState m_FSMHopperState = new FSM_HopperState();
+  // public DigitalSensor m_FrontIntakeSensor = new DigitalSensor(IndexerConstants.kFrontIntakeIR);
+  // private DigitalSensor m_BackIntakeSensor = new DigitalSensor(IndexerConstants.kBackIntakeIR);
+  // private DigitalSensor m_HopperSensor = new DigitalSensor(IndexerConstants.kHopperIR);
   // public final SUB_Shooter m_shooter = new SUB_Shooter();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -49,19 +52,44 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // new JoystickButton(m_controller, XboxController.Button.kB.value)
+    // new JoystickButton(m_secondController, XboxController.Button.kA.value)
     // .whenPressed(new CMD_ShooterReady(m_shooter));
-    // new JoystickButton(m_controller, XboxController.Button.kA.value)
+    
+    // new JoystickButton(m_secondController, XboxController.Button.kB.value)
     // .whenPressed(new CMD_ShooterOff(m_shooter));
-    // new JoystickButton(m_controller, XboxController.Button.kX.value)
-    // .whenPressed(new CMD_FrontIntakeForward(m_intake));
+    
+    // new JoystickButton(m_secondController, XboxController.Button.kRightBumper.value)
+    //hint turret right comand plz.
+
+    // new JoystickButton(m_secondController, XboxController.Button.kLeftBumper.value)
+    // plze make hint turret left command and put it here I'm begging you.
+
+    new JoystickButton(m_controller, XboxController.Button.kA.value)
+    .whenPressed(new SequentialCommandGroup(
+      new CMD_FrontIntakeForward(m_intake),  
+      new CMD_HopperForward (m_intake))
+    );
+    new JoystickButton(m_controller, XboxController.Button.kB.value)
+    .whenPressed(new SequentialCommandGroup(
+      new CMD_FrontIntakeOff(m_intake),
+      new CMD_HopperOff(m_intake)));
+ 
+
     // new JoystickButton(m_controller, XboxController.Button.kY.value)
     // .whenPressed(new CMD_FrontIntakeOff(m_intake));
-    // new JoystickButton(m_controller, XboxController.Button.kA.value)
+    
+    // new JoystickButton(m_controller, XboxController.Button.kB.value)
     // .whenPressed(new CMD_FrontIntakeReverse(m_intake));
-      m_intake.m_FrontIntakeSensor
-        .and(new TRG_Hopper(m_FSMHopperState, "ACTIVE"))
-        .whenActive(new CMD_IndexerCheck(m_Indexer, m_intake));
+  
+
+
+    new JoystickButton(m_controller, XboxController.Button.kY.value)
+    .whenHeld(new CMD_IndexerForward(m_intake))
+    .whenReleased(new CMD_IndexerOff(m_intake));
+    
+    // m_HopperSensor
+    // .whenActive(new CMD_HopperOff(m_intake));
+
 
   }
 

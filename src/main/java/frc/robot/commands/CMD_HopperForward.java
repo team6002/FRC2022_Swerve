@@ -5,22 +5,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SUB_Indexer;
+import frc.robot.subsystems.SUB_Intake;
 
 
 
 public class CMD_HopperForward extends CommandBase {
-  private SUB_Indexer m_Indexer;
+  private SUB_Intake m_intake;
   /** Creates a new CMD_HopperOff. */
-  public CMD_HopperForward(SUB_Indexer p_Indexer) {
-    m_Indexer = p_Indexer;
+  public CMD_HopperForward(SUB_Intake p_intake) {
+    m_intake = p_intake;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      m_Indexer.setHopperForward();
+      m_intake.setHopperForward();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,6 +34,6 @@ public class CMD_HopperForward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

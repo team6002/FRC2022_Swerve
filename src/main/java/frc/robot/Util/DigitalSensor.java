@@ -17,6 +17,6 @@ public class DigitalSensor extends Button{
         return sensor.get();
     }
 
-    public void and() {
+    public void and(boolean b) {
     }
 }

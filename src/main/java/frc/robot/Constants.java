@@ -40,8 +40,8 @@ public final class Constants {
     public static final class ShooterConstants {
     
         //shooter
-        public static final int kShooterMaster = 14;
-        public static final int kShooterSlave = 15;
+        public static final int kShooterMaster = 18;
+        public static final int kShooterSlave = 19;
     
         public static final double kShooterFF = 0.000230;
         public static final double kShooterP = 0.000080;
@@ -59,37 +59,16 @@ public final class Constants {
         public static final double kShooterSpeed = 0.30;
     
         //turret
-        public static final int kTurretMotor = 11;
+        public static final int kTurretMotor = 1;
     
-        //indexer
-        public static final int kIndexerTop = 12;
-        public static final int kIndexerBottom = 13;
-        public static final int kIndexerBack = 10;
-    
-        public static final double kIndexerFSpeed = 0.5;
-        public static final double kIndexerRSpeed = -0.3;
-    
-        public static final double kStabilizationP = 1;
-        public static final double kStabilizationI = 0.5;
-        public static final double kStabilizationD = 0;
-    
-        public static final double kTurnP = 1;
-        public static final double kTurnI = 0;
-        public static final double kTurnD = 0;
-    
-        public static final double kMaxTurnRateDegPerS = 100;
-        public static final double kMaxTurnAccelerationDegPerSSquared = 300;
-    
-        public static final double kTurnToleranceDeg = 5;
-        public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
 
         
     }
     public static final class IndexerConstants{
         // Intake stuff
-        public static final int kFrontIntake = 9;
-        public static final int kBackIntake = 17;
-        public static final int kFrontIntakeIR = 1;
+        public static final int kFrontIntake = 12;
+        public static final int kBackIntake = 20;
+        public static final int kFrontIntakeIR = 0;
         public static final int kBackIntakeIR=2 ;
         
         public static final double IntakeForward = 0.4;
@@ -97,17 +76,17 @@ public final class Constants {
         public static final double IntakeReverse = -0.4;
 
         //Indexer stuff
-        public static final int kIndexer = 15;
-        public static final int kHopper  = 16;
-        public static final int kHopperIR = 0;
+        public static final int kIndexer = 7;
+        public static final int kHopper  = 17;
+        public static final int kHopperIR = 1;
 
-        public static final double HopperForward = 0.4;
+        public static final double HopperForward = 0.3;
         public static final double HopperOff = 0;
-        public static final double HopperBackward = -0.4;
+        public static final double HopperBackward = -0.3;
 
-        public static final double IndexerForward = 0.4;
+        public static final double IndexerForward = 0.6;
         public static final double IndexerOff = 0;
-        public static final double IndexerBackward = -0.4;
+        public static final double IndexerBackward = -0.3;
 
 
     }
