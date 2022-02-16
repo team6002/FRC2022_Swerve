@@ -14,11 +14,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
+import frc.robot.Util.TRG_Intake;
+import frc.robot.subsystems.FSM_IntakeStatus.State;
 
 
 
 /** Add your docs here. */
 public class SUB_Intake extends SubsystemBase {
+    private FSM_IntakeStatus m_IntakeStatus;
+
     public CANSparkMax m_FrontIntakeMotor= new CANSparkMax(IndexerConstants.kFrontIntake,MotorType.kBrushless);
     public CANSparkMax m_BackIntakeMotor= new CANSparkMax(IndexerConstants.kBackIntake,MotorType.kBrushless);
     private CANSparkMax m_HopperMotor= new CANSparkMax(IndexerConstants.kHopper,MotorType.kBrushless);
@@ -37,7 +41,9 @@ public class SUB_Intake extends SubsystemBase {
     public double hopperState;
 
 
-    public SUB_Intake() { 
+    public SUB_Intake(FSM_IntakeStatus p_IntakeStatus) {
+    m_IntakeStatus = p_IntakeStatus;
+      
     m_HopperMotor.setInverted(true);
     m_IndexerMotor.setInverted(true);
     }
@@ -103,7 +109,9 @@ public class SUB_Intake extends SubsystemBase {
     m_IndexerMotor.set(IndexerConstants.IndexerBackward);
     indexerState = -1;
   }
-  
+  public boolean getHopperStatus(){
+    return m_HopperSensor.get();
+  }
 
 
 
@@ -111,9 +119,13 @@ public class SUB_Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-      if (m_HopperSensor.get()){
+      if (m_IntakeStatus.getState(State.SHOOTING)){
+
+      }else 
+      if (getHopperStatus()){
         setHopperOff();
       }
+      SmartDashboard.putBoolean("HopperStatus", getHopperStatus());
     }
 }
         

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.FSM_IntakeStatus.State;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.Util.DigitalSensor;
 import frc.robot.autos.AUTO_Trajectory;
@@ -26,12 +27,10 @@ public class RobotContainer {
   private final XboxController m_controller = new XboxController(0);
   private final XboxController m_secondController = new XboxController(1);
   public final SwerveDrivetrain m_drivetrain = new SwerveDrivetrain();
-  final SUB_Intake m_intake = new SUB_Intake();
+  final FSM_IntakeStatus m_IntakeStatus = new FSM_IntakeStatus();
+  final SUB_Intake m_intake = new SUB_Intake(m_IntakeStatus);
   public final SUB_Navx m_NavxGyro = new SUB_Navx();
   public final AUTO_Trajectory trajectory = new AUTO_Trajectory(m_drivetrain);
-  // public DigitalSensor m_FrontIntakeSensor = new DigitalSensor(IndexerConstants.kFrontIntakeIR);
-  // private DigitalSensor m_BackIntakeSensor = new DigitalSensor(IndexerConstants.kBackIntakeIR);
-  // private DigitalSensor m_HopperSensor = new DigitalSensor(IndexerConstants.kHopperIR);
   // public final SUB_Shooter m_shooter = new SUB_Shooter();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -84,7 +83,9 @@ public class RobotContainer {
 
 
     new JoystickButton(m_controller, XboxController.Button.kY.value)
-    .whenHeld(new CMD_IndexerForward(m_intake))
+    // .whenHeld(new CMD_IndexerForward(m_intake))
+    .whenHeld(new SequentialCommandGroup(
+      new CMD_IndexerForward(m_intake)))
     .whenReleased(new CMD_IndexerOff(m_intake));
     
     // m_HopperSensor
