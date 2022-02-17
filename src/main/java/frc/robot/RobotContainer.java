@@ -66,7 +66,9 @@ public class RobotContainer {
     new JoystickButton(m_controller, XboxController.Button.kA.value)
     .whenPressed(new SequentialCommandGroup(
       new CMD_FrontIntakeForward(m_intake),  
-      new CMD_HopperForward (m_intake))
+      new CMD_HopperForward (m_intake),
+      new CMD_SetIntakeStatus(m_IntakeStatus, State.INTAKE))
+
     );
     new JoystickButton(m_controller, XboxController.Button.kB.value)
     .whenPressed(new SequentialCommandGroup(
@@ -77,16 +79,20 @@ public class RobotContainer {
     // new JoystickButton(m_controller, XboxController.Button.kY.value)
     // .whenPressed(new CMD_FrontIntakeOff(m_intake));
     
-    // new JoystickButton(m_controller, XboxController.Button.kB.value)
-    // .whenPressed(new CMD_FrontIntakeReverse(m_intake));
+    new JoystickButton(m_controller, XboxController.Button.kX.value)
+    .whenPressed(new SequentialCommandGroup(
+      new CMD_HopperForward(m_intake),
+      new CMD_FrontIntakeForward(m_intake)
+    ));
   
 
 
     new JoystickButton(m_controller, XboxController.Button.kY.value)
     // .whenHeld(new CMD_IndexerForward(m_intake))
-    .whenHeld(new SequentialCommandGroup(
+    .whenPressed(new SequentialCommandGroup(
+      new CMD_SetIntakeStatus(m_IntakeStatus, State.SHOOTING),
       new CMD_IndexerForward(m_intake)))
-    .whenReleased(new CMD_IndexerOff(m_intake));
+      .whenReleased(new CMD_IndexerOff(m_intake));
     
     // m_HopperSensor
     // .whenActive(new CMD_HopperOff(m_intake));

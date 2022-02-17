@@ -119,13 +119,12 @@ public class SUB_Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-      if (m_IntakeStatus.getState(State.SHOOTING)){
+      if (m_IntakeStatus.getState(State.SHOOTING)== true){
 
-      }else 
-      if (getHopperStatus()){
+      }else if (getHopperStatus()){
         setHopperOff();
       }
-      SmartDashboard.putBoolean("HopperStatus", getHopperStatus());
+      SmartDashboard.putString("IntakeStatus", m_IntakeStatus.getState().toString());
     }
 }
         

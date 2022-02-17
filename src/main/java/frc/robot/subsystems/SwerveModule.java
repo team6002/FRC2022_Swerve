@@ -74,8 +74,8 @@ public class SwerveModule {
     m_driveEncoder = m_driveMotor.getEncoder();
     // m_driveEncoder.setPositionConversionFactor(1); //* 0.0381);
     // // 0.0381
-    m_driveEncoder.setVelocityConversionFactor(((2.0*Math.PI*0.0381)/5)/60.0);
-    m_driveEncoder.setPositionConversionFactor((2.0 * Math.PI * 0.0381)/5.0);
+    m_driveEncoder.setVelocityConversionFactor(((2.0*Math.PI*0.0381)/6)/60.0);
+    m_driveEncoder.setPositionConversionFactor((2.0 * Math.PI * 0.0381)/6.0);
     m_driveEncoder.setPosition(0);
   
 

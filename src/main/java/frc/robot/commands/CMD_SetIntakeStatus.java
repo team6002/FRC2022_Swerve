@@ -11,6 +11,7 @@ public class CMD_SetIntakeStatus extends CommandBase {
   /** Creates a new CMD_SetIntakeStatus. */
   FSM_IntakeStatus m_IntakeStatus;
   State m_wantedStatus;
+ 
   public CMD_SetIntakeStatus(FSM_IntakeStatus p_IntakeStatus, State p_wantedStatus) {
     m_IntakeStatus = p_IntakeStatus;
     m_wantedStatus = p_wantedStatus;
@@ -34,6 +35,6 @@ public class CMD_SetIntakeStatus extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

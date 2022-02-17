@@ -19,7 +19,7 @@ import frc.robot.Constants.DriveConstants;
 
 public class SwerveDrivetrain extends SubsystemBase {
 
-  public static final double kMaxSpeed = Units.feetToMeters(13.6); // 13.6 feet per second/ 10 feet per second now
+  public static final double kMaxSpeed = Units.feetToMeters(10); // 13.6 feet per second/ 10 feet per second now
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
   /**
