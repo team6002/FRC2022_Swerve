@@ -120,7 +120,7 @@ public class SUB_Intake extends SubsystemBase {
     @Override
     public void periodic() {
       if (m_IntakeStatus.getState(State.SHOOTING)== true){
-
+        
       }else if (getHopperStatus()){
         setHopperOff();
       }

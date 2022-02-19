@@ -30,8 +30,9 @@ public class RobotContainer {
   final FSM_IntakeStatus m_IntakeStatus = new FSM_IntakeStatus();
   final SUB_Intake m_intake = new SUB_Intake(m_IntakeStatus);
   public final SUB_Navx m_NavxGyro = new SUB_Navx();
+  public final SUB_Turret m_Turret = new SUB_Turret();
   public final AUTO_Trajectory trajectory = new AUTO_Trajectory(m_drivetrain);
-  // public final SUB_Shooter m_shooter = new SUB_Shooter();
+  public final SUB_Shooter m_shooter = new SUB_Shooter();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     SmartDashboard.putData("SyncAngles", new CMD_SyncSwerveEncoders(m_drivetrain));
@@ -56,12 +57,7 @@ public class RobotContainer {
     
     // new JoystickButton(m_secondController, XboxController.Button.kB.value)
     // .whenPressed(new CMD_ShooterOff(m_shooter));
-    
-    // new JoystickButton(m_secondController, XboxController.Button.kRightBumper.value)
-    //hint turret right comand plz.
-
-    // new JoystickButton(m_secondController, XboxController.Button.kLeftBumper.value)
-    // plze make hint turret left command and put it here I'm begging you.
+  
 
     new JoystickButton(m_controller, XboxController.Button.kA.value)
     .whenPressed(new SequentialCommandGroup(
@@ -82,6 +78,7 @@ public class RobotContainer {
     new JoystickButton(m_controller, XboxController.Button.kX.value)
     .whenPressed(new SequentialCommandGroup(
       new CMD_HopperForward(m_intake),
+      // new CMD_TurretReverse(m_Turret)
       new CMD_FrontIntakeForward(m_intake)
     ));
   
@@ -91,11 +88,20 @@ public class RobotContainer {
     // .whenHeld(new CMD_IndexerForward(m_intake))
     .whenPressed(new SequentialCommandGroup(
       new CMD_SetIntakeStatus(m_IntakeStatus, State.SHOOTING),
-      new CMD_IndexerForward(m_intake)))
-      .whenReleased(new CMD_IndexerOff(m_intake));
+      new CMD_ShooterOn(m_shooter),
+      new CMD_IndexerForward(m_intake),
+      new CMD_HopperForward(m_intake)
+      ))
+      .whenReleased(new SequentialCommandGroup(
+       new CMD_IndexerOff(m_intake),
+       new CMD_ShooterOff(m_shooter),
+       new CMD_SetIntakeStatus(m_IntakeStatus, State.INTAKE)
+      ));
     
     // m_HopperSensor
     // .whenActive(new CMD_HopperOff(m_intake));
+
+  
 
 
   }

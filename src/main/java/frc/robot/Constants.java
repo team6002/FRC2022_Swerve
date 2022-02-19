@@ -40,8 +40,8 @@ public final class Constants {
     public static final class ShooterConstants {
     
         //shooter
-        public static final int kShooterMaster = 18;
-        public static final int kShooterSlave = 19;
+        public static final int kShooterMaster = 8;
+        public static final int kShooterSlave = 9;
     
         public static final double kShooterFF = 0.000230;
         public static final double kShooterP = 0.000080;
@@ -50,7 +50,7 @@ public final class Constants {
     
         //Max free velocity ~5000
         public static final double kMaxShooterVelocity = 2750;//max working velocity 
-        public static final double kShootingVelocity = 2650;
+        public static final double kShootingVelocity = 2075;    //2650;
         public static final double kShootingAccel = 1200;
     
         public static final double kMinOutput = -1;
@@ -64,14 +64,31 @@ public final class Constants {
 
         
     }
+    public static final class TurretConstants {
+        //turret
+        public static final int kTurretMotor = 2;
+    
+        //turret PID
+        public static final double kTurretFF = 0;
+        public static final double kTurretP = 0.0049;
+        public static final double kTurretI = 0.00003;
+        public static final double kTurretD = 0.00003;
+    
+        //turret speeds
+        public static final double kMinTurretOutput = -1;
+        public static final double kMaxTurretOutput = 1;
+    
+        public static final double kTurretVoltage = 10;
+        public static final double kTurretHuntVoltage = 1;
+      }
     public static final class IndexerConstants{
         // Intake stuff
         public static final int kFrontIntake = 12;
-        public static final int kBackIntake = 20;
+        public static final int kBackIntake = 1;
         public static final int kFrontIntakeIR = 0;
         public static final int kBackIntakeIR=2 ;
         
-        public static final double IntakeForward = 0.4;
+        public static final double IntakeForward = 0.5;
         public static final double IntakeOff = 0;
         public static final double IntakeReverse = -0.4;
 
@@ -84,7 +101,7 @@ public final class Constants {
         public static final double HopperOff = 0;
         public static final double HopperBackward = -0.3;
 
-        public static final double IndexerForward = 0.6;
+        public static final double IndexerForward = 0.5;
         public static final double IndexerOff = 0;
         public static final double IndexerBackward = -0.3;
 

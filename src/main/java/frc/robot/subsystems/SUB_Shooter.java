@@ -6,6 +6,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
@@ -21,6 +22,7 @@ public class SUB_Shooter extends SubsystemBase{
 
     public SUB_Shooter()
     {
+    
         m_ShooterMaster.restoreFactoryDefaults();
         m_ShooterSlave.restoreFactoryDefaults();
 
@@ -28,6 +30,7 @@ public class SUB_Shooter extends SubsystemBase{
         m_ShooterSlave.setIdleMode(IdleMode.kCoast);
 
         m_ShooterSlave.follow(m_ShooterMaster, true);
+        m_ShooterMaster.setInverted(true);
 
         m_Controller.setFF(ShooterConstants.kShooterFF);
         m_Controller.setP(ShooterConstants.kShooterP);
@@ -37,6 +40,7 @@ public class SUB_Shooter extends SubsystemBase{
         m_Controller.setOutputRange(ShooterConstants.kMinOutput, ShooterConstants.kMaxOutput);
         m_Controller.setSmartMotionMaxVelocity(ShooterConstants.kShootingVelocity, 0);
         m_Controller.setSmartMotionMaxAccel(ShooterConstants.kShootingAccel, 0);
+
     }
 
     public void setVoltage(double value)
@@ -60,7 +64,8 @@ public class SUB_Shooter extends SubsystemBase{
     }
     @Override
     public void periodic() {
-        // SmartDashboard.putNumber("ShooterVelocity",getVelocity());
+        getVelocity();
+        SmartDashboard.putNumber("ShooterVelocity",getVelocity());
         // SmartDashboard.putNumber("Shootervelocity",getVelocity());
         // double kFF = SmartDashboard.getNumber("kShooterFF", ShooterConstants.kShooterFF);
         // double kP = SmartDashboard.getNumber("kShooterP", ShooterConstants.kShooterP);
