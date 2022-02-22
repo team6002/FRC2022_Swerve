@@ -86,7 +86,7 @@ public final class Constants {
         public static final int kFrontIntake = 12;
         public static final int kBackIntake = 1;
         public static final int kFrontIntakeIR = 0;
-        public static final int kBackIntakeIR=2 ;
+        public static final int kBackIntakeIR=5 ;
         
         public static final double IntakeForward = 0.5;
         public static final double IntakeOff = 0;

@@ -30,6 +30,7 @@ public class RobotContainer {
   final FSM_IntakeStatus m_IntakeStatus = new FSM_IntakeStatus();
   final SUB_Intake m_intake = new SUB_Intake(m_IntakeStatus);
   public final SUB_Navx m_NavxGyro = new SUB_Navx();
+  final SUB_Climber m_Climber = new SUB_Climber();
   public final SUB_Turret m_Turret = new SUB_Turret();
   public final AUTO_Trajectory trajectory = new AUTO_Trajectory(m_drivetrain);
   public final SUB_Shooter m_shooter = new SUB_Shooter();
