@@ -91,13 +91,17 @@ public class RobotContainer {
       new CMD_SetIntakeStatus(m_IntakeStatus, State.SHOOTING),
       new CMD_ShooterOn(m_shooter),
       new CMD_IndexerForward(m_intake),
-      new CMD_HopperForward(m_intake)
-      ))
-      .whenReleased(new SequentialCommandGroup(
-       new CMD_IndexerOff(m_intake),
-       new CMD_ShooterOff(m_shooter),
-       new CMD_SetIntakeStatus(m_IntakeStatus, State.INTAKE)
+      new CMD_HopperForward(m_intake),
+      new CMD_HopperCheck(m_intake),
+      new CMD_IndexerOff(m_intake),
+      new CMD_ShooterOff(m_shooter),
+      new CMD_SetIntakeStatus(m_IntakeStatus, State.INTAKE)
       ));
+      // .whenReleased(new SequentialCommandGroup(
+      //  new CMD_IndexerOff(m_intake),
+      //  new CMD_ShooterOff(m_shooter),
+      //  new CMD_SetIntakeStatus(m_IntakeStatus, State.INTAKE)
+      // ));
     
     // m_HopperSensor
     // .whenActive(new CMD_HopperOff(m_intake));
