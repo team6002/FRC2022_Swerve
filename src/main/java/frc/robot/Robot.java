@@ -47,6 +47,7 @@ public class Robot extends TimedRobot {
     LiveWindow.disableAllTelemetry();
     auto.addOption("Example", new AUTO_Example(m_robotContainer.m_drivetrain, m_robotContainer.trajectory));
     auto.addOption("Nothingn", new AUTO_Nothing());
+    auto.addOption("Red1", new AUTO_RED(m_robotContainer.m_drivetrain, m_robotContainer.trajectory, m_robotContainer.m_intake));
     auto.addOption("ForwardWaitBack", new AUTO_ForwardWaitBack(m_robotContainer.m_drivetrain,m_robotContainer.trajectory));
     SmartDashboard.putData("Auto Mode", auto);
   }

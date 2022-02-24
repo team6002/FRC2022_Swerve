@@ -42,6 +42,7 @@ public class RobotContainer {
     configureButtonBindings();
     // m_FRCGyro.calibrateFRCGyro();
     // m_shooter.setDefaultCommand(new CMD_ShooterOn(m_shooter,m_secondController));
+    m_Climber.setDefaultCommand(new CMD_ClimberThing(m_Climber, m_secondController));
     m_drivetrain.setDefaultCommand(new SwerveDriveCommand(m_drivetrain,m_controller));
     // m_drivetrain.setDefaultCommand(new SwerveTestCommand(m_drivetrain,m_controller));
   }
