@@ -17,12 +17,12 @@ public class CMD_ClimberThing extends CommandBase {
   
     @Override
     public void initialize() {
-       
     }
 
     @Override
     public void execute(){
       m_Climber.moveClimber(secondController.getLeftY());
+      // m_Climber.moveClimber(0.3);
     }
 
     @Override

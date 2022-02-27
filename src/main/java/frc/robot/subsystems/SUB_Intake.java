@@ -19,7 +19,7 @@ import frc.robot.subsystems.FSM_IntakeStatus.State;
 
 /** Add your docs here. */
 public class SUB_Intake extends SubsystemBase {
-    private FSM_IntakeStatus m_IntakeStatus;
+    private FSM_IntakeStatus m_intakeStatus;
 
     public CANSparkMax m_FrontIntakeMotor= new CANSparkMax(IndexerConstants.kFrontIntake,MotorType.kBrushless);
     public CANSparkMax m_BackIntakeMotor= new CANSparkMax(IndexerConstants.kBackIntake,MotorType.kBrushless);
@@ -40,7 +40,7 @@ public class SUB_Intake extends SubsystemBase {
 
 
     public SUB_Intake(FSM_IntakeStatus p_IntakeStatus) {
-    m_IntakeStatus = p_IntakeStatus;
+    m_intakeStatus = p_IntakeStatus;
       
     m_HopperMotor.setInverted(true);
     m_IndexerMotor.setInverted(true);
@@ -117,12 +117,12 @@ public class SUB_Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-      if (m_IntakeStatus.getState(State.SHOOTING)== true){
+      if (m_intakeStatus.getState(State.SHOOTING)== true){
         
       }else if (getHopperStatus()){
         setHopperOff();
       }
-      SmartDashboard.putString("IntakeStatus", m_IntakeStatus.getState().toString());
+      SmartDashboard.putString("IntakeStatus", m_intakeStatus.getState().toString());
     }
 }
         

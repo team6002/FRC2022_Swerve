@@ -8,13 +8,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CLimberConstants;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SUB_Climber extends SubsystemBase {
   Encoder ThroughBore;
   private final Solenoid m_SecondSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, CLimberConstants.kSecondSolonoid);
@@ -26,7 +25,9 @@ public class SUB_Climber extends SubsystemBase {
   /** Creates a new SUB_Climber. */
   public SUB_Climber() {
     ThroughBore = new Encoder(2,3);
-    m_ClimberMotor1.follow(m_ClimberMotor2, true);
+    m_ClimberMotor2.follow(m_ClimberMotor1, false);
+    m_ClimberMotor1.setIdleMode(IdleMode.kBrake);
+    m_ClimberMotor2.setIdleMode(IdleMode.kBrake);
   }
   public void setRetractMain(){
     m_MainSolenoid.set(false);
@@ -40,9 +41,12 @@ public class SUB_Climber extends SubsystemBase {
   public void setExtendSecond(){
     m_SecondSolenoid.set(true);
   }
+  public void setClimberForward(){
+    m_ClimberMotor1.set(0.3);
+  }
   public void moveClimber(double value){
 
-    m_ClimberMotor1.setVoltage(value);
+    m_ClimberMotor1.set(value);
   }
 
 
@@ -50,6 +54,7 @@ public class SUB_Climber extends SubsystemBase {
   public void periodic() {
     // int Ticks = ThroughBore.get(); // 2000 ticks are about a rotation.
     // SmartDashboard.putNumber("ThroughBore", Ticks);
+    // moveClimber(0.1);
     // // This method will be called once per schedule;r run
   }
 }

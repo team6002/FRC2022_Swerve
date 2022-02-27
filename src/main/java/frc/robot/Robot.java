@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.autos.*;
+import frc.robot.subsystems.FSM_IntakeStatus;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -47,7 +48,7 @@ public class Robot extends TimedRobot {
     LiveWindow.disableAllTelemetry();
     auto.addOption("Example", new AUTO_Example(m_robotContainer.m_drivetrain, m_robotContainer.trajectory));
     auto.addOption("Nothingn", new AUTO_Nothing());
-    auto.addOption("Red1", new AUTO_RED(m_robotContainer.m_drivetrain, m_robotContainer.trajectory, m_robotContainer.m_intake));
+    auto.addOption("Red1", new AUTO_RED1(m_robotContainer.m_drivetrain, m_robotContainer.trajectory, m_robotContainer.m_intake, m_robotContainer.m_shooter, m_robotContainer.m_intakeStatus));
     auto.addOption("ForwardWaitBack", new AUTO_ForwardWaitBack(m_robotContainer.m_drivetrain,m_robotContainer.trajectory));
     SmartDashboard.putData("Auto Mode", auto);
   }
@@ -95,10 +96,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    double time = tim.get();
-    if (time <= m_robotContainer.trajectory.threeMetersBackwardTrajectory.getTotalTimeSeconds()) {
-      SmartDashboard.putString("TrajectoryPose", m_robotContainer.trajectory.threeMetersBackwardTrajectory.sample(time).poseMeters.toString());
-    }
   }
 
   @Override

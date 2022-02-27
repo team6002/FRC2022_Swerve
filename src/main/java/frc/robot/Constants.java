@@ -110,8 +110,8 @@ public final class Constants {
     public static final class CLimberConstants{
         public static final int kClimberMotor1 = 10;
         public static final int kClimberMotor2 = 11;
-        public static final int kMainSolonoid = 1;
-        public static final int kSecondSolonoid = 2;
+        public static final int kMainSolonoid = 2;
+        public static final int kSecondSolonoid = 3;
         public static final double ThroughBoreEncoderPort1 = 3;
         public static final double ThroughBoreEncoderPort2 = 4;
 
@@ -119,7 +119,7 @@ public final class Constants {
      
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 2.5;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 1.5;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI/4;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI/4;
     

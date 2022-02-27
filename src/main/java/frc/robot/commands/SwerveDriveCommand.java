@@ -26,11 +26,27 @@ public class SwerveDriveCommand extends CommandBase {
  
   @Override
   public void execute() {
+      double y = 0;           //variable for forward/backward movement
+      double x = 0;           //variable for side to side movement
+      double turn = 0;        //variable for turning movement
+      double deadzone = 0.3;	//variable for amount of deadzone
+    
+      if(controller.getLeftY() > deadzone || controller.getLeftY() < -deadzone) {
+        y = controller.getLeftY();
+      }
+    
+      if(controller.getLeftX() > deadzone || controller.getLeftX() < -deadzone) {
+        x = controller.getLeftX();
+      }
+    
+      if(controller.getRightX() > deadzone || controller.getRightX() < -deadzone){
+        turn = controller.getRightX();
+      }
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
 
     final var xSpeed =
-      -xspeedLimiter.calculate(jStickBand(controller.getLeftY()))
+      -xspeedLimiter.calculate(jStickBand(y))
         * SwerveDrivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
@@ -38,7 +54,7 @@ public class SwerveDriveCommand extends CommandBase {
     // return positive values when you pull to the right by default.
     
     final var ySpeed =
-      -yspeedLimiter.calculate(jStickBand(controller.getLeftX()))
+      -yspeedLimiter.calculate(jStickBand(x))
         * SwerveDrivetrain.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
@@ -47,7 +63,7 @@ public class SwerveDriveCommand extends CommandBase {
     // the right by default.
     
     final var rot =
-      -rotLimiter.calculate(jStickBand(controller.getRightX()))
+      -rotLimiter.calculate(jStickBand(turn))
         * SwerveDrivetrain.kMaxAngularSpeed;
 
     if(controller.getLeftTriggerAxis() >= 0.7){
