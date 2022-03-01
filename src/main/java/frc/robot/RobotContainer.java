@@ -29,6 +29,7 @@ public class RobotContainer {
   public final SwerveDrivetrain m_drivetrain = new SwerveDrivetrain();
   final FSM_IntakeStatus m_intakeStatus = new FSM_IntakeStatus();
   final SUB_Intake m_intake = new SUB_Intake(m_intakeStatus);
+  final FSM_ClimberMode m_climberMode = new FSM_ClimberMode();
   public final SUB_Navx m_NavxGyro = new SUB_Navx();
   final SUB_Climber m_climber = new SUB_Climber();
   public final SUB_Turret m_turret = new SUB_Turret();
@@ -44,7 +45,8 @@ public class RobotContainer {
     configureButtonBindings();
     // m_FRCGyro.calibrateFRCGyro();
     // m_shooter.setDefaultCommand(new CMD_ShooterOn(m_shooter,m_secondController));
-    m_climber.setDefaultCommand(new CMD_ClimberThing(m_climber, m_secondController));
+    m_climber.setDefaultCommand(new CMD_SecondaryClimberMove(m_climber, m_secondController));
+    m_climber.setDefaultCommand(new CMD_PrimaryClimberMove(m_climber, m_secondController));
     m_drivetrain.setDefaultCommand(new SwerveDriveCommand(m_drivetrain,m_controller));
     // m_drivetrain.setDefaultCommand(new SwerveTestCommand(m_drivetrain,m_controller));
   }
@@ -57,11 +59,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_secondController, XboxController.Button.kA.value)
-    .whenPressed(new CMD_ClimberMainExtend(m_climber));
+    .whenPressed(new CMD_Shooting(m_intake, m_shooter, m_intakeStatus));
     
     new JoystickButton(m_secondController, XboxController.Button.kB.value)
-    .whenPressed(new CMD_ClimberSecondaryExtend(m_climber));
-    // .whenPressed(new CMD_ClimberOn(m_climber));
+    .toggleWhenPressed(new CMD_SetClimberMode(m_climberMode, ))
     new JoystickButton(m_secondController, XboxController.Button.kY.value)
     .whenPressed(new CMD_ClimberRetractMain(m_climber));
     
@@ -69,48 +70,25 @@ public class RobotContainer {
     .whenPressed(new CMD_ClimberRetractSecond(m_climber));
   
 
-    // new JoystickButton(m_controller, XboxController.Button.kA.value)
-    // .whenPressed(new SequentialCommandGroup(
-    //   new CMD_FrontIntakeForward(m_intake),  
-    //   new CMD_HopperForward (m_intake),
-    //   new CMD_SetIntakeStatus(m_intakeStatus, State.INTAKE))
+    new JoystickButton(m_controller, XboxController.Button.kA.value)
+    .whenPressed(new SequentialCommandGroup(
+      new CMD_FrontIntakeForward(m_intake),
+      new CMD_FrontSolonoidExtend(m_intake)
+    ));
+    new JoystickButton(m_controller, XboxController.Button.kB.value)
+    .whenPressed(new SequentialCommandGroup(
+      new CMD_FrontSolonoidRetract(m_intake)
+      
+    ));
+    new JoystickButton(m_controller, XboxController.Button.kX.value)
+    .whenPressed(new CMD_BackSolonoidRetract(m_intake)
+    );
+    new JoystickButton(m_controller, XboxController.Button.kY.value)
+    .whenPressed(new SequentialCommandGroup(
+      new CMD_BackSolonoidExtend(m_intake),
+      new CMD_BackIntakeForward(m_intake)
 
-    // );
-    // new JoystickButton(m_controller, XboxController.Button.kB.value)
-    // .whenPressed(new SequentialCommandGroup(
-    //   new CMD_FrontIntakeOff(m_intake),
-    //   new CMD_HopperOff(m_intake)));
- 
-
-    // new JoystickButton(m_controller, XboxController.Button.kY.value)
-    // .whenPressed(n$ew CMD_FrontIntakeOff(m_intake));
-    
-    // new JoystickButton(m_controller, XboxController.Button.kX.value)
-    // .whenPressed(new SequentialCommandGroup(
-    //   new CMD_HopperForward(m_intake),
-    //   // new CMD_TurretReverse(m_turret)
-    //   new CMD_FrontIntakeForward(m_intake)
-    // ));
-  
-
-
-    // new JoystickButton(m_controller, XboxController.Button.kY.value)
-    // // .whenHeld(new CMD_IndexerForward(m_intake))
-    // .whenPressed(new SequentialCommandGroup(
-    //   new CMD_Shooting(m_intake, m_shooter, m_intakeStatus)
-    //   ));
-      // .whenReleased(new SequentialCommandGroup(
-      //  new CMD_IndexerOff(m_intake),
-      //  new CMD_ShooterOff(m_shooter),
-      //  new CMD_SetIntakeStatus(m_intakeStatus, State.INTAKE)
-      // ));
-    
-    // m_HopperSensor
-    // .whenActive(new CMD_HopperOff(m_intake));
-
-  
-
-
+    ));
   }
 
   public XboxController getDriveController(){
