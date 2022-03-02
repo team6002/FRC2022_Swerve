@@ -5,10 +5,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.FSM_IntakeStatus;
 import frc.robot.subsystems.SUB_Intake;
 import frc.robot.subsystems.SUB_Shooter;
-import frc.robot.subsystems.FSM_IntakeStatus.State;
+import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;
 
 public class CMD_Shooting extends CommandBase {
   SUB_Shooter m_shooter;
@@ -25,14 +26,19 @@ public class CMD_Shooting extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    new CMD_SetIntakeStatus(m_intakeStatus, State.SHOOTING);
-    new CMD_ShooterOn(m_shooter);
-    new CMD_IndexerForward(m_intake);
-    new CMD_HopperForward(m_intake);
-    new CMD_HopperCheck(m_intake);
-    new CMD_IndexerOff(m_intake);
-    new CMD_ShooterOff(m_shooter);
-    new CMD_SetIntakeStatus(m_intakeStatus, State.INTAKE);
+    new SequentialCommandGroup( 
+      new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.SHOOTING),
+    new CMD_ShooterOn(m_shooter),
+    new CMD_IndexerForward(m_intake),
+    new CMD_HopperForward(m_intake),
+    new CMD_BackIntakeForward(m_intake),
+    new CMD_FrontIntakeForward(m_intake),
+    new CMD_HopperCheck(m_intake),
+    new CMD_IndexerOff(m_intake),
+    new CMD_ShooterOff(m_shooter),
+    new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.INTAKE)
+    );
+   
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -4,29 +4,31 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+public class FSM_ClimberMode {
 
-public class FSM_ClimberMode extends CommandBase {
-  /** Creates a new FSM_ClimberMode. */
-  public FSM_ClimberMode() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+    public enum ClimberState 
+    {
+        SHOOTING
+        ,CLIMBING
+    }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+    private ClimberState m_currentState = ClimberState.SHOOTING;
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
+    public void setState(ClimberState p_State) {
+        m_currentState = p_State;
+    }
+    
+    public ClimberState getState() {
+        return m_currentState;
+    }
+    
+    public boolean getState(ClimberState p_State) {
+        return (m_currentState == p_State);
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
+    public boolean getState(String p_State) {
+        return (m_currentState.toString().equals(p_State));
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    
 }

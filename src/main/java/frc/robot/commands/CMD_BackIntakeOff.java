@@ -5,28 +5,24 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.SUB_Intake;
 
-public class CMD_BackIntakeOff extends CommandBase {
-  /** Creates a new CMD_BackIntakeOff. */
-  public CMD_BackIntakeOff() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+/** Add your docs here. */
+public class CMD_BackIntakeOff extends CommandBase{
+    private SUB_Intake m_Intake;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+    public CMD_BackIntakeOff(SUB_Intake p_Intake){
+        m_Intake = p_Intake;
+    }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
+    @Override
+    public void initialize() {
+        m_Intake.setBackIntakeOff();
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }

@@ -6,13 +6,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.FSM_IntakeStatus;
-import frc.robot.subsystems.FSM_IntakeStatus.State;
+import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;
 public class CMD_SetIntakeStatus extends CommandBase {
   /** Creates a new CMD_SetIntakeStatus. */
   FSM_IntakeStatus m_IntakeStatus;
-  State m_wantedStatus;
+  IntakeState m_wantedStatus;
  
-  public CMD_SetIntakeStatus(FSM_IntakeStatus p_IntakeStatus, State p_wantedStatus) {
+  public CMD_SetIntakeStatus(FSM_IntakeStatus p_IntakeStatus, IntakeState p_wantedStatus) {
     m_IntakeStatus = p_IntakeStatus;
     m_wantedStatus = p_wantedStatus;
     // Use addRequirements() here to declare subsystem dependencies.

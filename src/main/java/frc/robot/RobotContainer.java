@@ -5,14 +5,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import javax.swing.SwingWorker.StateValue;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.FSM_IntakeStatus.State;
+import frc.robot.subsystems.FSM_ClimberMode.ClimberState;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.Util.DigitalSensor;
+import frc.robot.Util.TRG_ClimberMode;
 import frc.robot.autos.AUTO_Trajectory;
 import frc.robot.commands.*;
 
@@ -36,6 +41,7 @@ public class RobotContainer {
   public final AUTO_Trajectory trajectory = new AUTO_Trajectory(m_drivetrain);
   public final SUB_Shooter m_shooter = new SUB_Shooter();
   Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -45,8 +51,7 @@ public class RobotContainer {
     configureButtonBindings();
     // m_FRCGyro.calibrateFRCGyro();
     // m_shooter.setDefaultCommand(new CMD_ShooterOn(m_shooter,m_secondController));
-    m_climber.setDefaultCommand(new CMD_SecondaryClimberMove(m_climber, m_secondController));
-    m_climber.setDefaultCommand(new CMD_PrimaryClimberMove(m_climber, m_secondController));
+    m_climber.setDefaultCommand(new CMD_ClimberMove(m_climber, m_secondController));
     m_drivetrain.setDefaultCommand(new SwerveDriveCommand(m_drivetrain,m_controller));
     // m_drivetrain.setDefaultCommand(new SwerveTestCommand(m_drivetrain,m_controller));
   }
@@ -59,15 +64,23 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_secondController, XboxController.Button.kA.value)
-    .whenPressed(new CMD_Shooting(m_intake, m_shooter, m_intakeStatus));
-    
+    .and(new TRG_ClimberMode(m_climberMode, ClimberState.SHOOTING))
+    .whenActive(new CMD_Shooting(m_intake, m_shooter, m_intakeStatus))
+    .and(new TRG_ClimberMode(m_climberMode, ClimberState.CLIMBING))
+    ;
+
     new JoystickButton(m_secondController, XboxController.Button.kB.value)
-    .toggleWhenPressed(new CMD_SetClimberMode(m_climberMode, ))
+      .toggleWhenPressed(new CMD_SetClimberMode(m_climberMode, ClimberState.CLIMBING)
+      ).whenPressed(new CMD_SetClimberMode(m_climberMode, ClimberState.SHOOTING)
+      );
+
     new JoystickButton(m_secondController, XboxController.Button.kY.value)
-    .whenPressed(new CMD_ClimberRetractMain(m_climber));
+    .whenPressed(new CMD_ClimberMainToggle(m_climber)
+    );
     
     new JoystickButton(m_secondController, XboxController.Button.kX.value)
-    .whenPressed(new CMD_ClimberRetractSecond(m_climber));
+    .whenPressed(new CMD_ClimberSecondToggle(m_climber)
+    );
   
 
     new JoystickButton(m_controller, XboxController.Button.kA.value)

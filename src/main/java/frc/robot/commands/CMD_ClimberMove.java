@@ -5,14 +5,15 @@ import frc.robot.subsystems.SUB_Climber;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.RobotContainer;
 
-public class CMD_ClimberThing extends CommandBase {
+public class CMD_ClimberMove extends CommandBase {
     SUB_Climber m_Climber;
     private XboxController secondController;
-    public CMD_ClimberThing(SUB_Climber p_Climber, XboxController secondController)
+    public CMD_ClimberMove(SUB_Climber p_Climber, XboxController secondController)
     {
         m_Climber = p_Climber;
         addRequirements(p_Climber);
         this.secondController = secondController;
+        
     }
   
     @Override
@@ -21,7 +22,18 @@ public class CMD_ClimberThing extends CommandBase {
 
     @Override
     public void execute(){
-      m_Climber.moveClimber(secondController.getLeftY());
+     double Ly = 0;
+     double Ry = 0;
+     double deadzone = 0.5;
+        if(secondController.getLeftY() > deadzone || secondController.getLeftY() < -deadzone) {
+            Ly = secondController.getLeftY();
+          }
+      m_Climber.movePrimaryClimber(Ly);
+
+       if(secondController.getRightY() > deadzone || secondController.getRightY() < -deadzone) {
+           Ry = secondController.getRightY();
+         }
+      m_Climber.moveSecondaryClimber(Ry);
       // m_Climber.moveClimber(0.3);
     }
 

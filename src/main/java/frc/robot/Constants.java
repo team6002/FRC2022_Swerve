@@ -87,7 +87,9 @@ public final class Constants {
         public static final int kBackIntake = 1;
         public static final int kFrontIntakeIR = 0;
         public static final int kBackIntakeIR=5 ;
-        
+        public static final int kFrontIntakeSolonoid = 0;
+        public static final int kBackIntakeSolonoid = 1;
+
         public static final double IntakeForward = 0.5;
         public static final double IntakeOff = 0;
         public static final double IntakeReverse = -0.4;
@@ -108,13 +110,14 @@ public final class Constants {
 
     }
     public static final class CLimberConstants{
-        public static final int kClimberMotor1 = 10;
-        public static final int kClimberMotor2 = 11;
-        public static final int kMainSolonoid = 2;
-        public static final int kSecondSolonoid = 3;
+        public static final int kSecondaryClimberMotor1 = 10;
+        public static final int kSecondaryClimberMotor2 = 11;
+        public static final int kPrimaryClimberMotor1 = 18;
+        public static final int kPrimaryClimberMotor2 = 19;
+        public static final int kMainSolonoid = 3;
+        public static final int kSecondSolonoid = 2;
         public static final double ThroughBoreEncoderPort1 = 3;
         public static final double ThroughBoreEncoderPort2 = 4;
-
     }
      
     public static final class AutoConstants {

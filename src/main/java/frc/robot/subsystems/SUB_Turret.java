@@ -25,6 +25,10 @@ public class SUB_Turret extends SubsystemBase {
     public SUB_Turret() {
 
     }
+    // We have 30:1 gear ratio and convert our 0-1 encoder to a 0-360.
+    // We also want to have one of our limit switch be 0 so if one goes wack
+    // we can reset it.
+
     
     public void setTurretForward(){
         m_TurretMotor.setVoltage(5);

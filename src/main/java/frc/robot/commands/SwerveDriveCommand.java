@@ -29,7 +29,7 @@ public class SwerveDriveCommand extends CommandBase {
       double y = 0;           //variable for forward/backward movement
       double x = 0;           //variable for side to side movement
       double turn = 0;        //variable for turning movement
-      double deadzone = 0.3;	//variable for amount of deadzone
+      double deadzone = 0.5;	//variable for amount of deadzone
     
       if(controller.getLeftY() > deadzone || controller.getLeftY() < -deadzone) {
         y = controller.getLeftY();

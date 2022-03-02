@@ -9,11 +9,14 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.Util.TRG_Intake;
-import frc.robot.subsystems.FSM_IntakeStatus.State;
+import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;
 
 
 
@@ -33,11 +36,16 @@ public class SUB_Intake extends SubsystemBase {
     private RelativeEncoder m_FrontIntakeEncoder = m_FrontIntakeMotor.getEncoder();
     private RelativeEncoder m_BackIntakeEncoder = m_BackIntakeMotor.getEncoder();
   
+    
+    private final Solenoid m_FrontIntakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, IndexerConstants.kFrontIntakeSolonoid);
+    private final Solenoid m_BackIntakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, IndexerConstants.kBackIntakeSolonoid);
+
     public double frontIntakeState;
     public double backIntakeState;
     public double indexerState;
     public double hopperState;
-
+    public boolean frontIntakeDeployed;
+    public boolean backIntakeDeployed;
 
     public SUB_Intake(FSM_IntakeStatus p_IntakeStatus) {
     m_intakeStatus = p_IntakeStatus;
@@ -62,21 +70,36 @@ public class SUB_Intake extends SubsystemBase {
     public double getFrontVelocity(){
         return m_FrontIntakeEncoder.getVelocity();
     }
+    public void setFrontSolonoidExtend(){
+      m_FrontIntakeSolenoid.set(true);
+      frontIntakeDeployed = true;
+    }
+    public void setFrontSolonoidRetract(){
+      m_FrontIntakeSolenoid.set(false);
+      frontIntakeDeployed = false;
+    }
   
 
       public void setBackIntakeForward(){
-        m_FrontIntakeMotor.set(IndexerConstants.IntakeForward);
+        m_BackIntakeMotor.set(IndexerConstants.IntakeForward);
     }
     public void setBackIntakeReverse(){
-        m_FrontIntakeMotor.set(IndexerConstants.IntakeReverse);
+        m_BackIntakeMotor.set(IndexerConstants.IntakeReverse);
     }
     public void setBackIntakeOff(){
-        m_FrontIntakeMotor.set(IndexerConstants.IntakeOff);
+        m_BackIntakeMotor.set(IndexerConstants.IntakeOff);
     }
     public double getBackVelocity(){
         return m_BackIntakeEncoder.getVelocity();
     }
-
+    public void setBackSolonoidExtend(){
+      m_BackIntakeSolenoid.set(true);
+      backIntakeDeployed = true;
+    }
+    public void setBackSolonoidRetract(){
+      m_BackIntakeSolenoid.set(false);
+      backIntakeDeployed = false;
+    }
 
   public void setHopperOff(){
     m_HopperMotor.set(IndexerConstants.HopperOff);
@@ -117,12 +140,13 @@ public class SUB_Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-      if (m_intakeStatus.getState(State.SHOOTING)== true){
+      if (m_intakeStatus.getState(IntakeState.SHOOTING)== true){
         
       }else if (getHopperStatus()){
         setHopperOff();
       }
       SmartDashboard.putString("IntakeStatus", m_intakeStatus.getState().toString());
+    
     }
 }
         

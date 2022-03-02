@@ -5,16 +5,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
-public class CMD_PrimaryClimberMove extends CommandBase {
-  /** Creates a new CMD_PrimaryClimberMove. */
-  public CMD_PrimaryClimberMove() {
+import frc.robot.subsystems.SUB_Climber;
+public class CMD_ClimberMainToggle extends CommandBase {
+  /** Creates a new CMD_ClimberExtend. */
+  SUB_Climber m_climber;
+  public CMD_ClimberMainToggle(SUB_Climber p_climber) {
+    m_climber = p_climber;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if(m_climber.MainSolonoidState == false){
+    m_climber.setExtendMain();
+    }else m_climber.setRetractMain();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -27,6 +33,6 @@ public class CMD_PrimaryClimberMove extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

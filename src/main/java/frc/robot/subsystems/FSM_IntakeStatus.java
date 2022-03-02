@@ -6,7 +6,7 @@ package frc.robot.subsystems;
 
 public class FSM_IntakeStatus {
 
-    public enum State 
+    public enum IntakeState 
     {
         HOME
         ,INTAKE
@@ -14,17 +14,17 @@ public class FSM_IntakeStatus {
         ,SHOOTING
     }
 
-    private State m_currentState = State.HOME;
+    private IntakeState m_currentState = IntakeState.HOME;
 
-    public void setState(State p_State) {
+    public void setState(IntakeState p_State) {
         m_currentState = p_State;
     }
     
-    public State getState() {
+    public IntakeState getState() {
         return m_currentState;
     }
     
-    public boolean getState(State p_State) {
+    public boolean getState(IntakeState p_State) {
         return (m_currentState == p_State);
     }
 

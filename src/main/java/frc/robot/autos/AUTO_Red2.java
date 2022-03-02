@@ -15,7 +15,7 @@ import frc.robot.subsystems.SUB_Intake;
 import frc.robot.subsystems.SUB_Navx;
 import frc.robot.subsystems.SUB_Shooter;
 import frc.robot.subsystems.SwerveDrivetrain;
-import frc.robot.subsystems.FSM_IntakeStatus.State;
+import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
