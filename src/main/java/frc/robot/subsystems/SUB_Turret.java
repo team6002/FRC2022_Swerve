@@ -9,6 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.PneumaticsModuleType;
 // import edu.wpi.first.wpilibj.Solenoid;
@@ -19,12 +20,19 @@ import frc.robot.Constants.TurretConstants;
 
 /** Add your docs here. */
 public class SUB_Turret extends SubsystemBase {
+    String RED;
+    String BLUE;
+    String Color;
     private CANSparkMax m_TurretMotor = new CANSparkMax(TurretConstants.kTurretMotor, MotorType.kBrushless);
-
+    SendableChooser<String> m_color = new SendableChooser<>();
 
     public SUB_Turret() {
+        m_color.addOption("RED",RED);
+        m_color.addOption("BLUE",BLUE);
+        SmartDashboard.putData("Color", m_color);
 
     }
+    
     // We have 30:1 gear ratio and convert our 0-1 encoder to a 0-360.
     // We also want to have one of our limit switch be 0 so if one goes wack
     // we can reset it.
@@ -41,12 +49,20 @@ public class SUB_Turret extends SubsystemBase {
         m_TurretMotor.setVoltage(0);
      
     }
- 
+    public boolean checkChooser(){
+        if (Color == RED){
+            return true;
+        }else return false;
+    }
 
 
 
     @Override
     public void periodic() {
+        Color = m_color.getSelected();
+        SmartDashboard.putBoolean("RED???", checkChooser());
+        checkChooser();
+        
     }
 }
         
