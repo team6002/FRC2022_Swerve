@@ -54,6 +54,17 @@ public class RobotContainer {
     m_climber.setDefaultCommand(new CMD_ClimberMove(m_climber, m_secondController));
     m_drivetrain.setDefaultCommand(new SwerveDriveCommand(m_drivetrain,m_controller));
     // m_drivetrain.setDefaultCommand(new SwerveTestCommand(m_drivetrain,m_controller));
+    int direction = m_secondController.getPOV(0);
+
+    if (direction == 0) { // DPAD UP button is pressed
+      // do something
+    } else if (direction == 180) { // DPAD DOWN button is pressed
+      // do something else
+    }else if (direction == 90){
+
+    }else if (direction == 270);
+
+
   }
 
   /**
@@ -64,10 +75,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_secondController, XboxController.Button.kA.value)
-    .and(new TRG_ClimberMode(m_climberMode, ClimberState.SHOOTING))
-    .whenActive(new CMD_Shooting(m_intake, m_shooter, m_intakeStatus))
     .and(new TRG_ClimberMode(m_climberMode, ClimberState.CLIMBING))
-    ;
+    .whenInactive(new CMD_Shooting(m_intake, m_shooter, m_intakeStatus))
+    .whenActive(new CMD_ClimberMainToggle(m_climber)
+    );
 
     new JoystickButton(m_secondController, XboxController.Button.kB.value)
       .toggleWhenPressed(new CMD_SetClimberMode(m_climberMode, ClimberState.CLIMBING)
@@ -77,11 +88,19 @@ public class RobotContainer {
     new JoystickButton(m_secondController, XboxController.Button.kY.value)
     .whenPressed(new CMD_ClimberMainToggle(m_climber)
     );
-    
+  
     new JoystickButton(m_secondController, XboxController.Button.kX.value)
-    .whenPressed(new CMD_ClimberSecondToggle(m_climber)
+    .and(new TRG_ClimberMode(m_climberMode, ClimberState.CLIMBING))
+    .whenActive(new CMD_ClimberSecondToggle(m_climber)
+    //.whenInactive(new reset turret)
     );
   
+    new JoystickButton(m_secondController, XboxController.Button.kStart.value)
+    .and(new TRG_ClimberMode(m_climberMode, ClimberState.CLIMBING)
+    .whenInactive(new CMD_SetClimberMode(m_climberMode, ClimberState.CLIMBING))
+    .whenActive(new CMD_SetClimberMode(m_climberMode, ClimberState.SHOOTING))
+    );
+    
 
     new JoystickButton(m_controller, XboxController.Button.kA.value)
     .whenPressed(new SequentialCommandGroup(
@@ -90,12 +109,14 @@ public class RobotContainer {
     ));
     new JoystickButton(m_controller, XboxController.Button.kB.value)
     .whenPressed(new SequentialCommandGroup(
-      new CMD_FrontSolonoidRetract(m_intake)
-      
+      new CMD_FrontSolonoidRetract(m_intake),
+      new CMD_FrontIntakeOff(m_intake)
     ));
     new JoystickButton(m_controller, XboxController.Button.kX.value)
-    .whenPressed(new CMD_BackSolonoidRetract(m_intake)
-    );
+    .whenPressed(new SequentialCommandGroup(
+      new CMD_BackSolonoidRetract(m_intake),
+      new CMD_BackIntakeOff(m_intake)
+      ));
     new JoystickButton(m_controller, XboxController.Button.kY.value)
     .whenPressed(new SequentialCommandGroup(
       new CMD_BackSolonoidExtend(m_intake),
@@ -103,6 +124,7 @@ public class RobotContainer {
 
     ));
   }
+  
 
   public XboxController getDriveController(){
     return m_controller;

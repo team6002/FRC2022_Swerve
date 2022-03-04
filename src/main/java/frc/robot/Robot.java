@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.ejml.equation.Variable;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -14,7 +16,6 @@ import frc.robot.autos.*;
 import frc.robot.subsystems.FSM_IntakeStatus;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-// import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 

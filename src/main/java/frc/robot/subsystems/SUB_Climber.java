@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CLimberConstants;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -18,14 +20,20 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 public class SUB_Climber extends SubsystemBase {
   Encoder ThroughBore1;
   Encoder ThroughBore2;
+ 
   private final Solenoid m_SecondSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, CLimberConstants.kSecondSolonoid);
   private final Solenoid m_MainSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, CLimberConstants.kMainSolonoid);
+ 
   public CANSparkMax m_SecondaryClimberMotor2= new CANSparkMax(CLimberConstants.kSecondaryClimberMotor2,MotorType.kBrushless);
   public CANSparkMax m_SecondaryClimberMotor1= new CANSparkMax(CLimberConstants.kSecondaryClimberMotor1,MotorType.kBrushless);
   public CANSparkMax m_PrimaryClimberMotor2= new CANSparkMax(CLimberConstants.kPrimaryClimberMotor2,MotorType.kBrushless);
   public CANSparkMax m_PrimaryClimberMotor1= new CANSparkMax(CLimberConstants.kPrimaryClimberMotor1,MotorType.kBrushless);
+ 
   public boolean MainSolonoidState = false;
   public boolean SecondSolonoidState = false;
+  
+  private SparkMaxPIDController m_PrimaryClimberPID = m_PrimaryClimberMotor1.getPIDController();
+  private SparkMaxPIDController m_SecondaryClimberPID = m_SecondaryClimberMotor1.getPIDController();
   /** Creates a new SUB_Climber. */
   public SUB_Climber() {
     ThroughBore1 = new Encoder(2,3);
@@ -33,6 +41,18 @@ public class SUB_Climber extends SubsystemBase {
     m_PrimaryClimberMotor2.follow(m_PrimaryClimberMotor1);
     m_SecondaryClimberMotor1.setIdleMode(IdleMode.kBrake);
     m_SecondaryClimberMotor2.setIdleMode(IdleMode.kBrake);
+    m_PrimaryClimberMotor1.setIdleMode(IdleMode.kBrake);
+    m_PrimaryClimberMotor2.setIdleMode(IdleMode.kBrake);
+
+    m_PrimaryClimberPID.setFF(0);
+    m_PrimaryClimberPID.setP(0);
+    m_PrimaryClimberPID.setI(0);
+    m_PrimaryClimberPID.setD(0);
+
+    m_SecondaryClimberPID.setFF(0);
+    m_SecondaryClimberPID.setP(0);
+    m_SecondaryClimberPID.setI(0);
+    m_SecondaryClimberPID.setD(0);
   }
   public void setRetractMain(){
     m_MainSolenoid.set(false);
@@ -57,6 +77,9 @@ public class SUB_Climber extends SubsystemBase {
   public void movePrimaryClimber(double value){
 
     m_PrimaryClimberMotor1.set(value);
+  }
+  public void setPrimaryPosition(double value){
+    
   }
 
 
