@@ -24,11 +24,11 @@ public class AUTO_Trajectory {
     private SwerveDrivetrain m_drivetrain;
     public Trajectory threeMetersForwardTrajectory;
     public Trajectory threeMetersBackwardTrajectory;
-    public Trajectory exampleTrajectory;
-    public Trajectory FirstBallTrajectory;
-    public Trajectory SecondBallTrajectory;
-    public Trajectory ThirdBallTrajectory;
-    public Trajectory ReturnTrajectory;
+    // public Trajectory exampleTrajectory;
+    // public Trajectory FirstBallTrajectory;
+    // public Trajectory SecondBallTrajectory;
+    // public Trajectory ThirdBallTrajectory;
+    // public Trajectory ReturnTrajectory;
     public AUTO_Trajectory(SwerveDrivetrain drivetrain){
         m_drivetrain = drivetrain;
 
@@ -39,24 +39,24 @@ public class AUTO_Trajectory {
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(m_drivetrain.m_kinematics);
 
-        FirstBallTrajectory = 
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(8.2,2.8, new Rotation2d(0)),
-             List.of(new Translation2d(7,0.2))
-            , new Pose2d(7.5,0.2, new Rotation2d(0)), 
-            config);
-        SecondBallTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(7.5,0.2, new Rotation2d(0)),
-             List.of(new Translation2d(6,1.8))
-            , new Pose2d(5,1.8, new Rotation2d(0)), 
-            config);
-        ThirdBallTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(5,1.8, new Rotation2d(0)),
-             List.of(new Translation2d(4,1))
-            , new Pose2d(1,1, new Rotation2d(0)), 
-            config);
+        // FirstBallTrajectory = 
+        // TrajectoryGenerator.generateTrajectory(
+        //     new Pose2d(8.2,2.8, new Rotation2d(0)),
+        //      List.of(new Translation2d(7,0.2))
+        //     , new Pose2d(7.5,0.2, new Rotation2d(0)), 
+        //     config);
+        // SecondBallTrajectory =
+        // TrajectoryGenerator.generateTrajectory(
+        //     new Pose2d(7.5,0.2, new Rotation2d(0)),
+        //      List.of(new Translation2d(6,1.8))
+        //     , new Pose2d(5,1.8, new Rotation2d(0)), 
+        //     config);
+        // ThirdBallTrajectory =
+        // TrajectoryGenerator.generateTrajectory(
+        //     new Pose2d(5,1.8, new Rotation2d(0)),
+        //      List.of(new Translation2d(4,1))
+        //     , new Pose2d(1,1, new Rotation2d(0)), 
+        //     config);
          // three meters and stop
         threeMetersForwardTrajectory =
             TrajectoryGenerator.generateTrajectory(
@@ -74,20 +74,20 @@ public class AUTO_Trajectory {
                 new Pose2d(0, 0, new Rotation2d(0)),
                 config.setReversed(true));
         
-          ReturnTrajectory = 
-        TrajectoryGenerator.generateTrajectory(
-            drivetrain.getPose(),
-             List.of(new Translation2d(5,1.8))
-            , new Pose2d(5,1.8, new Rotation2d(0)), 
-            config);        
-        exampleTrajectory = 
-        TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(
-                        new Translation2d(1, 0),
-                        new Translation2d(1, -1)),
-                new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
-                config);
+        //   ReturnTrajectory = 
+        // TrajectoryGenerator.generateTrajectory(
+        //     drivetrain.getPose(),
+        //      List.of(new Translation2d(5,1.8))
+        //     , new Pose2d(5,1.8, new Rotation2d(0)), 
+        //     config);        
+        // exampleTrajectory = 
+        // TrajectoryGenerator.generateTrajectory(
+        //         new Pose2d(0, 0, new Rotation2d(0)),
+        //         List.of(
+        //                 new Translation2d(1, 0),
+        //                 new Translation2d(1, -1)),
+        //         new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
+        //         config);
 
         
     }

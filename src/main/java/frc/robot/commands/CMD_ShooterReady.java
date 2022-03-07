@@ -19,7 +19,6 @@ public class CMD_ShooterReady extends CommandBase{
 
     @Override
     public void execute() {
-        SmartDashboard.putNumber("Shooter Velocity", m_Shooter.getVelocity());
     }
 
     @Override

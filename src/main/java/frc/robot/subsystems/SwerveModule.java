@@ -8,7 +8,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 // import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.math.util.Units;
 
 import com.revrobotics.CANSparkMax;
@@ -133,19 +132,19 @@ public class SwerveModule {
     return getAbsAngle();
   }
 
-  public void updateSmartDashboard() {
-        double angle = getAbsAngle();
-        angle -= m_turningEncoderOffset;
-        if (angle > 180) angle -= 360;
+  // public void updateSmartDashboard() {
+  //       double angle = getAbsAngle();
+  //       angle -= m_turningEncoderOffset;
+  //       if (angle > 180) angle -= 360;
 
-        // SmartDashboard.putNumber("turnRaw:"+m_turningMotorChannel, m_turningEncoder.getPosition());
-        SmartDashboard.putNumber("turnEnc:"+m_turningMotorChannel, getAngle());
-        SmartDashboard.putNumber("driveEnc:"+m_turningMotorChannel, m_driveEncoder.getPosition());
-        SmartDashboard.putNumber("rawAnalogEnc:"+m_turningMotorChannel, m_analogSensor.getPosition());
-        SmartDashboard.putNumber("turnAbs:"+m_turningMotorChannel, angle);
-        SmartDashboard.putNumber("driveVelocity"+m_turningMotorChannel, m_driveEncoder.getVelocity());
+        // // SmartDashboard.putNumber("turnRaw:"+m_turningMotorChannel, m_turningEncoder.getPosition());
+        // SmartDashboard.putNumber("turnEnc:"+m_turningMotorChannel, getAngle());
+        // SmartDashboard.putNumber("driveEnc:"+m_turningMotorChannel, m_driveEncoder.getPosition());
+        // SmartDashboard.putNumber("rawAnalogEnc:"+m_turningMotorChannel, m_analogSensor.getPosition());
+        // SmartDashboard.putNumber("turnAbs:"+m_turningMotorChannel, angle);
+        // SmartDashboard.putNumber("driveVelocity"+m_turningMotorChannel, m_driveEncoder.getVelocity());
         // SmartDashboard.putNumber("turnOff:"+m_turningMotorChannel, m_turningEncoderOffset);
-  }
+  // }
   /**
    * Resets the relative encoder to the absolute encoder.
    */

@@ -5,19 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SUB_Climber;
-public class CMD_ClimberMainExtend extends CommandBase {
-  /** Creates a new CMD_ClimberExtend. */
-  SUB_Climber m_climber;
-  public CMD_ClimberMainExtend(SUB_Climber p_climber) {
-    m_climber = p_climber;
+import frc.robot.subsystems.SUB_Turret;
+
+public class CMD_ResetTurret extends CommandBase {
+  /** Creates a new CMD_ResetTurret. */
+  SUB_Turret m_turret;
+  public CMD_ResetTurret(SUB_Turret p_turret) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_turret = p_turret;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climber.setExtendMain();
+    m_turret.turretReset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

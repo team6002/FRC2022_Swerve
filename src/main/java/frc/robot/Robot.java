@@ -4,19 +4,16 @@
 
 package frc.robot;
 
-import org.ejml.equation.Variable;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.autos.*;
-import frc.robot.subsystems.FSM_IntakeStatus;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.XboxController;
 
 
 
@@ -27,9 +24,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
+  private XboxController debug_controller;
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  private Timer tim = new Timer();
+  // private Timer tim = new Timer();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -38,6 +36,8 @@ public class Robot extends TimedRobot {
   Command mAutonomousCommand;
   @Override
   public void robotInit() {
+    
+    SmartDashboard.putData(CommandScheduler.getInstance());
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     // double kFF = SmartDashboard.getNumber("kShooterFF", ShooterConstants.kShooterFF);
@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
     // double kD = SmartDashboard.getNumber("kShooterD", ShooterConstants.kShooterD);
     
     m_robotContainer = new RobotContainer();
+    debug_controller = m_robotContainer.getDriveController();
     m_robotContainer.m_drivetrain.syncAllAngles();
     LiveWindow.disableAllTelemetry();
     auto.addOption("Example", new AUTO_Example(m_robotContainer.m_drivetrain, m_robotContainer.trajectory));
@@ -68,7 +69,11 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled comm.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    // SmartDashboard.putNumber("debug controller x", debug_controller.getRightX());
+    // SmartDashboard.putNumber("debug controller y", debug_controller.getLeftY());
     // m_robotContainer.updateOdometry();
+
+    
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -88,8 +93,6 @@ public class Robot extends TimedRobot {
     // schedule the autonomous command (example)
     if (mAutonomousCommand != null) {
       mAutonomousCommand.schedule();
-      tim.reset();
-      tim.start();
       
     }
   }
@@ -117,7 +120,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-
+    // m_robotContainer.turretOpenLoop(m_robotContainer.getRightX2());
   }
 
   @Override

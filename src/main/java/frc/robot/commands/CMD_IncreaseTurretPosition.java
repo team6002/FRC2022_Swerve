@@ -5,21 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SUB_Climber;
-public class CMD_ClimberMainToggle extends CommandBase {
-  /** Creates a new CMD_ClimberExtend. */
-  SUB_Climber m_climber;
-  public CMD_ClimberMainToggle(SUB_Climber p_climber) {
-    m_climber = p_climber;
+import frc.robot.subsystems.SUB_Turret;
+
+public class CMD_IncreaseTurretPosition extends CommandBase {
+  /** Creates a new CMD_IncreaseTurretPosition. */
+  SUB_Turret m_Turret;
+
+  public CMD_IncreaseTurretPosition(SUB_Turret p_Turret) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_Turret = p_Turret;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(m_climber.MainSolonoidState == false){
-    m_climber.setExtendMain();
-    }else m_climber.setRetractMain();
+    m_Turret.increasePosition();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -17,7 +17,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 
 public final class Constants {
-
     public static final class DriveConstants {
     public static double k_frontLeftOffset =0.0;   // 15;
     public static double k_backLeftOffset = 0.0;//40;
@@ -44,25 +43,19 @@ public final class Constants {
         public static final int kShooterSlave = 9;
     
         public static final double kShooterFF = 0.000230;
-        public static final double kShooterP = 0.000080;
+        public static final double kShooterP = 0.00010;
         public static final double kShooterI = 0; 
         public static final double kShooterD = 0.000;
     
         //Max free velocity ~5000
         public static final double kMaxShooterVelocity = 2750;//max working velocity 
-        public static final double kShootingVelocity =  1000;   //2075;    
+        public static final double kShootingVelocity =  2275;    
         public static final double kShootingAccel = 1200;
     
         public static final double kMinOutput = -1;
         public static final double kMaxOutput = 1;
     
         public static final double kShooterSpeed = 0.30;
-    
-        //turret
-        public static final int kTurretMotor = 1;
-    
-
-        
     }
     public static final class TurretConstants {
         //turret
@@ -78,38 +71,62 @@ public final class Constants {
         public static final double kMinTurretOutput = -1;
         public static final double kMaxTurretOutput = 1;
     
-        public static final double kTurretVoltage = 10;
+        public static final double kTurretVoltage = 3;
         public static final double kTurretHuntVoltage = 1;
+        public static final double kTurretMannualVoltage = 3;
+        public static final double kTurretResetVoltage = 1;
       }
+
     public static final class IndexerConstants{
-        // Intake stuff
+        //INTAKE PORTS
         public static final int kFrontIntake = 12;
         public static final int kBackIntake = 1;
         public static final int kFrontIntakeIR = 0;
         public static final int kBackIntakeIR=5 ;
-        public static final int kFrontIntakeSolonoid = 0;
-        public static final int kBackIntakeSolonoid = 1;
-
-        public static final double IntakeForward = 0.5;
-        public static final double IntakeOff = 0;
-        public static final double IntakeReverse = -0.4;
-
-        //Indexer stuff
         public static final int kIndexer = 7;
         public static final int kHopper  = 17;
         public static final int kHopperIR = 1;
+        public static final int kFrontIntakeSolonoid = 0;
+        public static final int kBackIntakeSolonoid = 1;
 
-        public static final double HopperForward = 0.3;
+        //INDEXER (pre-stager)
+        public static final double kIndexerFF = 0.00031;
+        public static final double kIndexerP = 0.0003;
+        public static final double kIndexerI = 0;  
+        public static final double kIndexerD = 0.0001;
+        public static final double kIndexerMaxVelocity = 2000;
+        public static final double kIndexerAccel = 2000;
+
+        //HOPPER
+        public static final double kHopperFF = 0.0003;
+        public static final double kHopperP = 0.000052;
+        public static final double kHopperI = 0.00000;  
+        public static final double kHopperD = 0.00001;
+        public static final double kHopperMaxVelocity = 4500;//1500;
+        public static final double kHopperAccel = 2000;
+
+        //INTAKE
+        public static final double kIntakeFF = 0.00026; 
+        public static final double kIntakeP = 0.000032;
+        public static final double kIntakeI = 0;  
+        public static final double kIntakeD = 0.0000;
+        public static final double kIntakeMaxVelocity = 2000;
+        public static final double kIntakeAccel = 2000;
+
+        //SPEEDS
+        public static final double kIndexerVelocity = 1000;
+        public static final double kHopperVelocity = 1500; //Sometimes runs 1700 for no reason??
+        public static final double kIntakeVelocity = 1100;
         public static final double HopperOff = 0;
-        public static final double HopperBackward = -0.3;
-
-        public static final double IndexerForward = 0.5;
         public static final double IndexerOff = 0;
-        public static final double IndexerBackward = -0.3;
+        public static final double IntakeOff = 0;
 
+       
+        public static final double kMinOutput = -1;
+        public static final double kMaxOutput = 1; 
 
     }
-    public static final class CLimberConstants{
+    public static final class ClimberConstants{
         public static final int kSecondaryClimberMotor1 = 10;
         public static final int kSecondaryClimberMotor2 = 11;
         public static final int kPrimaryClimberMotor1 = 18;

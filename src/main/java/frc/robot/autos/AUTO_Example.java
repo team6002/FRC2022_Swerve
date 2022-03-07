@@ -23,7 +23,7 @@ public class AUTO_Example extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    trajectory.driveTrajectory(trajectory.exampleTrajectory)
+    // trajectory.driveTrajectory(trajectory.exampleTrajectory)
     );
     
   }

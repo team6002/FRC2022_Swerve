@@ -5,32 +5,41 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SUB_Turret;
-public class CMD_TurretForward extends CommandBase {
-  SUB_Turret m_Turret;
-  /** Creates a new CMD_TurretForward. */
-  public CMD_TurretForward(SUB_Turret p_Turret) {
-    m_Turret = p_Turret;
+import frc.robot.subsystems.SUB_Climber;
+
+public class CMD_ClimberPrimarySetHome extends CommandBase {
+  /** Creates a new CMD_ClimberPrimarySetHome. */
+  SUB_Climber m_climber;
+  public CMD_ClimberPrimarySetHome(SUB_Climber p_climber) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_climber = p_climber;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Turret.setTurretForward();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_climber.setPrimaryGearEngage();
+    m_climber.movePrimaryClimber(-0.2);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("FINISHED HOMING PRIMARY CLIMBER");
+    m_climber.setPrimaryPosition(0); //reset encoder
+    m_climber.movePrimaryClimber(0); //stop moving
+    m_climber.setPrimaryGearDisengage(); //latch
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return m_climber.getPrimaryHomeLimitSwitch();
   }
 }

@@ -5,16 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.SUB_Turret;
 
-public class CMD_Wait extends CommandBase {
-  /** Creates a new CMD_Wait. */
-  public CMD_Wait() {
+public class CMD_BlueBall extends CommandBase {
+  SUB_Turret m_Turret;
+  /** Creates a new CMD_BlueBall. */
+  public CMD_BlueBall(SUB_Turret p_Turret) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_Turret = p_Turret;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_Turret.setBallColor(false);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

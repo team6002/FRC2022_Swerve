@@ -6,18 +6,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Turret;
-public class CMD_TurretReverse extends CommandBase {
+
+public class CMD_SetOffset extends CommandBase {
+  /** Creates a new CMD_SetOffset. */
   SUB_Turret m_Turret;
-  /** Creates a new CMD_TurretForward. */
-  public CMD_TurretReverse(SUB_Turret p_Turret) {
-    m_Turret = p_Turret;
+  
+  public CMD_SetOffset(SUB_Turret p_Turret) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_Turret = p_Turret;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Turret.setTurretReverse();
+    m_Turret.setOffset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

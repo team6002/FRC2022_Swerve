@@ -16,6 +16,10 @@ public class SwerveDriveCommand extends CommandBase {
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
   public boolean fieldMode = false;
+  double deadzone = 0.15;	//variable for amount of deadzone
+  double y = 0;           //variable for forward/backward movement
+  double x = 0;           //variable for side to side movement
+  double turn = 0;        //variable for turning movement
   
   public SwerveDriveCommand(SwerveDrivetrain drivetrain, XboxController controller) {
     this.drivetrain = drivetrain;
@@ -23,25 +27,18 @@ public class SwerveDriveCommand extends CommandBase {
 
     this.controller = controller;
   }
+
+  @Override
+  public void initialize() {
+  }
  
   @Override
   public void execute() {
-      double y = 0;           //variable for forward/backward movement
-      double x = 0;           //variable for side to side movement
-      double turn = 0;        //variable for turning movement
-      double deadzone = 0.5;	//variable for amount of deadzone
+      y = controller.getLeftY();
+
+      x = controller.getLeftX();
     
-      if(controller.getLeftY() > deadzone || controller.getLeftY() < -deadzone) {
-        y = controller.getLeftY();
-      }
-    
-      if(controller.getLeftX() > deadzone || controller.getLeftX() < -deadzone) {
-        x = controller.getLeftX();
-      }
-    
-      if(controller.getRightX() > deadzone || controller.getRightX() < -deadzone){
-        turn = controller.getRightX();
-      }
+      turn = controller.getRightX();
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
 
@@ -66,27 +63,33 @@ public class SwerveDriveCommand extends CommandBase {
       -rotLimiter.calculate(jStickBand(turn))
         * SwerveDrivetrain.kMaxAngularSpeed;
 
-    if(controller.getLeftTriggerAxis() >= 0.7){
-      //left evasive
-      drivetrain.LeftEvasive();
-    }else if(controller.getRightTriggerAxis() >= 0.7){
-      //right evasive
-      drivetrain.RightEvasive();
-    }else{
-      drivetrain.NonEvasive();
-      //non evasive
-    }
+    // if(controller.getLeftTriggerAxis() >= 0.7){
+    //   //left evasive
+    //   drivetrain.LeftEvasive();
+    // }else if(controller.getRightTriggerAxis() >= 0.7){
+    //   //right evasive
+    //   drivetrain.RightEvasive();
+    // }else{
+    //   drivetrain.NonEvasive();
+    //   //non evasive
+    // }
 
     if(controller.getRightBumperPressed()){
       drivetrain.fieldModeChange();
     }
     boolean fieldRelative = drivetrain.getFieldMode();
 
+    // SmartDashboard.putNumber("xspeed", xSpeed);
+    // SmartDashboard.putNumber("yspeed", ySpeed);
+    // SmartDashboard.putNumber("rotspeed", rot);
+    // SmartDashboard.putNumber("yaxis", controller.getLeftY());
+    // SmartDashboard.putNumber("x-axis", controller.getRightX());
+
     drivetrain.drive(xSpeed, ySpeed, rot, fieldRelative);
   }
 
   public double jStickBand(double value) {
-    if (Math.abs(value) < 0) return 0;
+    if (Math.abs(value) < deadzone) return 0;
 
     return value;
   }

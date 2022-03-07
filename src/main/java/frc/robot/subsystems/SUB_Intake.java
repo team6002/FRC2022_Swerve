@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -13,9 +14,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.IndexerConstants;
-import frc.robot.Util.TRG_Intake;
 import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;
 
 
@@ -47,20 +46,62 @@ public class SUB_Intake extends SubsystemBase {
     public boolean frontIntakeDeployed;
     public boolean backIntakeDeployed;
 
+    
+    private SparkMaxPIDController m_FrontController = m_FrontIntakeMotor.getPIDController();
+    private SparkMaxPIDController m_BackController = m_BackIntakeMotor.getPIDController();    
+    private SparkMaxPIDController m_HopperController = m_HopperMotor.getPIDController();
+    private SparkMaxPIDController m_IndexerController = m_IndexerMotor.getPIDController();
+    
     public SUB_Intake(FSM_IntakeStatus p_IntakeStatus) {
-    m_intakeStatus = p_IntakeStatus;
+      m_intakeStatus = p_IntakeStatus;
+        
+      m_HopperMotor.setInverted(false);
+      m_IndexerMotor.setInverted(true);
+
+      m_FrontController.setFF(IndexerConstants.kIntakeFF);
+      m_FrontController.setP(IndexerConstants.kIntakeP);
+      m_FrontController.setI(IndexerConstants.kIntakeI);
+      m_FrontController.setD(IndexerConstants.kIntakeD);
+
+      m_FrontController.setOutputRange(IndexerConstants.kMinOutput, IndexerConstants.kMaxOutput);
+      m_FrontController.setSmartMotionMaxVelocity(IndexerConstants.kIntakeVelocity, 0);
+      m_FrontController.setSmartMotionMaxAccel(IndexerConstants.kIntakeAccel, 0);
+
+      m_BackController.setFF(IndexerConstants.kIntakeFF);
+      m_BackController.setP(IndexerConstants.kIntakeP);
+      m_BackController.setI(IndexerConstants.kIntakeI);
+      m_BackController.setD(IndexerConstants.kIntakeD);
+
+      m_BackController.setOutputRange(IndexerConstants.kMinOutput, IndexerConstants.kMaxOutput);
+      m_BackController.setSmartMotionMaxVelocity(IndexerConstants.kIntakeVelocity, 0);
+      m_BackController.setSmartMotionMaxAccel(IndexerConstants.kIntakeAccel, 0);
+
+      m_HopperController.setFF(IndexerConstants.kHopperFF);
+      m_HopperController.setP(IndexerConstants.kHopperP);
+      m_HopperController.setI(IndexerConstants.kHopperI);
+      m_HopperController.setD(IndexerConstants.kHopperD);
+
+      m_HopperController.setOutputRange(IndexerConstants.kMinOutput, IndexerConstants.kMaxOutput);
+      m_HopperController.setSmartMotionMaxVelocity(IndexerConstants.kHopperVelocity, 0);
+      m_HopperController.setSmartMotionMaxAccel(IndexerConstants.kHopperAccel, 0);
       
-    m_HopperMotor.setInverted(true);
-    m_IndexerMotor.setInverted(true);
+      m_IndexerController.setFF(IndexerConstants.kIndexerFF);
+      m_IndexerController.setP(IndexerConstants.kIndexerP);
+      m_IndexerController.setI(IndexerConstants.kIndexerI);
+      m_IndexerController.setD(IndexerConstants.kIndexerD);
+
+      m_IndexerController.setOutputRange(IndexerConstants.kMinOutput, IndexerConstants.kMaxOutput);
+      m_IndexerController.setSmartMotionMaxVelocity(IndexerConstants.kIndexerVelocity, 0);
+      m_IndexerController.setSmartMotionMaxAccel(IndexerConstants.kIndexerAccel, 0);
     }
     
     public void setFrontIntakeForward(){
-        m_FrontIntakeMotor.set(IndexerConstants.IntakeForward);
+      m_FrontController.setReference(IndexerConstants.kIntakeVelocity, CANSparkMax.ControlType.kVelocity);
         frontIntakeState = 1;
     }
 
     public void setFrontIntakeReverse(){
-        m_FrontIntakeMotor.set(IndexerConstants.IntakeReverse);
+      m_FrontController.setReference(-IndexerConstants.kIntakeVelocity, CANSparkMax.ControlType.kVelocity);
         frontIntakeState = -1;
     }
     public void setFrontIntakeOff(){
@@ -78,16 +119,15 @@ public class SUB_Intake extends SubsystemBase {
       m_FrontIntakeSolenoid.set(false);
       frontIntakeDeployed = false;
     }
-  
 
-      public void setBackIntakeForward(){
-        m_BackIntakeMotor.set(IndexerConstants.IntakeForward);
+    public void setBackIntakeForward(){
+      m_BackController.setReference(IndexerConstants.kIntakeVelocity, CANSparkMax.ControlType.kVelocity);
     }
     public void setBackIntakeReverse(){
-        m_BackIntakeMotor.set(IndexerConstants.IntakeReverse);
+      m_BackController.setReference(-IndexerConstants.kIntakeVelocity, CANSparkMax.ControlType.kVelocity);
     }
     public void setBackIntakeOff(){
-        m_BackIntakeMotor.set(IndexerConstants.IntakeOff);
+      m_BackIntakeMotor.set(IndexerConstants.IntakeOff);
     }
     public double getBackVelocity(){
         return m_BackIntakeEncoder.getVelocity();
@@ -102,17 +142,18 @@ public class SUB_Intake extends SubsystemBase {
     }
 
   public void setHopperOff(){
-    m_HopperMotor.set(IndexerConstants.HopperOff);
+    m_HopperMotor.set(0);
     hopperState = 0;
   }
 
   public void setHopperForward(){
-    m_HopperMotor.set(IndexerConstants.HopperForward);
+    // m_HopperMotor.set(1); //4500
+    m_HopperController.setReference(IndexerConstants.kHopperVelocity, CANSparkMax.ControlType.kVelocity);
     hopperState = 1;
   }
 
   public void setHopperBackward(){
-    m_HopperMotor.set(IndexerConstants.HopperBackward);
+    m_HopperController.setReference(-IndexerConstants.kHopperVelocity, CANSparkMax.ControlType.kVelocity);
     hopperState = -1;
   }
   
@@ -122,12 +163,12 @@ public class SUB_Intake extends SubsystemBase {
   }
   
   public void setIndexerForward(){
-    m_IndexerMotor.set(IndexerConstants.IndexerForward);
+    m_IndexerController.setReference(IndexerConstants.kIndexerVelocity, CANSparkMax.ControlType.kVelocity);
     indexerState = 1;
   }
 
   public void setIndexerBackward(){
-    m_IndexerMotor.set(IndexerConstants.IndexerBackward);
+    m_IndexerController.setReference(-IndexerConstants.kIndexerVelocity, CANSparkMax.ControlType.kVelocity);
     indexerState = -1;
   }
   public boolean getHopperStatus(){
@@ -135,18 +176,22 @@ public class SUB_Intake extends SubsystemBase {
   }
 
 
-
-
-
-    @Override
-    public void periodic() {
-      if (m_intakeStatus.getState(IntakeState.SHOOTING)== true){
+  @Override
+  public void periodic() {
+    // if (m_intakeStatus.getState(IntakeState.SHOOTING)== true){
         
-      }else if (getHopperStatus()){
-        setHopperOff();
-      }
-      SmartDashboard.putString("IntakeStatus", m_intakeStatus.getState().toString());
-    
+    // }else
+    if (getHopperStatus() && m_intakeStatus.isState(IntakeState.INTAKE)){
+      setHopperOff();
     }
+    
+
+
+    SmartDashboard.putBoolean("HopperFull?", getHopperStatus());
+    SmartDashboard.putString("IntakeState", m_intakeStatus.getCurrentState().toString());
+    SmartDashboard.putNumber("Hopper Velocity", m_HopperMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Intake Velocity", m_FrontIntakeEncoder.getVelocity());
+    SmartDashboard.putNumber("Indexer Velocity", m_IndexerMotor.getEncoder().getVelocity());
+  }
 }
         

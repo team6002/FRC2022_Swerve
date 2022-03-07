@@ -40,10 +40,10 @@ public class SwerveDrivetrain extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(11.75));
   private final Translation2d m_backRightLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(-11.75));
 
-  private final SwerveModule m_frontLeft = new SwerveModule(15, 16, DriveConstants.k_frontLeftOffset, true);
-  private final SwerveModule m_frontRight = new SwerveModule(13, 14, DriveConstants.k_frontRightOffset, false);
-  private final SwerveModule m_backLeft = new SwerveModule(3, 4, DriveConstants.k_backLeftOffset, true);
-  private final SwerveModule m_backRight = new SwerveModule(5, 6, DriveConstants.k_backRightOffset, false);
+  private final SwerveModule m_frontLeft = new SwerveModule(15, 16, DriveConstants.k_frontLeftOffset, false);
+  private final SwerveModule m_frontRight = new SwerveModule(13, 14, DriveConstants.k_frontRightOffset, true);
+  private final SwerveModule m_backLeft = new SwerveModule(3, 4, DriveConstants.k_backLeftOffset, false);
+  private final SwerveModule m_backRight = new SwerveModule(5, 6, DriveConstants.k_backRightOffset, true);
 
   private final SUB_Navx m_Navx = new SUB_Navx();   
   private double EvasiveX = 0;
@@ -172,13 +172,13 @@ public class SwerveDrivetrain extends SubsystemBase {
   public void periodic() {
     updateOdometry();
     SmartDashboard.putBoolean("FieldRelative", fieldMode);
-    SmartDashboard.putNumber("OdoX", getOdometryX());
-    SmartDashboard.putNumber("OdoY", getOdometryY());
-    SmartDashboard.putNumber("OdoRotate", getOdometryRotate());
-    m_frontLeft.updateSmartDashboard();
-    m_frontRight.updateSmartDashboard();
-    m_backLeft.updateSmartDashboard();
-    m_backRight.updateSmartDashboard();
+    // SmartDashboard.putNumber("OdoX", getOdometryX());
+    // SmartDashboard.putNumber("OdoY", getOdometryY());
+    // SmartDashboard.putNumber("OdoRotate", getOdometryRotate());
+    // m_frontLeft.updateSmartDashboard();
+    // m_frontRight.updateSmartDashboard();
+    // m_backLeft.updateSmartDashboard();
+    // m_backRight.updateSmartDashboard();
 
     // This method will be called once per scheduler run
   }

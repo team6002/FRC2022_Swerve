@@ -36,9 +36,9 @@ public class AUTO_Red2 extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    new CMD_FrontIntakeForward(m_intake),
-    trajectory.driveTrajectory(trajectory.FirstBallTrajectory),
-    new CMD_Shooting(m_intake, m_shooter, m_intakeStatus)
+    // new CMD_FrontIntakeForward(m_intake),
+    // trajectory.driveTrajectory(trajectory.FirstBallTrajectory),
+    // new CMD_Shooting(m_intake, m_shooter, m_intakeStatus)
     
     );
     

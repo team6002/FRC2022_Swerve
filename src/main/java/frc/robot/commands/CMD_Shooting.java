@@ -31,14 +31,13 @@ public class CMD_Shooting extends CommandBase {
     new CMD_ShooterOn(m_shooter),
     new CMD_IndexerForward(m_intake),
     new CMD_HopperForward(m_intake),
-    new CMD_BackIntakeForward(m_intake),
-    new CMD_FrontIntakeForward(m_intake),
     new CMD_HopperCheck(m_intake),
     new CMD_IndexerOff(m_intake),
     new CMD_ShooterOff(m_shooter),
+    new CMD_BackIntakeForward(m_intake),
+    new CMD_FrontIntakeForward(m_intake),
     new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.INTAKE)
     );
-   
   }
 
   // Called every time the scheduler runs while the command is scheduled.

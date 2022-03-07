@@ -6,18 +6,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Turret;
-public class CMD_TurretOff extends CommandBase {
+
+public class CMD_RedBall extends CommandBase {
   SUB_Turret m_Turret;
-  /** Creates a new CMD_TurretForward. */
-  public CMD_TurretOff(SUB_Turret p_Turret) {
-    m_Turret = p_Turret;
+
+  /** Creates a new CMD_RedBall. */
+  public CMD_RedBall(SUB_Turret p_Turret) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_Turret = p_Turret;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Turret.setTurretOff();
+    m_Turret.setBallColor(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
