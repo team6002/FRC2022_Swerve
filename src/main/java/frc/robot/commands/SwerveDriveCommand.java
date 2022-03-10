@@ -3,6 +3,7 @@ package frc.robot.commands;
 // import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrivetrain;
 
@@ -16,7 +17,7 @@ public class SwerveDriveCommand extends CommandBase {
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
   public boolean fieldMode = false;
-  double deadzone = 0.15;	//variable for amount of deadzone
+  double deadzone = 0.2;	//variable for amount of deadzone
   double y = 0;           //variable for forward/backward movement
   double x = 0;           //variable for side to side movement
   double turn = 0;        //variable for turning movement
@@ -63,25 +64,25 @@ public class SwerveDriveCommand extends CommandBase {
       -rotLimiter.calculate(jStickBand(turn))
         * SwerveDrivetrain.kMaxAngularSpeed;
 
-    // if(controller.getLeftTriggerAxis() >= 0.7){
-    //   //left evasive
-    //   drivetrain.LeftEvasive();
-    // }else if(controller.getRightTriggerAxis() >= 0.7){
-    //   //right evasive
-    //   drivetrain.RightEvasive();
-    // }else{
-    //   drivetrain.NonEvasive();
-    //   //non evasive
-    // }
+    if(controller.getLeftTriggerAxis() >= 0.7){
+      //left evasive
+      drivetrain.LeftEvasive();
+    }else if(controller.getRightTriggerAxis() >= 0.7){
+      //right evasive
+      drivetrain.RightEvasive();
+    }else{
+      drivetrain.NonEvasive();
+      //non evasive
+    }
 
-    if(controller.getRightBumperPressed()){
+    if(controller.getAButtonPressed()){
       drivetrain.fieldModeChange();
     }
     boolean fieldRelative = drivetrain.getFieldMode();
 
-    // SmartDashboard.putNumber("xspeed", xSpeed);
-    // SmartDashboard.putNumber("yspeed", ySpeed);
-    // SmartDashboard.putNumber("rotspeed", rot);
+    SmartDashboard.putNumber("xspeed", xSpeed);
+    SmartDashboard.putNumber("yspeed", ySpeed);
+    SmartDashboard.putNumber("rotspeed", rot);
     // SmartDashboard.putNumber("yaxis", controller.getLeftY());
     // SmartDashboard.putNumber("x-axis", controller.getRightX());
 

@@ -12,8 +12,9 @@ public class CMD_ClimberPrimaryArmMove extends CommandBase {
   SUB_Climber m_climber;
   private double m_setpoint;
   private double m_tolerance;
+  // private double m_timeout;
   public CMD_ClimberPrimaryArmMove(SUB_Climber p_climber, double p_setpoint,
-                                  double p_tolerance) {
+                                  double p_tolerance) {//fourth parameter, timeout
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = p_climber;
     m_setpoint = p_setpoint;

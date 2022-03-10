@@ -18,14 +18,17 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
     public static final class DriveConstants {
-    public static double k_frontLeftOffset =0.0;   // 15;
-    public static double k_backLeftOffset = 0.0;//40;
-    public static double k_frontRightOffset = 0.0;
-    public static double k_backRightOffset = 0.0;// 164;
-    public static double k_LeftEvasiveX = 0.0635;
-    public static double k_LeftEvasiveY = 0.6477;
-    public static double k_RightEvasiveX = 0.6477;
-    public static double k_RightEvasiveY = -0.0635;
+        public static double k_frontLeftOffset =0.0;   // 15;
+        public static double k_backLeftOffset = 0.0;//40;
+        public static double k_frontRightOffset = 0.0;
+        public static double k_backRightOffset = 0.0;// 164;
+
+        public static double k_LeftEvasiveX = 0.0635;
+        public static double k_LeftEvasiveY = 0.6477;
+        public static double k_RightEvasiveX = 0.6477;
+        public static double k_RightEvasiveY = -0.0635;
+        
+        public static int kNavXAdjustment = 0;
     }
         /**
      * Gear Ratios for Swerve
@@ -47,10 +50,10 @@ public final class Constants {
         public static final double kShooterI = 0; 
         public static final double kShooterD = 0.000;
     
-        //Max free velocity ~5000
-        public static final double kMaxShooterVelocity = 2750;//max working velocity 
-        public static final double kShootingVelocity =  2475;    
-        public static final double kShootingAccel = 1200;
+        //Shooter is 2:1
+        public static final double kMaxShooterVelocity = 5500; //2750;//max working velocity 
+        public static final double kShootingVelocity =  2950;//2475;    
+        public static final double kShootingAccel = 4950;
     
         public static final double kMinOutput = -1;
         public static final double kMaxOutput = 1;
@@ -81,8 +84,8 @@ public final class Constants {
         //INTAKE PORTS
         public static final int kFrontIntake = 12;
         public static final int kBackIntake = 1;
-        public static final int kFrontIntakeIR = 0;
-        public static final int kBackIntakeIR=5 ;
+        public static final int kFrontIntakeIR = 2;
+        public static final int kBackIntakeIR= 3;
         public static final int kIndexer = 7;
         public static final int kHopper  = 17;
         public static final int kHopperIR = 1;
@@ -114,9 +117,9 @@ public final class Constants {
         public static final double kIntakeAccel = 2000;
 
         //SPEEDS
-        public static final double kIndexerVelocity = 1100;
-        public static final double kHopperVelocity = 1200; 
-        public static final double kIntakeVelocity = 900;
+        public static final double kIndexerVelocity = 1500;
+        public static final double kHopperVelocity = 1500; 
+        public static final double kIntakeVelocity = 1800;
         public static final double HopperOff = 0;
         public static final double IndexerOff = 0;
         public static final double IntakeOff = 0;
@@ -181,8 +184,8 @@ public final class Constants {
      
 
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = 2.5;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 1.5;
+        public static final double kMaxSpeedMetersPerSecond = 0.5;//2.5;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;//1.5;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI/4;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI/4;
     

@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.XboxController;
  * project.
  */
 public class Robot extends TimedRobot {
-  private XboxController debug_controller;
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
   // private Timer tim = new Timer();
@@ -38,21 +37,20 @@ public class Robot extends TimedRobot {
   Command mAutonomousCommand = new AUTO_Nothing();
   @Override
   public void robotInit() {
-    
-    SmartDashboard.putData(CommandScheduler.getInstance());
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    // double kFF = SmartDashboard.getNumber("kShooterFF", ShooterConstants.kShooterFF);
-    // double kP = SmartDashboard.getNumber("kShooterP", ShooterConstants.kShooterP);
-    // double kD = SmartDashboard.getNumber("kShooterD", ShooterConstants.kShooterD);
-    
     m_robotContainer = new RobotContainer();
-    debug_controller = m_robotContainer.getDriveController();
+    
+
+    m_robotContainer.m_NavxGyro.resetNavx();
     m_robotContainer.m_drivetrain.syncAllAngles();
     LiveWindow.disableAllTelemetry();
-    // auto.addOption("Red1", new AUTO_RED1(m_robotContainer.m_drivetrain, m_robotContainer.trajectory, m_robotContainer.m_intake, m_robotContainer.m_shooter, m_robotContainer.m_intakeStatus));
-    // auto.addOption("Forward And Back", new AUTO_ForwardWaitBack(m_robotContainer.m_drivetrain,m_robotContainer.trajectory));
+    auto.addOption("Rightside ThreeBall", 
+                    new AUTO_ThreeBall(m_robotContainer.m_turret, m_robotContainer.m_intake, 
+                                      m_robotContainer.m_intakeStatus, m_robotContainer.m_shooter, 
+                                      m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory));
     SmartDashboard.putData("Auto Mode", auto);
+    SmartDashboard.putData(CommandScheduler.getInstance());
   }
 
   /**
@@ -69,8 +67,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled comm.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    // SmartDashboard.putNumber("debug controller x", debug_controller.getRightX());
-    // SmartDashboard.putNumber("debug controller y", debug_controller.getLeftY());
+    SmartDashboard.putData(CommandScheduler.getInstance());
     // m_robotContainer.updateOdometry();
 
     
@@ -90,10 +87,9 @@ public class Robot extends TimedRobot {
     m_robotContainer.m_drivetrain.resetDriveEncoder();
     m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));// temp
     // mAutonomousCommand = auto.getSelected();
-    mAutonomousCommand = new AUTO_Shoot(m_robotContainer.m_turret, m_robotContainer.m_intake, 
-                        m_robotContainer.m_intakeStatus, m_robotContainer.m_shooter, m_robotContainer.m_drivetrain);
-    //new AUTO_RED1(m_robotContainer.m_drivetrain, m_robotContainer.trajectory, m_robotContainer.m_intake, m_robotContainer.m_shooter, m_robotContainer.m_intakeStatus);
-    // schedule the autonomous command (example)
+    mAutonomousCommand = new AUTO_ThreeBall(m_robotContainer.m_turret, m_robotContainer.m_intake, 
+                        m_robotContainer.m_intakeStatus, m_robotContainer.m_shooter, 
+                        m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory);
     if (mAutonomousCommand != null) {
       mAutonomousCommand.schedule();
     }
@@ -106,7 +102,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // m_robotContainer.m_NavxGyro.resetNavx();
     // m_robotContainer.m_drivetrain.resetDriveEncoder();
     // m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
     // This makes sure that the autonomous stops running when
@@ -121,9 +116,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    // m_robotContainer.turretOpenLoop(m_robotContainer.getRightX2());
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {

@@ -20,7 +20,7 @@ public class CMD_ClimbFull extends SequentialCommandGroup {
     m_climber = p_climber;
     addCommands(
       new CMD_ClimberPrimaryArmMove(m_climber, 0, 1), //Climber lift to 1st bar
-      new WaitCommand(0.25),
+      // new WaitCommand(0.1),
       new CMD_ClimberSecondaryArmMove(m_climber, 97, 1), //Climber captures 2nd bar
       // new WaitCommand(1),
       new ParallelCommandGroup(
@@ -32,17 +32,17 @@ public class CMD_ClimbFull extends SequentialCommandGroup {
         new CMD_ClimberSecondaryArmMove(m_climber, 110, 2)
       ),
       new CMD_ClimberPrimaryArmMove(m_climber, 30, 2),
-      new CMD_ClimberPrimaryArmMove(m_climber, 60, 2), //The release
+      new CMD_ClimberPrimaryArmMove(m_climber, 75, 2), //The release
       //major swing alert WEEEEEEEEEEEEE
       new CMD_ClimberSecondaryArmMove(m_climber, 40, 1),//pull robot in
       new CMD_ClimberPrimaryArmMove(m_climber, 100, 1), //put primary arm behind 2nd bar
       new CMD_ClimberSecondaryArmMove(m_climber, 85,1), //lean primary arm against 2nd bar
-      new WaitCommand(0.1),
+      // new WaitCommand(0.1),
       new CMD_ClimberPrimaryArmMove(m_climber, 40, 1),  //swap hands on 2nd bar
       //REPEAT PARTIAL CLIMB
       new CMD_ClimberSecondaryArmMove(m_climber, 115, 1), //lay back the 2nd arm before repeating partial
       new CMD_ClimberPrimaryArmMove(m_climber, 0, 1), //Climber lift to 1st bar
-      new WaitCommand(0.25),
+      // new WaitCommand(0.1),
       new CMD_ClimberSecondaryArmMove(m_climber, 97, 1), //Climber captures 2nd bar
       new ParallelCommandGroup(
         new CMD_ClimberPrimaryArmMove(m_climber, 10, 2), //Start rocking down
@@ -53,7 +53,7 @@ public class CMD_ClimbFull extends SequentialCommandGroup {
         new CMD_ClimberSecondaryArmMove(m_climber, 110, 2)
       ),
       new CMD_ClimberPrimaryArmMove(m_climber, 30, 2),
-      new CMD_ClimberPrimaryArmMove(m_climber, 60, 2) //The release
+      new CMD_ClimberPrimaryArmMove(m_climber, 80, 2) //The release
     );
   }
 }

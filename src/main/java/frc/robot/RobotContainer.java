@@ -35,7 +35,7 @@ public class RobotContainer {
   public final SUB_Navx m_NavxGyro = new SUB_Navx();
   public final SUB_Climber m_climber = new SUB_Climber();
   public final SUB_Turret m_turret = new SUB_Turret();
-  public final AUTO_Trajectory trajectory = new AUTO_Trajectory(m_drivetrain);
+  public final AUTO_Trajectory m_autotrajectory = new AUTO_Trajectory(m_drivetrain);
   public final SUB_Shooter m_shooter = new SUB_Shooter();
   Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
   
@@ -48,6 +48,8 @@ public class RobotContainer {
     SmartDashboard.putData("ResetAngles", new CMD_ResetSwerve(m_drivetrain));
     SmartDashboard.putData("Secondary Climber Home", new CMD_ClimberSecondarySetHome(m_climber,true));
     SmartDashboard.putData("Primary Climber Home", new CMD_ClimberPrimarySetHome(m_climber,true));
+    SmartDashboard.putData("Reset NavX", new CMD_ResetNavX(m_NavxGyro));
+    
     // Configure the button bindings
     configureButtonBindings();
     m_drivetrain.setDefaultCommand(new SwerveDriveCommand(m_drivetrain, m_driverController));
@@ -78,15 +80,13 @@ public class RobotContainer {
 
    
    /** 
-    * TODO TOP PRIORITY:
-    * Homing button for climbing arm (similar to turret reset)
     * IMPROVEMENTS:
     * Alter command structure so that commands tell robot what statee to be in, and 
     *   subsystem handles actual movement to state
     * Decide flow of subsystems (when shooter turns off, intake when?)
     * Idle state for Shooter (lower rpm)
     * Global Robot Status (network tables, or constants-like file)
-    * Singleton Subsystems (getInstance())
+    * Singleton Subsystems? (getInstance())
   */ 
 
   // shooting
@@ -124,75 +124,26 @@ public class RobotContainer {
       .whenPressed(new CMD_ClimberSecondarySetHome(m_climber, true)
     );
 
-    new JoystickButton(m_driverController, XboxController.Button.kA.value)
-      .whenPressed(new CMD_InitalizeClimbMode(m_climber)
+    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+      .whenPressed(new CMD_FrontIntakeToggle(m_intake, m_intakeStatus)
     );
 
-    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+      .whenPressed(new CMD_BackIntakeToggle(m_intake, m_intakeStatus)
+    );
+
+    new POVButton(m_driverController, 180)
+      .whenPressed(new CMD_InitalizeClimbMode(m_climber, m_turret)
+    );
+
+    new JoystickButton(m_driverController, XboxController.Button.kBack.value)
       .whenPressed(new CMD_ClimbPartial(m_climber)
     );
 
-    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
       .whenPressed(new CMD_ClimbFull(m_climber)
     );
 
-    // new JoystickButton(m_driverController, XboxController.Button.kX.value)
-    //   .whenPressed(new CMD_ClimbTenPoints(m_climber)
-    // );
-
-    new JoystickButton(m_driverController, XboxController.Button.kBack.value)
-      .whenPressed(new CMD_ClimberPrimaryToggle(m_climber)
-    );
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
-      .whenPressed(new CMD_ClimberSecondaryToggle(m_climber)
-    );
-    // new JoystickButton(m_driverController, XboxController.Button.kB.value)
-    //   .whenPressed(new CMD_ClimberLevitate(m_climber)
-    // );
-    // new JoystickButton(m_operatorController, XboxController.Button.kY.value)
-    //   .whenPressed(new CMD_ClimberPrimaryToggle(m_climber)
-    // );
-  
-    // new JoystickButton(m_operatorController, XboxController.Button.kX.value)
-    //   .and(new TRG_ClimberMode(m_climberMode, ClimberState.CLIMBING))
-    //   .whenActive(new CMD_ClimberSecondaryToggle(m_climber)
-    //   //.whenInactive(new reset turret)
-    // );
-    
-    // new JoystickButton(m_driverController, XboxController.Button.kB.value)
-    // .whenPressed(new SequentialCommandGroup(
-    //   new CMD_FrontIntakeForward(m_intake),
-    //   new CMD_HopperForward(m_intake),
-    //   new CMD_FrontSolonoidExtend(m_intake),
-    //   new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.INTAKE)
-    // ));
-
-    // new JoystickButton(m_driverController, XboxController.Button.kA.value)
-    // .whenPressed(new SequentialCommandGroup(
-    //   new CMD_FrontSolonoidRetract(m_intake),
-    //   new CMD_FrontIntakeOff(m_intake),
-    //   new CMD_HopperOff(m_intake)
-    //   //INTAKESTATE FRONT RETRACTED?
-    // ));
-
-    // new JoystickButton(m_driverController, XboxController.Button.kY.value)
-    // .whenPressed(new SequentialCommandGroup(
-    //   new CMD_BackSolonoidRetract(m_intake),
-    //   new CMD_BackIntakeOff(m_intake),
-    //   new CMD_HopperOff(m_intake)
-    //   //INTAKESTATE BACK RETRACTED?
-    //   ));
-    
-
-    // new JoystickButton(m_driverController, XboxController.Button.kX.value)
-    // .whenPressed(new SequentialCommandGroup(
-    //   new CMD_BackSolonoidExtend(m_intake),
-    //   new CMD_HopperForward(m_intake),
-    //   new CMD_BackIntakeForward(m_intake),
-    //   new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.INTAKE)
-    // ));
-
-    
   }
   
 
@@ -208,12 +159,12 @@ public class RobotContainer {
     return m_operatorController.getRightX();
   }
 
-  public void turretOpenLoop(double d) {
-    if(Math.abs(d) < .06) {
-      m_turret.setOpenLoop(0);
-    }
-    else {
-      m_turret.setOpenLoop(d);
-    }
-  }
+  // public void turretOpenLoop(double d) {
+  //   if(Math.abs(d) < .06) {
+  //     m_turret.setOpenLoop(0);
+  //   }
+  //   else {
+  //     m_turret.setOpenLoop(d);
+  //   }
+  // }
 }

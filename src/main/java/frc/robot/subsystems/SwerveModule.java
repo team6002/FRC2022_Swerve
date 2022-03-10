@@ -158,7 +158,6 @@ public class SwerveModule {
     Rotation2d rotationDelta = rotation.minus(currentRotation);
     double position = rotationDelta.getDegrees() + m_turningEncoder.getPosition();
     m_turningPIDController.setReference(position, ControlType.kPosition);
-    
   }
 
 

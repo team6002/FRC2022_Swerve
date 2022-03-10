@@ -4,16 +4,21 @@
 
 package frc.robot.autos;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
@@ -21,13 +26,16 @@ import frc.robot.subsystems.SwerveDrivetrain;
 /** Add your docs here. */
 
 public class AUTO_Trajectory {
+    
+    // String trajectoryJSON = "paths/FirstBall.wpilib.json";
+    Trajectory trajectory = new Trajectory();
     private SwerveDrivetrain m_drivetrain;
     // public Trajectory threeMetersForwardTrajectory;
     // public Trajectory threeMetersBackwardTrajectory;
     // public Trajectory exampleTrajectory;
     public Trajectory FirstBallTrajectory;
     public Trajectory SecondBallTrajectory;
-    public Trajectory FluidThreeBallTrajectory;
+    // public Trajectory FluidThreeBallTrajectory;
     // public Trajectory ThirdBallTrajectory;
     // public Trajectory ReturnTrajectory;
 
@@ -41,6 +49,15 @@ public class AUTO_Trajectory {
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(m_drivetrain.m_kinematics);
 
+        // Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+        //     try {
+        //         trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        //     } catch (IOException e) {
+        //         e.printStackTrace();
+        // }           
+        
+        //Rotation2d uses RADIANS NOT DEGREES!
+        //Use Rotation2d.fromDegrees(desiredDegree) instead
         FirstBallTrajectory = 
         TrajectoryGenerator.generateTrajectory(
             new Pose2d(0,0, new Rotation2d(0)),
@@ -48,28 +65,21 @@ public class AUTO_Trajectory {
                 //  new Translation2d(0.5, 0)
             ), 
             new Pose2d(1.1,0, new Rotation2d(0)), 
-            config);
+            config
+        );
 
         SecondBallTrajectory =
         TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)),
             List.of(
-                new Translation2d(-0.25, -1),
-                new Translation2d(-0.435, -2.4)
+                // new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+                // new Pose2d(-0.25, -1, Rotation2d.fromDegrees(0)),
             ),
-            new Pose2d(-0.438, -2.43, new Rotation2d(-55)),
-            config);
-        
-        FluidThreeBallTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)), 
-            List.of(
-                new Translation2d(1, 0),
-                new Translation2d(1, -2)
-            ), 
-            new Pose2d(0, -2, new Rotation2d(0)), 
-            config);
-        // ThirdBallTrajectory =
+            new Pose2d(-0.8, -2.371, Rotation2d.fromDegrees(45)),
+            config.setReversed(true)
+        );    
+            
+            // ThirdBallTrajectory =
         // TrajectoryGenerator.generateTrajectory(
         //     new Pose2d(5,1.8, new Rotation2d(0)),
         //      List.of(new Translation2d(4,1))

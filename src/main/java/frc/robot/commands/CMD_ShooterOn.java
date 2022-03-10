@@ -30,7 +30,7 @@ public class CMD_ShooterOn extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        boolean isFinish = (m_Shooter.getVelocity() >= ShooterConstants.kShootingVelocity);
+        boolean isFinish = (m_Shooter.getVelocity() >= m_Shooter.getShooterSetpoint());
         if (m_runtime.get() > m_maxRuntime) isFinish = true;
         
         return isFinish;

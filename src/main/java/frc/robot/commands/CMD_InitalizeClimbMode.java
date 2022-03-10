@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.SUB_Climber;
+import frc.robot.subsystems.SUB_Turret;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -16,11 +17,14 @@ public class CMD_InitalizeClimbMode extends ParallelCommandGroup {
    * Deploys the primary and secondary arms 
   */
   SUB_Climber m_climber;
-  public CMD_InitalizeClimbMode(SUB_Climber p_climber) {
+  SUB_Turret m_turret;
+  public CMD_InitalizeClimbMode(SUB_Climber p_climber, SUB_Turret p_turret) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     m_climber = p_climber;
+    m_turret = p_turret;
     addCommands(
+      new CMD_FrontTurret(p_turret),
       new SequentialCommandGroup(
         new CMD_ClimberPrimarySetHome(m_climber, false),
         new CMD_ClimbDeployPrimaryClimber(m_climber)

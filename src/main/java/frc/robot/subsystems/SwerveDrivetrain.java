@@ -43,12 +43,12 @@ public class SwerveDrivetrain extends SubsystemBase {
   private final SwerveModule m_frontLeft = new SwerveModule(15, 16, DriveConstants.k_frontLeftOffset, false);
   private final SwerveModule m_frontRight = new SwerveModule(13, 14, DriveConstants.k_frontRightOffset, true);
   private final SwerveModule m_backLeft = new SwerveModule(3, 4, DriveConstants.k_backLeftOffset, false);
-  private final SwerveModule m_backRight = new SwerveModule(5, 6, DriveConstants.k_backRightOffset, true);
+  private final SwerveModule m_backRight = new SwerveModule(5, 6, DriveConstants.k_backRightOffset, false);
 
   private final SUB_Navx m_Navx = new SUB_Navx();   
   private double EvasiveX = 0;
   private double EvasiveY = 0;
-  private boolean fieldMode = false;
+  private boolean fieldMode = true;
 
   public final SwerveDriveKinematics m_kinematics =
       new SwerveDriveKinematics(
@@ -96,11 +96,8 @@ public class SwerveDrivetrain extends SubsystemBase {
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_Navx.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot), new Translation2d(EvasiveX,EvasiveY));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);
+    // SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+    setModuleStates(swerveModuleStates);
   }
   
   public void setModuleStates(SwerveModuleState[] desiredStates) {

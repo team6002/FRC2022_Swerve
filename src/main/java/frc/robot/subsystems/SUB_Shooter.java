@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -22,6 +23,9 @@ public class SUB_Shooter extends SubsystemBase{
     //PID controller
     private SparkMaxPIDController m_Controller = m_ShooterMaster.getPIDController();
 
+    private double m_ShooterSetpoint = ShooterConstants.kShootingVelocity;
+    private boolean wantShooter = false;
+
     public SUB_Shooter()
     {
         m_ShooterMaster.restoreFactoryDefaults();
@@ -40,24 +44,27 @@ public class SUB_Shooter extends SubsystemBase{
         m_Controller.setOutputRange(ShooterConstants.kMinOutput, ShooterConstants.kMaxOutput);
         m_Controller.setSmartMotionMaxVelocity(ShooterConstants.kShootingVelocity, 0);
         m_Controller.setSmartMotionMaxAccel(ShooterConstants.kShootingAccel, 0);
+        SmartDashboard.putNumber("Desired Shooter Setpoint", ShooterConstants.kShootingVelocity);
     }
 
-    //turns on shooter
-    public void shooterOn()
-    {
-        m_ShooterMaster.set(ShooterConstants.kShooterSpeed);
-    }
+    // //turns on shooter
+    // public void shooterOn()
+    // {
+    //     m_ShooterMaster.set(ShooterConstants.kShooterSpeed);
+    // }
 
     //turns off shooter
     public void shooterOff()
     {
-        m_ShooterMaster.set(0);
+        wantShooter = false;
+        // m_ShooterMaster.set(0);
     }
 
     //gets the shooter up to speed
     public void readyShooter()
     {
-        m_Controller.setReference(ShooterConstants.kShootingVelocity, CANSparkMax.ControlType.kVelocity);
+        wantShooter = true;
+        // m_Controller.setReference(ShooterConstants.kShootingVelocity, CANSparkMax.ControlType.kVelocity);
     }
 
     //checks if the shooter is ready to shoot
@@ -71,9 +78,21 @@ public class SUB_Shooter extends SubsystemBase{
     {
         return m_ShooterMasterEncoder.getVelocity();
     }
+    public double getShooterSetpoint(){
+        return m_ShooterSetpoint;
+    }
 
     @Override
     public void periodic() {
+        
+
+        m_ShooterSetpoint = SmartDashboard.getNumber("Desired Shooter Setpoint", 
+                                                        ShooterConstants.kShootingVelocity);
+        if(wantShooter){
+            m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
+        }else{
+            m_Controller.setReference(0, ControlType.kDutyCycle);
+        }
         SmartDashboard.putNumber("ShooterVelocity", getVelocity());
     }
 }
