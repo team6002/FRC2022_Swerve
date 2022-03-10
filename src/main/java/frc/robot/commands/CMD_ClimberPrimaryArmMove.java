@@ -6,21 +6,25 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Climber;
-public class CMD_ClimberSecondToggle extends CommandBase {
-  /** Creates a new CMD_ClimberExtend. */
+
+public class CMD_ClimberPrimaryArmMove extends CommandBase {
+  /** Creates a new CMD_ClimberPrimaryArmMove. */
   SUB_Climber m_climber;
-  public CMD_ClimberSecondToggle(SUB_Climber p_climber) {
-    m_climber = p_climber;
+  private double m_setpoint;
+  private double m_tolerance;
+  public CMD_ClimberPrimaryArmMove(SUB_Climber p_climber, double p_setpoint,
+                                  double p_tolerance) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_climber = p_climber;
+    m_setpoint = p_setpoint;
+    m_tolerance = p_tolerance;
+    // addRequirements(m_climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (m_climber.SecondSolonoidState == false){
-      m_climber.setExtendSecond();
-    }else m_climber.setRetractSecond();
-    
+    m_climber.setPrimaryPosition(m_setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,6 +38,6 @@ public class CMD_ClimberSecondToggle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return Math.abs(m_climber.getPrimarySetpoint() - m_climber.getPrimaryPosition()) < m_tolerance;
   }
 }

@@ -5,19 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SUB_Climber;
-public class CMD_ClimberSecondaryExtend extends CommandBase {
-  /** Creates a new CMD_ClimberExtend. */
-  SUB_Climber m_climber;
-  public CMD_ClimberSecondaryExtend(SUB_Climber p_climber) {
-    m_climber = p_climber;
+import frc.robot.subsystems.SUB_Intake;
+
+public class CMD_ForceFeedToShooter extends CommandBase {
+  /** If there is a ball in the hopper, run this with shooter to clear */
+  SUB_Intake m_intake;
+  public CMD_ForceFeedToShooter(SUB_Intake p_intake) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_intake = p_intake;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climber.setSecondaryGearEngage();
+    m_intake.setHopperForward();
+    m_intake.setIndexerForward();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -26,11 +28,14 @@ public class CMD_ClimberSecondaryExtend extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    // m_intake.setHopperOff();
+    // m_intake.setIndexerOff();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return !m_intake.getHopperStatus();
   }
 }

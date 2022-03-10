@@ -5,19 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.SUB_Climber;
-public class CMD_ClimberSecondaryExtend extends CommandBase {
-  /** Creates a new CMD_ClimberExtend. */
+
+public class CMD_ClimbDeploySecondaryClimber extends CommandBase {
+  /** Creates a new CMD_ClimbDeploySecondaryClimber. */
   SUB_Climber m_climber;
-  public CMD_ClimberSecondaryExtend(SUB_Climber p_climber) {
-    m_climber = p_climber;
+  public CMD_ClimbDeploySecondaryClimber(SUB_Climber p_climber) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_climber = p_climber;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climber.setSecondaryGearEngage();
+    m_climber.setSecondaryPosition(ClimberConstants.SecondaryClimberDeploy);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

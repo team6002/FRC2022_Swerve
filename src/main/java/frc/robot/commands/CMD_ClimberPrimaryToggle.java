@@ -6,10 +6,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Climber;
-public class CMD_ClimberSecondaryExtend extends CommandBase {
+public class CMD_ClimberPrimaryToggle extends CommandBase {
   /** Creates a new CMD_ClimberExtend. */
   SUB_Climber m_climber;
-  public CMD_ClimberSecondaryExtend(SUB_Climber p_climber) {
+  public CMD_ClimberPrimaryToggle(SUB_Climber p_climber) {
     m_climber = p_climber;
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -17,8 +17,14 @@ public class CMD_ClimberSecondaryExtend extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climber.setSecondaryGearEngage();
+    if (!m_climber.MainSolonoidState){
+      m_climber.setPrimaryGearEngage();
+    }else{ 
+      m_climber.setPrimaryGearDisengage();
+    }
+    System.out.println("TOOGLE");
   }
+  
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

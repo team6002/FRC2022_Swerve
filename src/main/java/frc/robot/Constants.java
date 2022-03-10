@@ -43,13 +43,13 @@ public final class Constants {
         public static final int kShooterSlave = 9;
     
         public static final double kShooterFF = 0.000230;
-        public static final double kShooterP = 0.00010;
+        public static final double kShooterP = 0.00012;
         public static final double kShooterI = 0; 
         public static final double kShooterD = 0.000;
     
         //Max free velocity ~5000
         public static final double kMaxShooterVelocity = 2750;//max working velocity 
-        public static final double kShootingVelocity =  2275;    
+        public static final double kShootingVelocity =  2475;    
         public static final double kShootingAccel = 1200;
     
         public static final double kMinOutput = -1;
@@ -114,9 +114,9 @@ public final class Constants {
         public static final double kIntakeAccel = 2000;
 
         //SPEEDS
-        public static final double kIndexerVelocity = 1000;
-        public static final double kHopperVelocity = 1500; //Sometimes runs 1700 for no reason??
-        public static final double kIntakeVelocity = 1100;
+        public static final double kIndexerVelocity = 1100;
+        public static final double kHopperVelocity = 1200; 
+        public static final double kIntakeVelocity = 900;
         public static final double HopperOff = 0;
         public static final double IndexerOff = 0;
         public static final double IntakeOff = 0;
@@ -126,6 +126,7 @@ public final class Constants {
         public static final double kMaxOutput = 1; 
 
     }
+
     public static final class ClimberConstants{
         public static final int kSecondaryClimberMotor1 = 10;
         public static final int kSecondaryClimberMotor2 = 11;
@@ -135,8 +136,50 @@ public final class Constants {
         public static final int kSecondSolonoid = 2;
         public static final double ThroughBoreEncoderPort1 = 3;
         public static final double ThroughBoreEncoderPort2 = 4;
+        //PID VALUES
+        //Primary
+        public static final double kPrimaryClimberFF = 0.0016;
+        public static final double kPrimaryClimberP = 0.000001;
+        public static final double kPrimaryClimberI = 0;
+        public static final double kPrimaryClimberD = 0;
+        public static final double kPrimaryClimberIz = 0;
+
+        public static final double kPrimaryClimberMaxVelocity = 250;
+        public static final double kPrimaryClimberMaxAccel = 250;
+        public static final double kPrimaryClimberAllowedError = 0.5;
+        public static final double kPrimaryClimberMinOutput = -1;
+        public static final double kPrimaryClimberMaxOutput = 1;
+
+        //Secondary
+        public static final double kSecondaryClimberFF = 0.0016;
+        public static final double kSecondaryClimberP = 0.000003;
+        public static final double kSecondaryClimberI = 0;
+        public static final double kSecondaryClimberD = 0;
+        public static final double kSecondaryClimberIz = 0;
+
+        public static final double kSecondaryClimberMaxVelocity = 300;
+        public static final double kSecondaryClimberMaxAccel = 300;
+        public static final double kSecondaryClimberAllowedError = 0.5;
+        public static final double kSecondaryClimberMinOutput = -1;
+        public static final double kSecondaryClimberMaxOutput = 1;
+
+        //Climb Positions
+        public static final int PrimaryClimberFullyExtended = 116; 
+        public static final int PrimaryClimberDeploy = 116;
+        public static final int PrimaryClimberLevitate = 94;// pid test height
+        public static final int PrimaryClimberLift = 0;
+        public static final int PrimaryClimberFivePointsLower = 5;
+        public static final int PrimaryClimberRelease = 10;
+         
+
+        public static final int SecondaryClimberFullyExtended = 111;
+        public static final int SecondaryClimberDeploy = 115;
+        public static final int SecondaryClimberPreStage = 98;
+        public static final int SecondaryClimberLift = 80; //temp value
+        
     }
      
+
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 2.5;
         public static final double kMaxAccelerationMetersPerSecondSquared = 1.5;

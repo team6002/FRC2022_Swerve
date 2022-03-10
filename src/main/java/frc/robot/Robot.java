@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -33,7 +35,7 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   SendableChooser<Command> auto = new SendableChooser<Command>();
-  Command mAutonomousCommand;
+  Command mAutonomousCommand = new AUTO_Nothing();
   @Override
   public void robotInit() {
     
@@ -48,10 +50,8 @@ public class Robot extends TimedRobot {
     debug_controller = m_robotContainer.getDriveController();
     m_robotContainer.m_drivetrain.syncAllAngles();
     LiveWindow.disableAllTelemetry();
-    auto.addOption("Example", new AUTO_Example(m_robotContainer.m_drivetrain, m_robotContainer.trajectory));
-    auto.addOption("Nothingn", new AUTO_Nothing());
-    auto.addOption("Red1", new AUTO_RED1(m_robotContainer.m_drivetrain, m_robotContainer.trajectory, m_robotContainer.m_intake, m_robotContainer.m_shooter, m_robotContainer.m_intakeStatus));
-    auto.addOption("ForwardWaitBack", new AUTO_ForwardWaitBack(m_robotContainer.m_drivetrain,m_robotContainer.trajectory));
+    // auto.addOption("Red1", new AUTO_RED1(m_robotContainer.m_drivetrain, m_robotContainer.trajectory, m_robotContainer.m_intake, m_robotContainer.m_shooter, m_robotContainer.m_intakeStatus));
+    // auto.addOption("Forward And Back", new AUTO_ForwardWaitBack(m_robotContainer.m_drivetrain,m_robotContainer.trajectory));
     SmartDashboard.putData("Auto Mode", auto);
   }
 
@@ -88,12 +88,14 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_robotContainer.m_NavxGyro.resetNavx();
     m_robotContainer.m_drivetrain.resetDriveEncoder();
-    m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
-    mAutonomousCommand = auto.getSelected();
+    m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));// temp
+    // mAutonomousCommand = auto.getSelected();
+    mAutonomousCommand = new AUTO_Shoot(m_robotContainer.m_turret, m_robotContainer.m_intake, 
+                        m_robotContainer.m_intakeStatus, m_robotContainer.m_shooter, m_robotContainer.m_drivetrain);
+    //new AUTO_RED1(m_robotContainer.m_drivetrain, m_robotContainer.trajectory, m_robotContainer.m_intake, m_robotContainer.m_shooter, m_robotContainer.m_intakeStatus);
     // schedule the autonomous command (example)
     if (mAutonomousCommand != null) {
       mAutonomousCommand.schedule();
-      
     }
   }
 
@@ -104,9 +106,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_robotContainer.m_NavxGyro.resetNavx();
-    m_robotContainer.m_drivetrain.resetDriveEncoder();
-    m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
+    // m_robotContainer.m_NavxGyro.resetNavx();
+    // m_robotContainer.m_drivetrain.resetDriveEncoder();
+    // m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

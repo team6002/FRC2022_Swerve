@@ -172,9 +172,9 @@ public class SwerveDrivetrain extends SubsystemBase {
   public void periodic() {
     updateOdometry();
     SmartDashboard.putBoolean("FieldRelative", fieldMode);
-    // SmartDashboard.putNumber("OdoX", getOdometryX());
-    // SmartDashboard.putNumber("OdoY", getOdometryY());
-    // SmartDashboard.putNumber("OdoRotate", getOdometryRotate());
+    SmartDashboard.putNumber("OdoX", getOdometryX());
+    SmartDashboard.putNumber("OdoY", getOdometryY());
+    SmartDashboard.putNumber("OdoRotate", getOdometryRotate());
     // m_frontLeft.updateSmartDashboard();
     // m_frontRight.updateSmartDashboard();
     // m_backLeft.updateSmartDashboard();

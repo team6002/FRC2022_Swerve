@@ -69,7 +69,7 @@ public class SUB_Turret extends SubsystemBase{
     private double targetPosition = 0;
 
     //turretMode: 1=manual, 0 = auto (default), -1=calibration
-    private int turretMode = 2;
+    private int turretMode = 1;
     private final double RESET_TURRET = 150; // value of encoder when left limit switch is triggered
 
     public void setFrontPosition() {
@@ -186,10 +186,10 @@ public class SUB_Turret extends SubsystemBase{
                 //no target found
                 //move turret towards hunt direction, hunt direction -1 = counterclockwise +1 = clockwise
                 if(m_ForwardLimitSwitch.isPressed() == true) {
-                    setHuntDirection(1);
+                    setHuntDirection(-1);
                 }
                 else if(m_ReverseLimitSwitch.isPressed() == true) {
-                    setHuntDirection(-1);
+                    setHuntDirection(1);
                 }
     
                 diffFromCenter = -999;
@@ -269,8 +269,8 @@ public class SUB_Turret extends SubsystemBase{
         // SmartDashboard.putNumber("Difference", diffFromCenter);
         // SmartDashboard.putBoolean("Target?", onTarget);
         // SmartDashboard.putNumber("Hunting Direction", huntDirection);
-        // SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
-        // SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
+        SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
+        SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
         SmartDashboard.putBoolean("Ball color???", redBall);
         SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());
         SmartDashboard.putNumber("Target Encoder", targetPosition);

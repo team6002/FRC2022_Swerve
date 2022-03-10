@@ -2,12 +2,11 @@
 
 package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -27,14 +26,14 @@ import frc.robot.commands.*;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final XboxController m_controller;
-  private final XboxController m_secondController;
+  private final XboxController m_driverController;
+  private final XboxController m_operatorController;
   public final SwerveDrivetrain m_drivetrain = new SwerveDrivetrain();
-  final FSM_IntakeStatus m_intakeStatus = new FSM_IntakeStatus();
-  final SUB_Intake m_intake = new SUB_Intake(m_intakeStatus);
-  final FSM_ClimberMode m_climberMode = new FSM_ClimberMode();
+  public final FSM_IntakeStatus m_intakeStatus = new FSM_IntakeStatus();
+  public final SUB_Intake m_intake = new SUB_Intake(m_intakeStatus);
+  public final FSM_ClimberMode m_climberMode = new FSM_ClimberMode();
   public final SUB_Navx m_NavxGyro = new SUB_Navx();
-  final SUB_Climber m_climber = new SUB_Climber();
+  public final SUB_Climber m_climber = new SUB_Climber();
   public final SUB_Turret m_turret = new SUB_Turret();
   public final AUTO_Trajectory trajectory = new AUTO_Trajectory(m_drivetrain);
   public final SUB_Shooter m_shooter = new SUB_Shooter();
@@ -43,19 +42,16 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    m_controller = new XboxController(0);
-    m_secondController = new XboxController(1);
+    m_driverController = new XboxController(0);
+    m_operatorController = new XboxController(1);
     SmartDashboard.putData("SyncAngles", new CMD_SyncSwerveEncoders(m_drivetrain));
     SmartDashboard.putData("ResetAngles", new CMD_ResetSwerve(m_drivetrain));
+    SmartDashboard.putData("Secondary Climber Home", new CMD_ClimberSecondarySetHome(m_climber,true));
+    SmartDashboard.putData("Primary Climber Home", new CMD_ClimberPrimarySetHome(m_climber,true));
     // Configure the button bindings
     configureButtonBindings();
-    // m_FRCGyro.calibrateFRCGyro();
-    // m_shooter.setDefaultCommand(new CMD_ShooterOn(m_shooter,m_secondController));
+    m_drivetrain.setDefaultCommand(new SwerveDriveCommand(m_drivetrain, m_driverController));
 
-    m_climber.setDefaultCommand(new CMD_ClimberMove(m_climber, m_secondController));
-    m_drivetrain.setDefaultCommand(new SwerveDriveCommand(m_drivetrain,m_controller));
-
-    // m_drivetrain.setDefaultCommand(new SwerveTestCommand(m_drivetrain,m_controller));
   }
 
   /**
@@ -65,19 +61,19 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new POVButton(m_secondController, 90)
+    new POVButton(m_operatorController, 90)
       .whenPressed(new CMD_SideTurret(m_turret));
     
-    new POVButton(m_secondController, 0)
+    new POVButton(m_operatorController, 0)
       .whenPressed(new CMD_FrontTurret(m_turret));
     
-    new POVButton(m_secondController, 180)
+    new POVButton(m_operatorController, 180)
       .whenPressed(new CMD_BackTurret(m_turret));
     
-    new POVButton(m_secondController, 270)
+    new POVButton(m_operatorController, 270)
       .whenPressed(new CMD_ResetTurret(m_turret));
 
-    new JoystickButton(m_secondController, XboxController.Button.kRightBumper.value)
+    new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value)
       .whenPressed(new CMD_TurretMode(m_turret));
 
    
@@ -94,91 +90,122 @@ public class RobotContainer {
   */ 
 
   // shooting
-    new JoystickButton(m_secondController, XboxController.Button.kA.value)
+    new JoystickButton(m_operatorController, XboxController.Button.kA.value)
     .whenPressed(new SequentialCommandGroup( 
       new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.SHOOTING),
       new CMD_ShooterOn(m_shooter),
       new CMD_IndexerForward(m_intake),
       new CMD_HopperForward(m_intake),
       new CMD_BackIntakeForward(m_intake),
-      new CMD_FrontIntakeForward(m_intake)
+      new CMD_FrontIntakeForward(m_intake),
+      new CMD_FrontIntakeOff(m_intake),
+      new CMD_BackIntakeOff(m_intake)
       // new CMD_HopperCheck(m_intake),
       // new CMD_IndexerOff(m_intake),
       // new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.INTAKE)
       ));
 
-    new JoystickButton(m_secondController, XboxController.Button.kB.value)
+    new JoystickButton(m_operatorController, XboxController.Button.kB.value)
     .whenPressed(new ParallelCommandGroup(
       new CMD_ShooterOff(m_shooter),
-      new CMD_HopperOff(m_intake),
+      // new CMD_HopperOff(m_intake),
       new CMD_IndexerOff(m_intake),
       // new CMD_BackIntakeOff(m_intake),
       // new CMD_FrontIntakeOff(m_intake)
       new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.INTAKE)
-      ));
+      )
+    );
 
-    // new JoystickButton(m_secondController, XboxController.Button.kBack.value)
-    //   .whenPressed(new CMD_ClimberPrimarySetHome(m_climber)
+    new JoystickButton(m_operatorController, XboxController.Button.kBack.value)
+      .whenPressed(new CMD_ClimberPrimarySetHome(m_climber, true)
+    );
+
+    new JoystickButton(m_operatorController, XboxController.Button.kStart.value)
+      .whenPressed(new CMD_ClimberSecondarySetHome(m_climber, true)
+    );
+
+    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+      .whenPressed(new CMD_InitalizeClimbMode(m_climber)
+    );
+
+    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+      .whenPressed(new CMD_ClimbPartial(m_climber)
+    );
+
+    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+      .whenPressed(new CMD_ClimbFull(m_climber)
+    );
+
+    // new JoystickButton(m_driverController, XboxController.Button.kX.value)
+    //   .whenPressed(new CMD_ClimbTenPoints(m_climber)
     // );
 
-    // new JoystickButton(m_secondController, XboxController.Button.kY.value)
-      // .whenPressed(new CMD_ClimberMainToggle(m_climber)
+    new JoystickButton(m_driverController, XboxController.Button.kBack.value)
+      .whenPressed(new CMD_ClimberPrimaryToggle(m_climber)
+    );
+    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
+      .whenPressed(new CMD_ClimberSecondaryToggle(m_climber)
+    );
+    // new JoystickButton(m_driverController, XboxController.Button.kB.value)
+    //   .whenPressed(new CMD_ClimberLevitate(m_climber)
+    // );
+    // new JoystickButton(m_operatorController, XboxController.Button.kY.value)
+    //   .whenPressed(new CMD_ClimberPrimaryToggle(m_climber)
     // );
   
-    new JoystickButton(m_secondController, XboxController.Button.kX.value)
-      .and(new TRG_ClimberMode(m_climberMode, ClimberState.CLIMBING))
-      .whenActive(new CMD_ClimberSecondToggle(m_climber)
-      //.whenInactive(new reset turret)
-    );
-  
-    new JoystickButton(m_secondController, XboxController.Button.kStart.value)
-    .and(new TRG_ClimberMode(m_climberMode, ClimberState.CLIMBING)
-    .whenInactive(new CMD_SetClimberMode(m_climberMode, ClimberState.CLIMBING))
-    .whenActive(new CMD_SetClimberMode(m_climberMode, ClimberState.SHOOTING))
-    );
+    // new JoystickButton(m_operatorController, XboxController.Button.kX.value)
+    //   .and(new TRG_ClimberMode(m_climberMode, ClimberState.CLIMBING))
+    //   .whenActive(new CMD_ClimberSecondaryToggle(m_climber)
+    //   //.whenInactive(new reset turret)
+    // );
     
-    new JoystickButton(m_controller, XboxController.Button.kA.value)
-    .whenPressed(new SequentialCommandGroup(
-      new CMD_FrontIntakeForward(m_intake),
-      new CMD_HopperForward(m_intake),
-      new CMD_FrontSolonoidExtend(m_intake),
-      new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.INTAKE)
-    ));
+    // new JoystickButton(m_driverController, XboxController.Button.kB.value)
+    // .whenPressed(new SequentialCommandGroup(
+    //   new CMD_FrontIntakeForward(m_intake),
+    //   new CMD_HopperForward(m_intake),
+    //   new CMD_FrontSolonoidExtend(m_intake),
+    //   new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.INTAKE)
+    // ));
 
-    new JoystickButton(m_controller, XboxController.Button.kB.value)
-    .whenPressed(new SequentialCommandGroup(
-      new CMD_FrontSolonoidRetract(m_intake),
-      new CMD_FrontIntakeOff(m_intake)
-      //INTAKESTATE FRONT RETRACTED?
-    ));
+    // new JoystickButton(m_driverController, XboxController.Button.kA.value)
+    // .whenPressed(new SequentialCommandGroup(
+    //   new CMD_FrontSolonoidRetract(m_intake),
+    //   new CMD_FrontIntakeOff(m_intake),
+    //   new CMD_HopperOff(m_intake)
+    //   //INTAKESTATE FRONT RETRACTED?
+    // ));
 
-    new JoystickButton(m_controller, XboxController.Button.kX.value)
-    .whenPressed(new SequentialCommandGroup(
-      new CMD_BackSolonoidRetract(m_intake),
-      new CMD_BackIntakeOff(m_intake)
-      //INTAKESTATE BACK RETRACTED?
-      ));
+    // new JoystickButton(m_driverController, XboxController.Button.kY.value)
+    // .whenPressed(new SequentialCommandGroup(
+    //   new CMD_BackSolonoidRetract(m_intake),
+    //   new CMD_BackIntakeOff(m_intake),
+    //   new CMD_HopperOff(m_intake)
+    //   //INTAKESTATE BACK RETRACTED?
+    //   ));
+    
 
-    new JoystickButton(m_controller, XboxController.Button.kY.value)
-    .whenPressed(new SequentialCommandGroup(
-      new CMD_BackSolonoidExtend(m_intake),
-      new CMD_HopperForward(m_intake),
-      new CMD_BackIntakeForward(m_intake),
-      new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.INTAKE)
-    ));
+    // new JoystickButton(m_driverController, XboxController.Button.kX.value)
+    // .whenPressed(new SequentialCommandGroup(
+    //   new CMD_BackSolonoidExtend(m_intake),
+    //   new CMD_HopperForward(m_intake),
+    //   new CMD_BackIntakeForward(m_intake),
+    //   new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.INTAKE)
+    // ));
+
+    
   }
   
 
   public XboxController getDriveController(){
-    return m_controller;
+    return m_driverController;
   }
 
   public XboxController getOperatorController() {
-    return m_secondController;
+    return m_operatorController;
   }
 
   public double getRightX2() {
-    return m_secondController.getRightX();
+    return m_operatorController.getRightX();
   }
 
   public void turretOpenLoop(double d) {

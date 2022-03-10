@@ -4,29 +4,45 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.SUB_Climber;
-public class CMD_ClimberSecondaryExtend extends CommandBase {
-  /** Creates a new CMD_ClimberExtend. */
+
+public class CMD_ClimbDeployPrimaryClimber extends CommandBase {
+  /** Initalizes primary arm and secondary arm to climbing position
+   * (Primary arm at first bar position, secondary arm at full extension no spool)
+   * primary: 80
+   * secondary: 50
+  */
   SUB_Climber m_climber;
-  public CMD_ClimberSecondaryExtend(SUB_Climber p_climber) {
-    m_climber = p_climber;
+  // private Timer m_runtime = new Timer();
+  // private double m_maxtime = 1;
+  // private boolean m_isFinished = false;
+  public CMD_ClimbDeployPrimaryClimber(SUB_Climber p_climber) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_climber = p_climber;
+    // addRequirements(m_climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climber.setSecondaryGearEngage();
+    m_climber.setPrimaryPosition(Constants.ClimberConstants.PrimaryClimberDeploy);
+    // System.out.println("INITALIZE CLIMB MODE");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+  }
 
   // Returns true when the command should end.
   @Override

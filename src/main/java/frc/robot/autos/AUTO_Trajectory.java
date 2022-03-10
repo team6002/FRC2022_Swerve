@@ -22,13 +22,15 @@ import frc.robot.subsystems.SwerveDrivetrain;
 
 public class AUTO_Trajectory {
     private SwerveDrivetrain m_drivetrain;
-    public Trajectory threeMetersForwardTrajectory;
-    public Trajectory threeMetersBackwardTrajectory;
+    // public Trajectory threeMetersForwardTrajectory;
+    // public Trajectory threeMetersBackwardTrajectory;
     // public Trajectory exampleTrajectory;
-    // public Trajectory FirstBallTrajectory;
-    // public Trajectory SecondBallTrajectory;
+    public Trajectory FirstBallTrajectory;
+    public Trajectory SecondBallTrajectory;
+    public Trajectory FluidThreeBallTrajectory;
     // public Trajectory ThirdBallTrajectory;
     // public Trajectory ReturnTrajectory;
+
     public AUTO_Trajectory(SwerveDrivetrain drivetrain){
         m_drivetrain = drivetrain;
 
@@ -39,18 +41,34 @@ public class AUTO_Trajectory {
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(m_drivetrain.m_kinematics);
 
-        // FirstBallTrajectory = 
-        // TrajectoryGenerator.generateTrajectory(
-        //     new Pose2d(8.2,2.8, new Rotation2d(0)),
-        //      List.of(new Translation2d(7,0.2))
-        //     , new Pose2d(7.5,0.2, new Rotation2d(0)), 
-        //     config);
-        // SecondBallTrajectory =
-        // TrajectoryGenerator.generateTrajectory(
-        //     new Pose2d(7.5,0.2, new Rotation2d(0)),
-        //      List.of(new Translation2d(6,1.8))
-        //     , new Pose2d(5,1.8, new Rotation2d(0)), 
-        //     config);
+        FirstBallTrajectory = 
+        TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0,0, new Rotation2d(0)),
+             List.of(
+                //  new Translation2d(0.5, 0)
+            ), 
+            new Pose2d(1.1,0, new Rotation2d(0)), 
+            config);
+
+        SecondBallTrajectory =
+        TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)),
+            List.of(
+                new Translation2d(-0.25, -1),
+                new Translation2d(-0.435, -2.4)
+            ),
+            new Pose2d(-0.438, -2.43, new Rotation2d(-55)),
+            config);
+        
+        FluidThreeBallTrajectory =
+        TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)), 
+            List.of(
+                new Translation2d(1, 0),
+                new Translation2d(1, -2)
+            ), 
+            new Pose2d(0, -2, new Rotation2d(0)), 
+            config);
         // ThirdBallTrajectory =
         // TrajectoryGenerator.generateTrajectory(
         //     new Pose2d(5,1.8, new Rotation2d(0)),
@@ -58,21 +76,15 @@ public class AUTO_Trajectory {
         //     , new Pose2d(1,1, new Rotation2d(0)), 
         //     config);
          // three meters and stop
-        threeMetersForwardTrajectory =
-            TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
-                List.of(new Translation2d(1,0),
-                new Translation2d (2,0)),
-                new Pose2d(3, 0, new Rotation2d(0)),
-                config);
+            
            
-        threeMetersBackwardTrajectory =
-            TrajectoryGenerator.generateTrajectory(
-                new Pose2d(3, 0, new Rotation2d(0)),
-                List.of(new Translation2d(2, 0.1),
-                new Translation2d(1,0.1)),
-                new Pose2d(0, 0, new Rotation2d(0)),
-                config.setReversed(true));
+        // threeMetersBackwardTrajectory =
+        //     TrajectoryGenerator.generateTrajectory(
+        //         new Pose2d(0, 0, new Rotation2d(0)),
+        //         List.of(new Translation2d(2, 0.1),
+        //         new Translation2d(1,0.1)),
+        //         new Pose2d(0, 0, new Rotation2d(0)),
+        //         config.setReversed(true));
         
         //   ReturnTrajectory = 
         // TrajectoryGenerator.generateTrajectory(
@@ -95,9 +107,6 @@ public class AUTO_Trajectory {
     public Command driveTrajectory(Trajectory trajectory) {
      
         // Create config for trajectory
-      
-        
-    
         var thetaController =
             new ProfiledPIDController(
                 AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
@@ -122,9 +131,7 @@ public class AUTO_Trajectory {
 
         // Run path following command, then stop at the end.
         return swerveControllerCommand.andThen(() -> m_drivetrain.drive(0, 0, 0, false));
-  }
-
- 
+    }
 
 
 }
