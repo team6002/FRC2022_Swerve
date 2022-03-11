@@ -82,10 +82,12 @@ public class SUB_Shooter extends SubsystemBase{
         return m_ShooterSetpoint;
     }
 
+    // public void setShooterSetpoint(double setpoint){
+        // m_ShooterSetpoint = setpoint;
+    // }
     @Override
     public void periodic() {
-        
-
+        //must press tab to set in smartdashboard
         m_ShooterSetpoint = SmartDashboard.getNumber("Desired Shooter Setpoint", 
                                                         ShooterConstants.kShootingVelocity);
         if(wantShooter){
@@ -93,6 +95,7 @@ public class SUB_Shooter extends SubsystemBase{
         }else{
             m_Controller.setReference(0, ControlType.kDutyCycle);
         }
-        // SmartDashboard.putNumber("ShooterVelocity", getVelocity());
+        SmartDashboard.putBoolean("Shooting", wantShooter);
+        SmartDashboard.putNumber("ShooterVelocity", getVelocity());
     }
 }

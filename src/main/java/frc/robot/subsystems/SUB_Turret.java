@@ -52,7 +52,7 @@ public class SUB_Turret extends SubsystemBase{
 
         //testing encoders (figure out converstion factor on real robo)
         m_Encoder.setPositionConversionFactor(12);
-        m_Encoder.setPosition(0);
+        // m_Encoder.setPosition(0);
 
         //add options to sendable chooser
         m_color.addOption("RED", RED);
@@ -70,7 +70,7 @@ public class SUB_Turret extends SubsystemBase{
 
     //turretMode: 1=manual, 0 = auto (default), -1=calibration
     private int turretMode = 1;
-    private final double RESET_TURRET = 150; // value of encoder when left limit switch is triggered
+    private final double RESET_TURRET = 140; // value of encoder when left limit switch is triggered
 
     public void setFrontPosition() {
         targetPosition = 90;
@@ -177,6 +177,8 @@ public class SUB_Turret extends SubsystemBase{
             if(targetX == -1) {
                 //no target found
                 //move turret towards hunt direction, hunt direction -1 = counterclockwise +1 = clockwise
+                //A NOTE FOR THE FUTURE:
+                // slow down near the limit switches, maybe lowered voltage or pid.
                 if(m_ForwardLimitSwitch.isPressed() == true) {
                     setHuntDirection(-1);
                 }
@@ -206,7 +208,7 @@ public class SUB_Turret extends SubsystemBase{
                 // }
             }
         }
-        else if ( turretMode == 1) {
+        else if (turretMode == 1) {
             sentOutput = (targetPosition - m_Encoder.getPosition()) / 180 * TurretConstants.kTurretMannualVoltage;
 
             double minvolef = 0.6;

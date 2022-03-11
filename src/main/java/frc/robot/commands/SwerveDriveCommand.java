@@ -78,7 +78,7 @@ public class SwerveDriveCommand extends CommandBase {
     // if(controller.getAButtonPressed()){
     //   drivetrain.fieldModeChange();
     // }
-    boolean fieldRelative = controller.getAButton();
+    boolean fieldRelative = !controller.getAButton();
 
     // SmartDashboard.putNumber("xspeed", xSpeed);
     // SmartDashboard.putNumber("yspeed", ySpeed);

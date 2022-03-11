@@ -45,8 +45,10 @@ public class SUB_Intake extends SubsystemBase {
     public double hopperState = 0;
     public boolean frontIntakeDeployed;
     public boolean backIntakeDeployed;
-
-    
+    public boolean previousHopperStatus = false;
+    public boolean previousFrontIntakeStatus = false;
+    public boolean previousBackIntakeStatus = false;
+    // private double ballCount = 0;
     private SparkMaxPIDController m_FrontController = m_FrontIntakeMotor.getPIDController();
     private SparkMaxPIDController m_BackController = m_BackIntakeMotor.getPIDController();    
     private SparkMaxPIDController m_HopperController = m_HopperMotor.getPIDController();
@@ -176,39 +178,73 @@ public class SUB_Intake extends SubsystemBase {
     m_IndexerController.setReference(-IndexerConstants.kIndexerVelocity, CANSparkMax.ControlType.kVelocity);
     indexerState = -1;
   }
+
   public boolean getHopperStatus(){
     return m_HopperSensor.get();
+  }
+
+  public boolean isFrontIntaking(){
+    return frontIntakeState == 1;
+  }
+
+  public boolean isBackIntaking(){
+    return backIntakeState == 1;
+  }
+
+  public boolean isFrontDeployed(){
+    return frontIntakeDeployed;
+  }
+
+  public boolean isBackDeployed(){
+    return backIntakeDeployed;
   }
 
 
   @Override
   public void periodic() {
-    // if (m_intakeStatus.getState(IntakeState.SHOOTING)== true){
-        
-    // }else
     if(m_intakeStatus.isState(IntakeState.INTAKE)){
-      if(getHopperStatus()){
+      if((!getFrontStatus() || !getBackStatus()) && !getHopperStatus()){//zeroballs
+        //keep intaking        
+      } 
+      else if((!getFrontStatus() || !getBackStatus()) && getHopperStatus()){
         setHopperOff();
-        // if(getFrontStatus() || getBackStatus()){
-        //   setFrontIntakeOff();
-        //   setBackIntakeOff();
-        //   setFrontSolonoidRetract();
-        //   setBackSolonoidRetract();
-        // }
-      }else{
-        setHopperForward();
+        if(!previousFrontIntakeStatus || !previousBackIntakeStatus){
+          //keep intaking
+        }else if(previousFrontIntakeStatus || previousBackIntakeStatus){
+          setHopperOff();
+        }
       }
-    } else if(m_intakeStatus.isState(IntakeState.SHOOTING)){
+      else if((getFrontStatus() || getBackStatus()) && getHopperStatus()){ 
+        if((previousFrontIntakeStatus || previousBackIntakeStatus) && !previousHopperStatus){//first ball
+          //hopper stop, intake continue
+          setHopperOff();
+        }else if((previousFrontIntakeStatus || previousBackIntakeStatus) && previousHopperStatus){//2nd ball
+          //stop hopper and intake
+          setHopperOff();
+          setFrontIntakeOff();
+          setBackIntakeOff();
+          setFrontSolonoidRetract();
+          setBackSolonoidRetract();
+        }
+      } 
 
-    } else {
-      
+    }else if(m_intakeStatus.isState(IntakeState.SHOOTING)) {
+
     }
-    
-    
+
+    previousHopperStatus = getHopperStatus();
+    previousFrontIntakeStatus = getFrontStatus();
+    previousBackIntakeStatus = getBackStatus();
     SmartDashboard.putBoolean("FrontIntake?Full?", getFrontStatus());
     SmartDashboard.putBoolean("BackIntake?Full?", getBackStatus());
     SmartDashboard.putBoolean("HopperFull?", getHopperStatus());
-    SmartDashboard.putString("IntakeState", m_intakeStatus.getCurrentState().toString());
+
+    SmartDashboard.putBoolean("Front Deployed", isFrontDeployed());
+    SmartDashboard.putBoolean("Back Deployed", isBackDeployed());
+    SmartDashboard.putBoolean("Front Intake On", isFrontIntaking());
+    SmartDashboard.putBoolean("Back Intake On", isBackIntaking());
+
+    // SmartDashboard.putString("IntakeState", m_intakeStatus.getCurrentState().toString());
      // SmartDashboard.putNumber("Hopper Velocity", m_HopperMotor.getEncoder().getVelocity());
     // SmartDashboard.putNumber("Intake Velocity", m_FrontIntakeEncoder.getVelocity());
     // SmartDashboard.putNumber("Indexer Velocity", m_IndexerMotor.getEncoder().getVelocity());

@@ -52,13 +52,13 @@ public final class Constants {
     
         //Shooter is 2:1
         public static final double kMaxShooterVelocity = 5500; //2750;//max working velocity 
-        public static final double kShootingVelocity =  4750;//2475;    
-        public static final double kShootingAccel = 4950;
+        public static final double kShootingVelocity =  4450;//2475;    
+        public static final double kShootingAccel = 4550;
     
         public static final double kMinOutput = -1;
         public static final double kMaxOutput = 1;
     
-        public static final double kShooterSpeed = 0.30;
+        // public static final double kShooterSpeed = 0.30;
     }
     public static final class TurretConstants {
         //turret
@@ -118,7 +118,7 @@ public final class Constants {
 
         //SPEEDS
         public static final double kIndexerVelocity = 1500;
-        public static final double kHopperVelocity = 1500; 
+        public static final double kHopperVelocity = 1800; 
         public static final double kIntakeVelocity = 1800;
         public static final double HopperOff = 0;
         public static final double IndexerOff = 0;

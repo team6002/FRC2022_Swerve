@@ -69,7 +69,9 @@ public class Robot extends TimedRobot {
     
     // m_robotContainer.updateOdometry();
 
-    
+    // double shooterSetpoint = 
+      // SmartDashboard.getNumber("Desired Shooter Setpoint", Constants.ShooterConstants.kShootingVelocity);
+    // m_robotContainer.m_shooter.setShooterSetpoint(shooterSetpoint);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

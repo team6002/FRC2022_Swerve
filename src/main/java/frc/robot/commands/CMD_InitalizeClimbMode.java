@@ -24,7 +24,7 @@ public class CMD_InitalizeClimbMode extends ParallelCommandGroup {
     m_climber = p_climber;
     m_turret = p_turret;
     addCommands(
-      new CMD_FrontTurret(p_turret),
+      new CMD_TurretPrepareForClimb(m_turret),
       new SequentialCommandGroup(
         new CMD_ClimberPrimarySetHome(m_climber, false),
         new CMD_ClimbDeployPrimaryClimber(m_climber)

@@ -1,4 +1,3 @@
-// EMILY IS YOUR MESSAGE STILL THERE
 
 package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,12 +26,12 @@ public class RobotContainer {
   private final XboxController m_driverController;
   private final XboxController m_operatorController;
   public final SwerveDrivetrain m_drivetrain = new SwerveDrivetrain();
-  // public final SUB_Navx m_NavxGyro = new SUB_Navx();
+  public final SUB_Navx m_NavxGyro = new SUB_Navx();
   public final FSM_IntakeStatus m_intakeStatus = new FSM_IntakeStatus();
   public final SUB_Intake m_intake = new SUB_Intake(m_intakeStatus);
   public final SUB_Climber m_climber = new SUB_Climber();
-  // public final SUB_Turret m_turret = new SUB_Turret();
-  // public final AUTO_Trajectory m_autotrajectory = new AUTO_Trajectory(m_drivetrain);
+  public final SUB_Turret m_turret = new SUB_Turret();
+  public final AUTO_Trajectory m_autotrajectory = new AUTO_Trajectory(m_drivetrain);
   public final SUB_Shooter m_shooter = new SUB_Shooter();
   Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
   
@@ -46,7 +45,6 @@ public class RobotContainer {
     // SmartDashboard.putData("Secondary Climber Home", new CMD_ClimberSecondarySetHome(m_climber,true));
     // SmartDashboard.putData("Primary Climber Home", new CMD_ClimberPrimarySetHome(m_climber,true));
     // SmartDashboard.putData("Reset NavX", new CMD_ResetNavX(m_NavxGyro));
-    
     // Configure the button bindings
     configureButtonBindings();
     m_drivetrain.setDefaultCommand(new SwerveDriveCommand(m_drivetrain, m_driverController));
@@ -63,20 +61,20 @@ public class RobotContainer {
       .whenPressed(new CMD_ResetNavX(m_drivetrain)
     );
 
-    // new POVButton(m_operatorController, 90)
-    //   .whenPressed(new CMD_SideTurret(m_turret));
+    new POVButton(m_operatorController, 90)
+      .whenPressed(new CMD_SideTurret(m_turret));
     
-    // new POVButton(m_operatorController, 0)
-    //   .whenPressed(new CMD_FrontTurret(m_turret));
+    new POVButton(m_operatorController, 0)
+      .whenPressed(new CMD_FrontTurret(m_turret));
     
-    // new POVButton(m_operatorController, 180)
-    //   .whenPressed(new CMD_BackTurret(m_turret));
+    new POVButton(m_operatorController, 180)
+      .whenPressed(new CMD_BackTurret(m_turret));
     
-    // new POVButton(m_operatorController, 270)
-    //   .whenPressed(new CMD_ResetTurret(m_turret));
+    new POVButton(m_operatorController, 270)
+      .whenPressed(new CMD_ResetTurret(m_turret));
 
-    // new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value)
-    //   .whenPressed(new CMD_TurretMode(m_turret));
+    new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value)
+      .whenPressed(new CMD_TurretMode(m_turret));
 
    
    /** 
@@ -91,17 +89,10 @@ public class RobotContainer {
 
   // shooting
     new JoystickButton(m_operatorController, XboxController.Button.kA.value)
-    .whenPressed(new CMD_Shooting(m_intake, m_intakeStatus, m_shooter));
+      .whenPressed(new CMD_Shooting(m_intake, m_intakeStatus, m_shooter));
 
     new JoystickButton(m_operatorController, XboxController.Button.kB.value)
-    .whenPressed(new ParallelCommandGroup(
-      new CMD_ShooterOff(m_shooter),
-      // new CMD_HopperOff(m_intake),
-      new CMD_IndexerOff(m_intake),
-      // new CMD_BackIntakeOff(m_intake),
-      // new CMD_FrontIntakeOff(m_intake)
-      new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.INTAKE)
-      )
+      .whenPressed(new CMD_StopShooting(m_intake, m_intakeStatus, m_shooter)
     );
 
     new JoystickButton(m_operatorController, XboxController.Button.kBack.value)
@@ -120,9 +111,9 @@ public class RobotContainer {
       .whenPressed(new CMD_BackIntakeToggle(m_intake, m_intakeStatus)
     );
 
-    // new POVButton(m_driverController, 180)
-    //   .whenPressed(new CMD_InitalizeClimbMode(m_climber, m_turret)
-    // );
+    new POVButton(m_driverController, 180)
+      .whenPressed(new CMD_InitalizeClimbMode(m_climber, m_turret)
+    );
 
     new JoystickButton(m_driverController, XboxController.Button.kBack.value)
       .whenPressed(new CMD_ClimbPartial(m_climber)
