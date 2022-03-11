@@ -7,35 +7,48 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Intake;
 
-public class CMD_ForceFeedToShooter extends CommandBase {
-  /** If there is a ball in the hopper, run this with shooter to clear */
+public class CMD_HopperLoad extends CommandBase {
+  /** Checks if there is a ball in the external hoppers and then advances it
+   * (Assume there is only one extra ball in hopper)
+  */
   SUB_Intake m_intake;
-  public CMD_ForceFeedToShooter(SUB_Intake p_intake) {
+  public CMD_HopperLoad(SUB_Intake p_intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = p_intake;
+    addRequirements(m_intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intake.setHopperForward();
-    m_intake.setIndexerForward();
+    // m_intake.setIndexerOff();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_intake.setIndexerOff();
+    if(m_intake.getFrontStatus()){
+      m_intake.setFrontIntakeForward();
+      m_intake.setHopperForward();
+    }else {
+      m_intake.setBackIntakeForward();
+      m_intake.setHopperForward();
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // m_intake.setHopperOff();
-    // m_intake.setIndexerOff();
+    m_intake.setHopperOff();
+    m_intake.setFrontIntakeOff();
+    m_intake.setBackIntakeOff();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !m_intake.getHopperStatus();
+    return m_intake.getHopperStatus() || 
+          (!m_intake.getFrontStatus() && !m_intake.getBackStatus());
   }
 }

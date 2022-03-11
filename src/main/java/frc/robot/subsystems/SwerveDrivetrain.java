@@ -40,14 +40,14 @@ public class SwerveDrivetrain extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(11.75));
   private final Translation2d m_backRightLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(-11.75));
 
-  private final SwerveModule m_frontLeft = new SwerveModule(15, 16, DriveConstants.k_frontLeftOffset, false);
-  private final SwerveModule m_frontRight = new SwerveModule(13, 14, DriveConstants.k_frontRightOffset, true);
-  private final SwerveModule m_backLeft = new SwerveModule(3, 4, DriveConstants.k_backLeftOffset, false);
-  private final SwerveModule m_backRight = new SwerveModule(5, 6, DriveConstants.k_backRightOffset, false);
+  private final SwerveModule m_frontLeft = new SwerveModule(25, 16, false);//(15,16)
+  private final SwerveModule m_frontRight = new SwerveModule(13, 14, true);
+  private final SwerveModule m_backLeft = new SwerveModule(3, 4, true);
+  private final SwerveModule m_backRight = new SwerveModule(5, 6, true);
 
   private final SUB_Navx m_Navx = new SUB_Navx();   
-  private double EvasiveX = 0;
-  private double EvasiveY = 0;
+  // private double EvasiveX = 0;
+  // private double EvasiveY = 0;
   private boolean fieldMode = true;
 
   public final SwerveDriveKinematics m_kinematics =
@@ -55,11 +55,12 @@ public class SwerveDrivetrain extends SubsystemBase {
           m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
   public final SwerveDriveOdometry m_odometry =
-      new SwerveDriveOdometry(m_kinematics, m_Navx.getRotation2d(), new Pose2d(0, 0, new Rotation2d()));
+      new SwerveDriveOdometry(m_kinematics, m_Navx.getRotation2d());//, new Pose2d(0, 0, new Rotation2d()
 
   public SwerveDrivetrain() {
-   
+    m_Navx.resetNavx();
     syncAllAngles();
+    // resetDriveEncoder();
   }
 
   public void syncAllAngles() {
@@ -75,12 +76,12 @@ public class SwerveDrivetrain extends SubsystemBase {
     m_backLeft.resetDriveEnc();
     m_backRight.resetDriveEnc();
   }
-  public void stopModules() {
-    m_frontLeft.stop();
-    m_frontRight.stop();
-    m_backLeft.stop();
-    m_backRight.stop();
-}
+  // public void stopModules() {
+  //   m_frontLeft.stop();
+  //   m_frontRight.stop();
+  //   m_backLeft.stop();
+  //   m_backRight.stop();
+  // }
   /**
    * Method to drive the robot using joystick info.
    *
@@ -95,9 +96,12 @@ public class SwerveDrivetrain extends SubsystemBase {
         m_kinematics.toSwerveModuleStates(
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_Navx.getRotation2d())
-                : new ChassisSpeeds(xSpeed, ySpeed, rot), new Translation2d(EvasiveX,EvasiveY));
-    // SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
-    setModuleStates(swerveModuleStates);
+                : new ChassisSpeeds(xSpeed, ySpeed, rot));
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_backLeft.setDesiredState(swerveModuleStates[2]);
+    m_backRight.setDesiredState(swerveModuleStates[3]);
   }
   
   public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -126,18 +130,18 @@ public class SwerveDrivetrain extends SubsystemBase {
     // m_odometry.resetPosition(pose, new Rotation2d(0));
   }
 
-  public void LeftEvasive(){
-    EvasiveX = DriveConstants.k_LeftEvasiveX;
-    EvasiveY = DriveConstants.k_LeftEvasiveY;
-  }
-  public void RightEvasive(){
-    EvasiveX = DriveConstants.k_RightEvasiveX;
-    EvasiveY = DriveConstants.k_RightEvasiveY;
-  }
-  public void NonEvasive(){
-    EvasiveX = 0;
-    EvasiveY = 0;
-  }
+  // public void LeftEvasive(){
+  //   EvasiveX = DriveConstants.k_LeftEvasiveX;
+  //   EvasiveY = DriveConstants.k_LeftEvasiveY;
+  // }
+  // public void RightEvasive(){
+  //   EvasiveX = DriveConstants.k_RightEvasiveX;
+  //   EvasiveY = DriveConstants.k_RightEvasiveY;
+  // }
+  // public void NonEvasive(){
+  //   EvasiveX = 0;
+  //   EvasiveY = 0;
+  // }
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     // var gyroAngle = Rotation2d.fromDegrees(-m_Navx.getAngle());
@@ -150,6 +154,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         m_backLeft.getState(),
         m_backRight.getState());
   }
+
   public void resetDriveEncoder(){
     m_frontLeft.resetDriveEnc();
     m_frontRight.resetDriveEnc();
@@ -164,21 +169,30 @@ public class SwerveDrivetrain extends SubsystemBase {
   public boolean getFieldMode(){
     return fieldMode;
   }
+
+  public void resetNavx(){
+    m_Navx.resetNavx();
+  }
   
   @Override
   public void periodic() {
     updateOdometry();
-    SmartDashboard.putBoolean("FieldRelative", fieldMode);
-    SmartDashboard.putNumber("OdoX", getOdometryX());
-    SmartDashboard.putNumber("OdoY", getOdometryY());
-    SmartDashboard.putNumber("OdoRotate", getOdometryRotate());
+    // SmartDashboard.putBoolean("FieldRelative", fieldMode);
+    // SmartDashboard.putNumber("OdoX", getOdometryX());
+    // SmartDashboard.putNumber("OdoY", getOdometryY());
+    // SmartDashboard.putNumber("OdoRotate", getOdometryRotate());
     // m_frontLeft.updateSmartDashboard();
     // m_frontRight.updateSmartDashboard();
     // m_backLeft.updateSmartDashboard();
-    // m_backRight.updateSmartDashboard();
+    // m_backRight.updateSmartDashboard()
+    
+    // SmartDashboard.putNumber("NavxDegrees", m_Navx.getRotation2d().getDegrees());
+    // SmartDashboard.putNumber("NavxRadians", m_Navx.getRotation2d().getRadians());
 
     // This method will be called once per scheduler run
   }
+
+
 
   @Override       
   public void simulationPeriodic() {

@@ -64,25 +64,25 @@ public class SwerveDriveCommand extends CommandBase {
       -rotLimiter.calculate(jStickBand(turn))
         * SwerveDrivetrain.kMaxAngularSpeed;
 
-    if(controller.getLeftTriggerAxis() >= 0.7){
-      //left evasive
-      drivetrain.LeftEvasive();
-    }else if(controller.getRightTriggerAxis() >= 0.7){
-      //right evasive
-      drivetrain.RightEvasive();
-    }else{
-      drivetrain.NonEvasive();
-      //non evasive
-    }
+    // if(controller.getLeftTriggerAxis() >= 0.7){
+    //   //left evasive
+    //   drivetrain.LeftEvasive();
+    // }else if(controller.getRightTriggerAxis() >= 0.7){
+    //   //right evasive
+    //   drivetrain.RightEvasive();
+    // }else{
+    //   drivetrain.NonEvasive();
+    //   //non evasive
+    // }
 
-    if(controller.getAButtonPressed()){
-      drivetrain.fieldModeChange();
-    }
-    boolean fieldRelative = drivetrain.getFieldMode();
+    // if(controller.getAButtonPressed()){
+    //   drivetrain.fieldModeChange();
+    // }
+    boolean fieldRelative = controller.getAButton();
 
-    SmartDashboard.putNumber("xspeed", xSpeed);
-    SmartDashboard.putNumber("yspeed", ySpeed);
-    SmartDashboard.putNumber("rotspeed", rot);
+    // SmartDashboard.putNumber("xspeed", xSpeed);
+    // SmartDashboard.putNumber("yspeed", ySpeed);
+    // SmartDashboard.putNumber("rotspeed", rot);
     // SmartDashboard.putNumber("yaxis", controller.getLeftY());
     // SmartDashboard.putNumber("x-axis", controller.getRightX());
 

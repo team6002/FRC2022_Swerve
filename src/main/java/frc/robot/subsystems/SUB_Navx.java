@@ -16,19 +16,22 @@ public class SUB_Navx extends SubsystemBase {
   /** Creates a new SUB_Navx. */
   private AHRS NavxGyro = new AHRS(Port.kMXP);
   public SUB_Navx() {
-    NavxGyro.setAngleAdjustment(DriveConstants.kNavXAdjustment);
+    resetNavx();
+    // NavxGyro.setAngleAdjustment(DriveConstants.kNavXAdjustment);
   }
 
   @Override
   public void periodic() {
-    // SmartDashboard.putNumber("NavxGyroAngle",NavxGyro.getAngle());
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("NavxDegrees", getRotation2d().getDegrees());
   }
 
   public double getAngle(){
-      return NavxGyro.getAngle();
+    return NavxGyro.getAngle();
   }
+
+  // this is same as getRotation2d.getDegrees()
+  // public double getYaw(){
+  //   return -NavxGyro.getYaw();
+  // }
   
   public Rotation2d getRotation2d(){
     return NavxGyro.getRotation2d();

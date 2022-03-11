@@ -186,17 +186,32 @@ public class SUB_Intake extends SubsystemBase {
     // if (m_intakeStatus.getState(IntakeState.SHOOTING)== true){
         
     // }else
-    if (getHopperStatus() && m_intakeStatus.isState(IntakeState.INTAKE)){
-      setHopperOff();
+    if(m_intakeStatus.isState(IntakeState.INTAKE)){
+      if(getHopperStatus()){
+        setHopperOff();
+        // if(getFrontStatus() || getBackStatus()){
+        //   setFrontIntakeOff();
+        //   setBackIntakeOff();
+        //   setFrontSolonoidRetract();
+        //   setBackSolonoidRetract();
+        // }
+      }else{
+        setHopperForward();
+      }
+    } else if(m_intakeStatus.isState(IntakeState.SHOOTING)){
+
+    } else {
+      
     }
+    
     
     SmartDashboard.putBoolean("FrontIntake?Full?", getFrontStatus());
     SmartDashboard.putBoolean("BackIntake?Full?", getBackStatus());
     SmartDashboard.putBoolean("HopperFull?", getHopperStatus());
     SmartDashboard.putString("IntakeState", m_intakeStatus.getCurrentState().toString());
-    SmartDashboard.putNumber("Hopper Velocity", m_HopperMotor.getEncoder().getVelocity());
-    SmartDashboard.putNumber("Intake Velocity", m_FrontIntakeEncoder.getVelocity());
-    SmartDashboard.putNumber("Indexer Velocity", m_IndexerMotor.getEncoder().getVelocity());
+     // SmartDashboard.putNumber("Hopper Velocity", m_HopperMotor.getEncoder().getVelocity());
+    // SmartDashboard.putNumber("Intake Velocity", m_FrontIntakeEncoder.getVelocity());
+    // SmartDashboard.putNumber("Indexer Velocity", m_IndexerMotor.getEncoder().getVelocity());
   }
 }
         

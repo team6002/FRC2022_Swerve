@@ -16,23 +16,23 @@ import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class CMD_Shooting extends SequentialCommandGroup {
   /** Creates a new CMD_Shooting. */
-  public CMD_Shooting(SUB_Turret pTurret, SUB_Intake pIntake, 
-                    FSM_IntakeStatus pIntakeStatus, SUB_Shooter pShooter) {
 
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+  SUB_Intake m_intake;
+  FSM_IntakeStatus m_intakeStatus;
+  SUB_Shooter m_shooter;
+  public CMD_Shooting(SUB_Intake p_intake, FSM_IntakeStatus p_intakeStatus, 
+                    SUB_Shooter p_shooter) {//SUB_Turret pTurret, 
+
+    m_intake = p_intake;
+    m_intakeStatus = p_intakeStatus;
+    m_shooter = p_shooter;
+    // m_intakeStatus.setState(IntakeState.SHOOTING);
     addCommands(
-      new CMD_SetIntakeStatus(pIntakeStatus, IntakeState.SHOOTING),
-      new CMD_ShooterOn(pShooter),
-      new CMD_IndexerForward(pIntake),
-      new CMD_HopperForward(pIntake),
-      new CMD_BackIntakeForward(pIntake),
-      new CMD_FrontIntakeForward(pIntake),
-      new CMD_FrontIntakeOff(pIntake),
-      new CMD_BackIntakeOff(pIntake)
-      // new CMD_HopperCheck(m_intake),
-      // new CMD_IndexerOff(m_intake),
-      // new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.INTAKE)
+      new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.SHOOTING),
+      new CMD_ShooterOn(m_shooter),
+      new CMD_IndexerForward(m_intake),
+      new CMD_HopperForward(m_intake)
+      // new CMD_HopperLoad(m_intake)
       
     );
   }

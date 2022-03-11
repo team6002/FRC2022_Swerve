@@ -40,16 +40,15 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    
 
-    m_robotContainer.m_NavxGyro.resetNavx();
-    m_robotContainer.m_drivetrain.syncAllAngles();
+    // m_robotContainer.m_NavxGyro.resetNavx();
+    // m_robotContainer.m_drivetrain.syncAllAngles();
     LiveWindow.disableAllTelemetry();
-    auto.addOption("Rightside ThreeBall", 
-                    new AUTO_ThreeBall(m_robotContainer.m_turret, m_robotContainer.m_intake, 
-                                      m_robotContainer.m_intakeStatus, m_robotContainer.m_shooter, 
-                                      m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory));
-    SmartDashboard.putData("Auto Mode", auto);
+    // auto.addOption("Rightside ThreeBall", 
+    //                 new AUTO_ThreeBall(m_robotContainer.m_turret, m_robotContainer.m_intake, 
+    //                                   m_robotContainer.m_intakeStatus, m_robotContainer.m_shooter, 
+    //                                   m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory));
+    // SmartDashboard.putData("Auto Mode", auto);
     SmartDashboard.putData(CommandScheduler.getInstance());
   }
 
@@ -67,7 +66,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled comm.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putData(CommandScheduler.getInstance());
+    
     // m_robotContainer.updateOdometry();
 
     
@@ -83,13 +82,13 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_robotContainer.m_NavxGyro.resetNavx();
+    // m_robotContainer.m_NavxGyro.resetNavx();
     m_robotContainer.m_drivetrain.resetDriveEncoder();
     m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));// temp
     // mAutonomousCommand = auto.getSelected();
-    mAutonomousCommand = new AUTO_ThreeBall(m_robotContainer.m_turret, m_robotContainer.m_intake, 
-                        m_robotContainer.m_intakeStatus, m_robotContainer.m_shooter, 
-                        m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory);
+    // mAutonomousCommand = new AUTO_ThreeBall(m_robotContainer.m_turret, m_robotContainer.m_intake, 
+                        // m_robotContainer.m_intakeStatus, m_robotContainer.m_shooter, 
+                        // m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory);
     if (mAutonomousCommand != null) {
       mAutonomousCommand.schedule();
     }

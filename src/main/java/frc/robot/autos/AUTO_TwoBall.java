@@ -8,11 +8,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.autos.AUTO_Trajectory;
-import frc.robot.commands.CMD_DeployBackIntake;
-import frc.robot.commands.CMD_DeployFrontIntake;
-import frc.robot.commands.CMD_ForceFeedToShooter;
-import frc.robot.commands.CMD_RetractBackIntake;
-import frc.robot.commands.CMD_RetractFrontIntake;
+import frc.robot.commands.CMD_FrontIntakeToggle;
 import frc.robot.commands.CMD_ShooterOff;
 import frc.robot.commands.CMD_Shooting;
 import frc.robot.commands.CMD_TurretMode;
@@ -43,10 +39,10 @@ public class AUTO_TwoBall extends SequentialCommandGroup {
     m_Trajectory = p_AutoTrajectory;
     addCommands(
       new CMD_TurretMode(m_Turret), //switch on auto mode for turret
-      new CMD_Shooting(m_Turret, m_Intake, m_IntakeStatus, m_Shooter),//first ball
-      new CMD_DeployFrontIntake(m_Intake, m_IntakeStatus),
+      new CMD_Shooting(m_Intake, m_IntakeStatus, m_Shooter),//first ball
+      new CMD_FrontIntakeToggle(m_Intake, m_IntakeStatus), //Deploying front intake
       m_Trajectory.driveTrajectory(m_Trajectory.FirstBallTrajectory),
-      new CMD_Shooting(m_Turret, m_Intake, m_IntakeStatus, m_Shooter)//second ball
+      new CMD_Shooting(m_Intake, m_IntakeStatus, m_Shooter)//second ball
 
     );
   }

@@ -193,13 +193,13 @@ public class SUB_Climber extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putBoolean("SecondaryClutch", SecondSolonoidState);
     SmartDashboard.putBoolean("PrimaryClutch", MainSolonoidState);
-    SmartDashboard.putBoolean("Primaryhomelimitswitch", getPrimaryHomeLimitSwitch());
-    SmartDashboard.putNumber("PrimaryEncoder", getPrimaryPosition());
-    SmartDashboard.putNumber("PrimaryAppliedOutput", m_PrimaryClimberMotor1.getAppliedOutput());
+    // SmartDashboard.putBoolean("Primaryhomelimitswitch", getPrimaryHomeLimitSwitch());
+    // SmartDashboard.putNumber("PrimaryEncoder", getPrimaryPosition());
+    // SmartDashboard.putNumber("PrimaryAppliedOutput", m_PrimaryClimberMotor1.getAppliedOutput());
     
-    SmartDashboard.putBoolean("Secondaryhomelimitswitch", getSecondaryHomeLimitSwitch());
-    SmartDashboard.putNumber("SecondaryEncoder", getSecondaryPosition());
-    SmartDashboard.putNumber("SecondaryAppliedOutput", m_SecondaryClimberMotor1.getAppliedOutput());
+    // SmartDashboard.putBoolean("Secondaryhomelimitswitch", getSecondaryHomeLimitSwitch());
+    // SmartDashboard.putNumber("SecondaryEncoder", getSecondaryPosition());
+    // SmartDashboard.putNumber("SecondaryAppliedOutput", m_SecondaryClimberMotor1.getAppliedOutput());
 
     // int Ticks = ThroughBore.get(); // 2000 ticks are about a rotation.
     // SmartDashboard.putNumber("ThroughBore", Ticks);

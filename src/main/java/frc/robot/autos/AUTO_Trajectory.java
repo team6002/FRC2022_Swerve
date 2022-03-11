@@ -75,7 +75,7 @@ public class AUTO_Trajectory {
                 // new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
                 // new Pose2d(-0.25, -1, Rotation2d.fromDegrees(0)),
             ),
-            new Pose2d(-0.8, -2.371, Rotation2d.fromDegrees(45)),
+            new Pose2d(-0.8, -1.371, Rotation2d.fromDegrees(45)),
             config.setReversed(true)
         );    
             

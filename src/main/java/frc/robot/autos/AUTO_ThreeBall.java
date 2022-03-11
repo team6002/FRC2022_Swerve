@@ -7,12 +7,9 @@ package frc.robot.autos;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.autos.AUTO_Trajectory;
-import frc.robot.commands.CMD_DeployBackIntake;
-import frc.robot.commands.CMD_DeployFrontIntake;
-import frc.robot.commands.CMD_ForceFeedToShooter;
-import frc.robot.commands.CMD_RetractBackIntake;
-import frc.robot.commands.CMD_RetractFrontIntake;
+import frc.robot.commands.CMD_BackIntakeToggle;
+// import frc.robot.commands.CMD_ForceFeedToShooter;
+import frc.robot.commands.CMD_FrontIntakeToggle;
 import frc.robot.commands.CMD_ShooterOff;
 import frc.robot.commands.CMD_Shooting;
 import frc.robot.commands.CMD_TurretMode;
@@ -43,19 +40,19 @@ public class AUTO_ThreeBall extends SequentialCommandGroup {
     m_Trajectory = p_AutoTrajectory;
     addCommands(
       new CMD_TurretMode(m_Turret), //switch on auto mode for turret
-      new CMD_Shooting(m_Turret, m_Intake, m_IntakeStatus, m_Shooter),//first ball
+      new CMD_Shooting(m_Intake, m_IntakeStatus, m_Shooter),//first ball
       // new CMD_ForceFeedToShooter(m_Intake).withTimeout(1),//clear hopper
-      new CMD_DeployFrontIntake(m_Intake, m_IntakeStatus),
+      new CMD_FrontIntakeToggle(m_Intake, m_IntakeStatus), //deploying front intake
       m_Trajectory.driveTrajectory(m_Trajectory.FirstBallTrajectory),
       new WaitCommand(0.1), //intaking ball
-      new CMD_Shooting(m_Turret, m_Intake, m_IntakeStatus, m_Shooter).withTimeout(1.5), //second ball
+      new CMD_Shooting(m_Intake, m_IntakeStatus, m_Shooter).withTimeout(1.5), //second ball
       // new CMD_ForceFeedToShooter(m_Intake).withTimeout(1), //clear hopper
-      new CMD_DeployBackIntake(m_Intake, m_IntakeStatus), //probably don't have to do
-      new CMD_RetractFrontIntake(m_Intake),
+      new CMD_BackIntakeToggle(m_Intake, m_IntakeStatus), //deploying back intake
+      new CMD_FrontIntakeToggle(m_Intake, m_IntakeStatus), //retracting front intake
       m_Trajectory.driveTrajectory(m_Trajectory.SecondBallTrajectory),
-      new CMD_Shooting(m_Turret, m_Intake, m_IntakeStatus, m_Shooter).withTimeout(1.5), //third ball
+      new CMD_Shooting(m_Intake, m_IntakeStatus, m_Shooter).withTimeout(1.5), //third ball
       // new CMD_ForceFeedToShooter(m_Intake).withTimeout(1), //clear hopper
-      new CMD_RetractBackIntake(m_Intake),
+      new CMD_BackIntakeToggle(m_Intake, p_IntakeStatus), //retracting back intake
       new CMD_ShooterOff(m_Shooter)
     );
   }

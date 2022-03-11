@@ -93,6 +93,6 @@ public class SUB_Shooter extends SubsystemBase{
         }else{
             m_Controller.setReference(0, ControlType.kDutyCycle);
         }
-        SmartDashboard.putNumber("ShooterVelocity", getVelocity());
+        // SmartDashboard.putNumber("ShooterVelocity", getVelocity());
     }
 }

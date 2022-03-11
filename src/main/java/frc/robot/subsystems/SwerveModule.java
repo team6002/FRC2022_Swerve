@@ -44,14 +44,11 @@ public class SwerveModule {
   private final SparkMaxPIDController m_drivePIDController;
   private final SparkMaxPIDController m_turningPIDController;
  
-  private final  SparkMaxAnalogSensor m_analogSensor;
-  // private final boolean m_driveDirection;
-  private double m_turningEncoderOffset = 0.0;//15;
+  private final SparkMaxAnalogSensor m_analogSensor;
   
   public SwerveModule(
       int driveMotorChannel,
       int turningMotorChannel,
-      double turningOffset,
       boolean driveDirection) {
 
     m_turningMotorChannel = turningMotorChannel;    
@@ -59,7 +56,6 @@ public class SwerveModule {
     m_driveMotor.setInverted(driveDirection);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-    m_turningEncoderOffset = turningOffset;
      /**
      * The restoreFactoryDefaults method can be used to reset the configuration parameters
      * in the SPARK MAX to their factory default state. If no argument is passed, these
@@ -125,11 +121,11 @@ public class SwerveModule {
   public double getAngle() {
     // Note: This assumes the CANCoders are setup with the default feedback coefficient
     // and the sensor value reports degrees.
-    double angle = ((m_turningEncoder.getPosition() - m_turningEncoderOffset) % 360);
+    double angle = ((m_turningEncoder.getPosition()) % 360);// - m_turningEncoderOffset
     // double angle = (m_analogSensor.getPosition() - m_turningEncoderOffset) % 360;
     if (angle > 180) angle-=360;
 
-    return getAbsAngle();
+    return angle;
   }
 
   // public void updateSmartDashboard() {

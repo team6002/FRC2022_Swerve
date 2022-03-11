@@ -52,7 +52,7 @@ public final class Constants {
     
         //Shooter is 2:1
         public static final double kMaxShooterVelocity = 5500; //2750;//max working velocity 
-        public static final double kShootingVelocity =  2950;//2475;    
+        public static final double kShootingVelocity =  4750;//2475;    
         public static final double kShootingAccel = 4950;
     
         public static final double kMinOutput = -1;

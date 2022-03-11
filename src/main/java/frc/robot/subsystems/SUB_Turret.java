@@ -147,14 +147,6 @@ public class SUB_Turret extends SubsystemBase{
         } else return false;
     }
 
-    //check ball color **DO NOT USE COLOR SENSOR**
-    // public boolean correctBall() {
-    //     if(m_colorSensor.getColor() == Color && m_colorSensor.getColor() != "unknown")
-    //     {
-    //         return true;
-    //     } else return false;
-    // }
-
     //set offset
     private int OFFSET = 0;
     public void setOffset(){
@@ -272,7 +264,7 @@ public class SUB_Turret extends SubsystemBase{
         SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
         SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
         SmartDashboard.putBoolean("Ball color???", redBall);
-        SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());
+        // SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());
         SmartDashboard.putNumber("Target Encoder", targetPosition);
         SmartDashboard.putNumber("Turret Mode", turretMode);
 
