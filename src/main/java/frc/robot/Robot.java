@@ -34,7 +34,8 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   SendableChooser<Command> auto = new SendableChooser<Command>();
-  Command mAutonomousCommand = new AUTO_Nothing();
+  Command mAutonomousCommand;
+
   @Override
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -87,7 +88,10 @@ public class Robot extends TimedRobot {
     // m_robotContainer.m_NavxGyro.resetNavx();
     m_robotContainer.m_drivetrain.resetDriveEncoder();
     m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));// temp
-    // mAutonomousCommand = auto.getSelected();
+    mAutonomousCommand =
+    new AUTO_TwoBall(m_robotContainer.m_turret, m_robotContainer.m_intake, m_robotContainer.m_intakeStatus, 
+                    m_robotContainer.m_shooter, m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory);
+    //auto.getSelected();
     // mAutonomousCommand = new AUTO_ThreeBall(m_robotContainer.m_turret, m_robotContainer.m_intake, 
                         // m_robotContainer.m_intakeStatus, m_robotContainer.m_shooter, 
                         // m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory);

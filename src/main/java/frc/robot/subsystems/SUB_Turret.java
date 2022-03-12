@@ -52,7 +52,7 @@ public class SUB_Turret extends SubsystemBase{
 
         //testing encoders (figure out converstion factor on real robo)
         m_Encoder.setPositionConversionFactor(12);
-        // m_Encoder.setPosition(0);
+        m_Encoder.setPosition(-90);//0
 
         //add options to sendable chooser
         m_color.addOption("RED", RED);
@@ -66,7 +66,7 @@ public class SUB_Turret extends SubsystemBase{
     }
 
     //2020 robot positions
-    private double targetPosition = 0;
+    private double targetPosition = -90;//0;
 
     //turretMode: 1=manual, 0 = auto (default), -1=calibration
     private int turretMode = 1;
@@ -151,6 +151,10 @@ public class SUB_Turret extends SubsystemBase{
     private int OFFSET = 0;
     public void setOffset(){
         OFFSET = 0;
+    }
+
+    public void setEncoderPosition(int pos){
+        m_Encoder.setPosition(pos);        
     }
 
     public void setOpenLoop(double d) {

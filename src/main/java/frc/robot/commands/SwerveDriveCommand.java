@@ -35,11 +35,11 @@ public class SwerveDriveCommand extends CommandBase {
  
   @Override
   public void execute() {
-      y = controller.getLeftY();
+    y = controller.getLeftY();
 
-      x = controller.getLeftX();
-    
-      turn = controller.getRightX();
+    x = controller.getLeftX();
+
+    turn = controller.getRightX();
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
 
@@ -78,7 +78,11 @@ public class SwerveDriveCommand extends CommandBase {
     // if(controller.getAButtonPressed()){
     //   drivetrain.fieldModeChange();
     // }
-    boolean fieldRelative = !controller.getAButton();
+
+    boolean fieldRelative = true;
+    if (controller.getRightTriggerAxis() >= 0.7) {
+      fieldRelative = false;  
+    }
 
     // SmartDashboard.putNumber("xspeed", xSpeed);
     // SmartDashboard.putNumber("yspeed", ySpeed);

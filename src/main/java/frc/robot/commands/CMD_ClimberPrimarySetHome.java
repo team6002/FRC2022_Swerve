@@ -28,7 +28,7 @@ public class CMD_ClimberPrimarySetHome extends CommandBase {
   @Override
   public void execute() {
     m_climber.setPrimaryGearEngage();
-    m_climber.movePrimaryClimber(-0.1);
+    m_climber.movePrimaryClimber(-0.2);
   }
 
   // Called once the command ends or is interrupted.

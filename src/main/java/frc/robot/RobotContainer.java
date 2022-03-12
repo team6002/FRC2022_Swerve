@@ -112,7 +112,11 @@ public class RobotContainer {
     );
 
     new POVButton(m_driverController, 180)
-      .whenPressed(new CMD_InitalizeClimbMode(m_climber, m_turret)
+      .whenPressed(new CMD_InitalizeClimbMode(m_climber, m_turret).withTimeout(4)
+    );
+
+    new POVButton(m_driverController, 0)
+      .whenPressed(new CMD_InitalizeClimbModeNoHome(m_climber, m_turret).withTimeout(4)
     );
 
     new JoystickButton(m_driverController, XboxController.Button.kBack.value)

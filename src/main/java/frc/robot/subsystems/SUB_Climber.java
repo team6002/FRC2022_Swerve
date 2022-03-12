@@ -40,6 +40,7 @@ public class SUB_Climber extends SubsystemBase {
 
   private double PrimarySetpoint = 0;
   private double SecondarySetpoint = 0;
+  private boolean climbing = false;
   /** Creates a new SUB_Climber. */
   public SUB_Climber() {
     m_SecondSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kSecondSolonoid);
@@ -101,6 +102,14 @@ public class SUB_Climber extends SubsystemBase {
     m_PrimaryClimberPID.setOutputRange(ClimberConstants.kSecondaryClimberMinOutput,
                                        ClimberConstants.kSecondaryClimberMaxOutput);
 
+  }
+  
+  public void setClimbing(boolean isClimbing){
+    climbing = isClimbing;
+  }
+
+  public boolean getClimbing(){
+    return climbing;
   }
 
   public void setPrimaryEncoder(int pos){
@@ -193,6 +202,7 @@ public class SUB_Climber extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putBoolean("SecondaryClutch", SecondSolonoidState);
     SmartDashboard.putBoolean("PrimaryClutch", MainSolonoidState);
+    // SmartDashboard.putBoolean("isClimbing", getClimbing());
     // SmartDashboard.putBoolean("Primaryhomelimitswitch", getPrimaryHomeLimitSwitch());
     // SmartDashboard.putNumber("PrimaryEncoder", getPrimaryPosition());
     // SmartDashboard.putNumber("PrimaryAppliedOutput", m_PrimaryClimberMotor1.getAppliedOutput());

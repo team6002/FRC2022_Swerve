@@ -23,7 +23,7 @@ import frc.robot.subsystems.SUB_Shooter;
 import frc.robot.subsystems.SUB_Turret;
 import frc.robot.subsystems.SwerveDrivetrain;
 
-public class AUTO_TwoBall extends SequentialCommandGroup {
+public class AUTO_TwoBall_Experimental extends SequentialCommandGroup {
   /** 
    * 3 Ball Autonomous for the right side(looking from driver station)
   */
@@ -33,7 +33,7 @@ public class AUTO_TwoBall extends SequentialCommandGroup {
   SUB_Shooter m_Shooter;
   AUTO_Trajectory m_Trajectory;
 
-  public AUTO_TwoBall(SUB_Turret p_Turret, SUB_Intake p_Intake, 
+  public AUTO_TwoBall_Experimental(SUB_Turret p_Turret, SUB_Intake p_Intake, 
                 FSM_IntakeStatus p_IntakeStatus, SUB_Shooter p_Shooter, 
                 SwerveDrivetrain p_Drivetrain, AUTO_Trajectory p_AutoTrajectory) {
     
@@ -44,17 +44,12 @@ public class AUTO_TwoBall extends SequentialCommandGroup {
     m_Trajectory = p_AutoTrajectory;
     addCommands(
       // new CMD_TurretMode(m_Turret), //switch on auto mode for turret
-      new CMD_Shooting(m_Intake, m_IntakeStatus, m_Shooter),//first ball
-      new WaitCommand(0.5),
-      new CMD_StopShooting(m_Intake, m_IntakeStatus, m_Shooter),
       new CMD_FrontIntakeToggle(m_Intake, m_IntakeStatus), //Deploying front intake
       // new CMD_FrontIntakeForward(m_Intake, m_IntakeStatus),
       m_Trajectory.driveTrajectory(m_Trajectory.FirstBallTrajectory),
       new WaitCommand(0.5),
-      // new CMD_FrontSolonoidRetract(m_Intake), //Force Ball Clamp for Shooter
-      new CMD_Shooting(m_Intake, m_IntakeStatus, m_Shooter),//second ball
-      // new CMD_FrontIntakeOff(m_Intake, m_IntakeStatus),
-      new WaitCommand(1),
+      new CMD_Shooting(m_Intake, m_IntakeStatus, m_Shooter),//first ball
+      new WaitCommand(3),
       new CMD_StopShooting(m_Intake, m_IntakeStatus, m_Shooter)
 
     );

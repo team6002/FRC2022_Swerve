@@ -29,6 +29,7 @@ public class CMD_ClimbDeployPrimaryClimber extends CommandBase {
   @Override
   public void initialize() {
     m_climber.setPrimaryPosition(Constants.ClimberConstants.PrimaryClimberDeploy);
+    m_climber.setClimbing(true);
     // System.out.println("INITALIZE CLIMB MODE");
   }
 

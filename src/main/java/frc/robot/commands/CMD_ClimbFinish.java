@@ -18,6 +18,9 @@ public class CMD_ClimbFinish extends SequentialCommandGroup {
    * Primary Climber - 70
    * Secondary Climber - 110
    * This file is just for reference of what full should do after partial
+   * NOT PART OF CLIMB
+   * NOT PART OF CLIMB
+   * NOT PART OF CLIMB
   */
   SUB_Climber m_climber;
   public CMD_ClimbFinish(SUB_Climber p_climber) {

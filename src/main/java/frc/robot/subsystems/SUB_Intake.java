@@ -229,7 +229,7 @@ public class SUB_Intake extends SubsystemBase {
       } 
 
     }else if(m_intakeStatus.isState(IntakeState.SHOOTING)) {
-
+    
     }
 
     previousHopperStatus = getHopperStatus();

@@ -22,6 +22,7 @@ public class SUB_Navx extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // SmartDashboard.putBoolean("navxIsConnected", NavxGyro.isConnected());
   }
 
   public double getAngle(){
