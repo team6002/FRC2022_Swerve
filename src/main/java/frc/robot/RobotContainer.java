@@ -30,7 +30,7 @@ public class RobotContainer {
   public final FSM_IntakeStatus m_intakeStatus = new FSM_IntakeStatus();
   public final SUB_Intake m_intake = new SUB_Intake(m_intakeStatus);
   public final SUB_Climber m_climber = new SUB_Climber();
-  public final SUB_Turret m_turret = new SUB_Turret();
+  public final SUB_Turret m_turret;
   public final AUTO_Trajectory m_autotrajectory = new AUTO_Trajectory(m_drivetrain);
   public final SUB_Shooter m_shooter = new SUB_Shooter();
   Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
@@ -40,6 +40,8 @@ public class RobotContainer {
   public RobotContainer() {
     m_driverController = new XboxController(0);
     m_operatorController = new XboxController(1);
+    m_turret = new SUB_Turret(m_operatorController);
+
     SmartDashboard.putData("SyncAngles", new CMD_SyncSwerveEncoders(m_drivetrain));
     SmartDashboard.putData("ResetAngles", new CMD_ResetSwerve(m_drivetrain));
     // SmartDashboard.putData("Secondary Climber Home", new CMD_ClimberSecondarySetHome(m_climber,true));
@@ -75,6 +77,9 @@ public class RobotContainer {
 
     new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value)
       .whenPressed(new CMD_TurretMode(m_turret));
+    
+    new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value)
+      .whenPressed(new CMD_SetTurretJoystickMode(m_turret));
 
    
    /** 

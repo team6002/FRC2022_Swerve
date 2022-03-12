@@ -78,6 +78,7 @@ public final class Constants {
         public static final double kTurretHuntVoltage = 1;
         public static final double kTurretMannualVoltage = 3;
         public static final double kTurretResetVoltage = 1;
+        public static final double kTurretJoystickVoltage = 0.5;
       }
 
     public static final class IndexerConstants{

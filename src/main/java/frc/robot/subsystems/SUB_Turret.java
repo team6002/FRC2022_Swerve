@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,8 +36,12 @@ public class SUB_Turret extends SubsystemBase{
     String BLUE = "BLUE";
     String bColor = "YOSHI";
     SendableChooser<String> m_color = new SendableChooser<>();
+    //joystick
+    XboxController joystick;
 
-    public SUB_Turret(){
+    public SUB_Turret(XboxController p_joystick){
+        joystick = p_joystick;
+
         m_Turret.setIdleMode(IdleMode.kBrake);
         m_Turret.setInverted(true);
 
@@ -175,8 +180,7 @@ public class SUB_Turret extends SubsystemBase{
 
         bColor = m_color.getSelected();
 
-        //auto mode = 0
-        if(turretMode == 0) {
+        if(turretMode == 0) { //auto mode = 0
             targetPosition = 0;
             if(targetX == -1) {
                 //no target found
@@ -212,7 +216,7 @@ public class SUB_Turret extends SubsystemBase{
                 // }
             }
         }
-        else if (turretMode == 1) {
+        else if (turretMode == 1) { //manual position mode
             sentOutput = (targetPosition - m_Encoder.getPosition()) / 180 * TurretConstants.kTurretMannualVoltage;
 
             double minvolef = 0.6;
@@ -241,7 +245,7 @@ public class SUB_Turret extends SubsystemBase{
             //     sentOutput = 0;
             // }
         }
-        else if(turretMode == -1) {
+        else if(turretMode == -1) { //reset turret position
             if(m_ForwardLimitSwitch.isPressed() == true) {
                 sentOutput = 0;
                 m_Encoder.setPosition(RESET_TURRET);
@@ -254,6 +258,13 @@ public class SUB_Turret extends SubsystemBase{
         } 
         else if (turretMode == 2) { //openloop mode 
             
+        }
+        else if(turretMode == 3) { //joystick mode
+            double xVal = joystick.getLeftX();
+            if(Math.abs(xVal) < 0.1) {
+                xVal = 0;
+            }
+            sentOutput = xVal * TurretConstants.kTurretJoystickVoltage;
         }
 
         if(turretMode != 2) {
