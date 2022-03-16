@@ -73,7 +73,7 @@ public class SUB_Turret extends SubsystemBase{
     //2020 robot positions
     private double targetPosition = -90;//0;
 
-    //turretMode: 1=manual, 0 = auto (default), -1=calibration
+    //turretMode: 1=manual, 0 = auto (default), -1=calibration, 3=joystick mode
     private int turretMode = 1;
     private final double RESET_TURRET = 140; // value of encoder when left limit switch is triggered
 
@@ -94,11 +94,7 @@ public class SUB_Turret extends SubsystemBase{
     }
 
     public void setTurretMode(int wantedMode) {
-        if(wantedMode == 1) {
-            turretMode = wantedMode;
-        } else {
-            turretMode = 0;
-        }
+        turretMode = wantedMode;
     }
 
     public int getTurretMode() {
@@ -280,9 +276,9 @@ public class SUB_Turret extends SubsystemBase{
         // SmartDashboard.putNumber("Hunting Direction", huntDirection);
         SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
         SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
-        SmartDashboard.putBoolean("Ball color???", redBall);
+        // SmartDashboard.putBoolean("Ball color???", redBall);
         // SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());
-        SmartDashboard.putNumber("Target Encoder", targetPosition);
+        // SmartDashboard.putNumber("Target Encoder", targetPosition);
         SmartDashboard.putNumber("Turret Mode", turretMode);
 
         // SmartDashboard.putBoolean("Forward Enabled", m_ForwardLimitSwitch.isLimitSwitchEnabled());

@@ -30,14 +30,14 @@ public final class Constants {
         
         public static int kNavXAdjustment = 0;
     }
-        /**
+    /*
      * Gear Ratios for Swerve
      * Turning: 16-1
-     * Drive  : 5-1
+     * Drive  : 6-1
      * 
      * Sparkmax Turning Position Conversion Factor
      * 360/16 = 22.5
-     */
+    */
 
     public static final class ShooterConstants {
     
@@ -45,14 +45,14 @@ public final class Constants {
         public static final int kShooterMaster = 8;
         public static final int kShooterSlave = 9;
     
-        public static final double kShooterFF = 0.000230;
+        public static final double kShooterFF = 0.000200;//0.000230;
         public static final double kShooterP = 0.00012;
         public static final double kShooterI = 0; 
         public static final double kShooterD = 0.000;
     
         //Shooter is 2:1
         public static final double kMaxShooterVelocity = 5500; //2750;//max working velocity 
-        public static final double kShootingVelocity =  4400;//2475;    
+        public static final double kShootingVelocity =  4450;//2475;    
         public static final double kShootingAccel = 4550;
     
         public static final double kMinOutput = -1;
@@ -118,9 +118,9 @@ public final class Constants {
         public static final double kIntakeAccel = 2000;
 
         //SPEEDS
-        public static final double kIndexerVelocity = 1300;
+        public static final double kIndexerVelocity = 1500;
         public static final double kHopperVelocity = 1500; 
-        public static final double kIntakeVelocity = 1600;
+        public static final double kIntakeVelocity = 1800;
         public static final double HopperOff = 0;
         public static final double IndexerOff = 0;
         public static final double IntakeOff = 0;

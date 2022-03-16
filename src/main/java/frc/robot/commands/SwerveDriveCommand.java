@@ -44,7 +44,7 @@ public class SwerveDriveCommand extends CommandBase {
     // negative values when we push forward.
 
     final var xSpeed =
-      -xspeedLimiter.calculate(jStickBand(y))
+      -xspeedLimiter.calculate(modifyAxis(y))
         * SwerveDrivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
@@ -52,7 +52,7 @@ public class SwerveDriveCommand extends CommandBase {
     // return positive values when you pull to the right by default.
     
     final var ySpeed =
-      -yspeedLimiter.calculate(jStickBand(x))
+      -yspeedLimiter.calculate(modifyAxis(x))
         * SwerveDrivetrain.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
@@ -61,7 +61,7 @@ public class SwerveDriveCommand extends CommandBase {
     // the right by default.
     
     final var rot =
-      -rotLimiter.calculate(jStickBand(turn))
+      -rotLimiter.calculate(modifyAxis(turn))
         * SwerveDrivetrain.kMaxAngularSpeed;
 
     // if(controller.getLeftTriggerAxis() >= 0.7){
@@ -92,9 +92,24 @@ public class SwerveDriveCommand extends CommandBase {
 
     drivetrain.drive(xSpeed, ySpeed, rot, fieldRelative);
   }
+  private static double deadband(double value, double deadband) {
+    if (Math.abs(value) > deadband) {
+      if (value > 0.0) {
+        return (value - deadband) / (1.0 - deadband);
+      } else {
+        return (value + deadband) / (1.0 - deadband);
+      }
+    } else {
+      return 0.0;
+    }
+  }
 
-  public double jStickBand(double value) {
-    if (Math.abs(value) < deadzone) return 0;
+  private static double modifyAxis(double value) {
+    // Deadband
+    value = deadband(value, 0.05);
+
+    // Square the axis
+    value = Math.copySign(value * value, value);
 
     return value;
   }

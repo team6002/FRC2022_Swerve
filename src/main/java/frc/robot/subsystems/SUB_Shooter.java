@@ -24,8 +24,9 @@ public class SUB_Shooter extends SubsystemBase{
     private SparkMaxPIDController m_Controller = m_ShooterMaster.getPIDController();
 
     private double m_ShooterSetpoint = ShooterConstants.kShootingVelocity;
-    private boolean wantShooter = false;
 
+    private boolean wantShooter = false;
+    private boolean twoBall = true;
     public SUB_Shooter()
     {
         m_ShooterMaster.restoreFactoryDefaults();
@@ -82,16 +83,29 @@ public class SUB_Shooter extends SubsystemBase{
         return m_ShooterSetpoint;
     }
 
+    //AUTONOMOUS USE ONLY
+    // public void twoBallSecondShot(){
+    //     m_ShooterSetpoint = 
+    // }
     // public void setShooterSetpoint(double setpoint){
         // m_ShooterSetpoint = setpoint;
     // }
+
+    public void setTwoBall(boolean auto){
+        twoBall = auto;
+    }
+    
     @Override
     public void periodic() {
         //must press tab to set in smartdashboard
         m_ShooterSetpoint = SmartDashboard.getNumber("Desired Shooter Setpoint", 
                                                         ShooterConstants.kShootingVelocity);
         if(wantShooter){
-            m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
+            if(twoBall){// Hack to set different setpoint in auton for tourny, fix -Daniel 3/12/22
+                m_Controller.setReference(4750, ControlType.kVelocity);
+            } else {
+                m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
+            }
         }else{
             m_Controller.setReference(0, ControlType.kDutyCycle);
         }

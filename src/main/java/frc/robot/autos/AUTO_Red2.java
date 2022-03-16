@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.FSM_IntakeStatus;
 import frc.robot.subsystems.SUB_Intake;
-import frc.robot.subsystems.SUB_Navx;
 import frc.robot.subsystems.SUB_Shooter;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;

@@ -5,20 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.SUB_Intake;
+
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class CMD_ResetNavX extends InstantCommand {
-  SwerveDrivetrain m_drivetrain;
-  public CMD_ResetNavX(SwerveDrivetrain p_drivetrain) {
-    m_drivetrain = p_drivetrain;
+public class CMD_FrontIntakeDeploy extends InstantCommand {
+  SUB_Intake m_intake;
+  public CMD_FrontIntakeDeploy(SUB_Intake p_intake) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_intake = p_intake;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrain.zeroGyroscope();
+    m_intake.setFrontSolonoidExtend();
   }
 }

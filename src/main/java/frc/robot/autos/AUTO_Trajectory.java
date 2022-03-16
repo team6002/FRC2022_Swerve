@@ -18,6 +18,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -27,14 +28,15 @@ import frc.robot.subsystems.SwerveDrivetrain;
 
 public class AUTO_Trajectory {
     
-    // String trajectoryJSON = "paths/FirstBall.wpilib.json";
-    Trajectory trajectory = new Trajectory();
+    String trajectoryJSON = "Paths/FirstBall.wpilib.json";
+    Trajectory FirstBallTrajectoryPathweaver = new Trajectory();
     private SwerveDrivetrain m_drivetrain;
     // public Trajectory threeMetersForwardTrajectory;
     // public Trajectory threeMetersBackwardTrajectory;
     // public Trajectory exampleTrajectory;
     public Trajectory FirstBallTrajectory;
     public Trajectory SecondBallTrajectory;
+    public Trajectory FirstBallTrajectoryPathWeaver;
     // public Trajectory FluidThreeBallTrajectory;
     // public Trajectory ThirdBallTrajectory;
     // public Trajectory ReturnTrajectory;
@@ -49,13 +51,13 @@ public class AUTO_Trajectory {
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(m_drivetrain.m_kinematics);
 
-        // Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-        //     try {
-        //         trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-        //     } catch (IOException e) {
-        //         e.printStackTrace();
-        // }           
-        
+            try {
+                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+                FirstBallTrajectoryPathweaver = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            } catch (IOException e) {
+                DriverStation.reportError("Unable to open trajectory", e.getStackTrace());
+        }           
+        FirstBallTrajectoryPathWeaver = FirstBallTrajectoryPathweaver;
         //Rotation2d uses RADIANS NOT DEGREES!
         //Use Rotation2d.fromDegrees(desiredDegree) instead
         FirstBallTrajectory = 
@@ -64,7 +66,7 @@ public class AUTO_Trajectory {
              List.of(
                 //  new Translation2d(0.5, 0)
             ), 
-            new Pose2d(1.2,0, new Rotation2d(0)), 
+            new Pose2d(1.4,0, new Rotation2d(0)), 
             config
         );
 
@@ -122,7 +124,7 @@ public class AUTO_Trajectory {
                 AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         // thetaController.setTolerance(1);
-        
+
         SwerveControllerCommand swerveControllerCommand =
             new SwerveControllerCommand(
                 trajectory,

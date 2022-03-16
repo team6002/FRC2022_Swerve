@@ -25,7 +25,10 @@ import frc.robot.subsystems.SwerveDrivetrain;
 
 public class AUTO_TwoBall_Experimental extends SequentialCommandGroup {
   /** 
-   * 3 Ball Autonomous for the right side(looking from driver station)
+   * 2 Ball Autonomous for all positions.
+   * Unfortunately experimental doesn't work with current intake code  
+   * It also looks like shooting one at a time is better for this tournament
+   * -Daniel 3/12/2022 
   */
   SUB_Turret m_Turret;
   SUB_Intake m_Intake;
@@ -44,13 +47,13 @@ public class AUTO_TwoBall_Experimental extends SequentialCommandGroup {
     m_Trajectory = p_AutoTrajectory;
     addCommands(
       // new CMD_TurretMode(m_Turret), //switch on auto mode for turret
-      new CMD_FrontIntakeToggle(m_Intake, m_IntakeStatus), //Deploying front intake
+      // new CMD_FrontIntakeToggle(m_Intake, m_IntakeStatus), //Deploying front intake
       // new CMD_FrontIntakeForward(m_Intake, m_IntakeStatus),
-      m_Trajectory.driveTrajectory(m_Trajectory.FirstBallTrajectory),
-      new WaitCommand(0.5),
-      new CMD_Shooting(m_Intake, m_IntakeStatus, m_Shooter),//first ball
-      new WaitCommand(3),
-      new CMD_StopShooting(m_Intake, m_IntakeStatus, m_Shooter)
+      m_Trajectory.driveTrajectory(m_Trajectory.FirstBallTrajectoryPathWeaver)
+      // new WaitCommand(0.5),
+      // new CMD_Shooting(m_Intake, m_IntakeStatus, m_Shooter),//first ball
+      // new WaitCommand(3),
+      // new CMD_StopShooting(m_Intake, m_IntakeStatus, m_Shooter)
 
     );
   }

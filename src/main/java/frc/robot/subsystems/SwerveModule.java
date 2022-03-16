@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 // import edu.wpi.first.wpilibj.motorcontrol.Spark;
 // import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
@@ -21,7 +22,6 @@ import com.revrobotics.SparkMaxPIDController;
 
 public class SwerveModule {
 
-  // TODO: Tune these PID values for your robot
   private static final double kDriveP = 0.005;  //15.0;
   private static final double kDriveI = 0;//0;  //0.01;
   private static final double kDriveD = 0.1;  //0.1;
@@ -47,20 +47,20 @@ public class SwerveModule {
   private final SparkMaxAnalogSensor m_analogSensor;
   
   public SwerveModule(
-      int driveMotorChannel,
-      int turningMotorChannel,
-      boolean driveDirection) {
+    int driveMotorChannel,
+    int turningMotorChannel,
+    boolean driveDirection) {
 
     m_turningMotorChannel = turningMotorChannel;    
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_driveMotor.setInverted(driveDirection);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-     /**
-     * The restoreFactoryDefaults method can be used to reset the configuration parameters
-     * in the SPARK MAX to their factory default state. If no argument is passed, these
-     * parameters will not persist between power cycles
-     */
+    /**
+   * The restoreFactoryDefaults method can be used to reset the configuration parameters
+   * in the SPARK MAX to their factory default state. If no argument is passed, these
+   * parameters will not persist between power cycles
+   */
 
      
     // m_driveMotor.restoreFactoryDefaults();
@@ -75,7 +75,10 @@ public class SwerveModule {
   
 
     m_turningEncoder = m_turningMotor.getEncoder();
-    m_turningEncoder.setPositionConversionFactor(22.5);
+    m_turningEncoder.setPositionConversionFactor(2*Math.PI*16);
+    m_turningEncoder.setVelocityConversionFactor(2*Math.PI*16/60);
+    
+    // m_turningEncoder.setPositionConversionFactor(22.5); // degrees
 
     m_analogSensor = m_turningMotor.getAnalog(SparkMaxAnalogSensor.Mode.kAbsolute);
     m_analogSensor.setInverted(true);
@@ -102,14 +105,19 @@ public class SwerveModule {
    * Gets the relative rotational position of the module
    * @return The relative rotational position of the angle motor in degrees
    */
+  private static final int ENCODER_RESET_ITERATIONS = 500;
+  private static final double ENCODER_RESET_MAX_ANGULAR_VELOCITY = Math.toRadians(0.5);
+  private double referenceAngleRadians = 0;
+  private double resetIteration = 0;
+
   public double getAbsAngle() {
     // set the lamprey sensor to zero degree pointing to the back
     // the analog signal is zero to 3.3v, representing 0 to 360 degree, CCW positive
     double absoluteAngle = m_analogSensor.getPosition();
-    if (absoluteAngle > 360) absoluteAngle = absoluteAngle % 360;
+    if (absoluteAngle > 2*Math.PI) absoluteAngle = absoluteAngle % 2*Math.PI;
     // we need to convert it to 180 degree (left) to -180 (right), zero degree pointing forward
     // we can do this by subtracting 180 from the value
-    absoluteAngle-=180;
+    absoluteAngle-=Math.PI;
 
     return absoluteAngle;
   }
@@ -121,26 +129,27 @@ public class SwerveModule {
   public double getAngle() {
     // Note: This assumes the CANCoders are setup with the default feedback coefficient
     // and the sensor value reports degrees.
-    double angle = ((m_turningEncoder.getPosition()) % 360);// - m_turningEncoderOffset
+    double angle = ((m_turningEncoder.getPosition()) % 2*Math.PI);// - m_turningEncoderOffset
     // double angle = (m_analogSensor.getPosition() - m_turningEncoderOffset) % 360;
-    if (angle > 180) angle-=360;
+    if (angle > Math.PI) angle-=2*Math.PI;
 
     return angle;
   }
-
-  // public void updateSmartDashboard() {
+ 
+  public void updateSmartDashboard() {
   //       double angle = getAbsAngle();
   //       angle -= m_turningEncoderOffset;
   //       if (angle > 180) angle -= 360;
 
         // // SmartDashboard.putNumber("turnRaw:"+m_turningMotorChannel, m_turningEncoder.getPosition());
-        // SmartDashboard.putNumber("turnEnc:"+m_turningMotorChannel, getAngle());
+        SmartDashboard.putNumber("turnEnc:"+m_turningMotorChannel, getAngle());
         // SmartDashboard.putNumber("driveEnc:"+m_turningMotorChannel, m_driveEncoder.getPosition());
         // SmartDashboard.putNumber("rawAnalogEnc:"+m_turningMotorChannel, m_analogSensor.getPosition());
         // SmartDashboard.putNumber("turnAbs:"+m_turningMotorChannel, angle);
         // SmartDashboard.putNumber("driveVelocity"+m_turningMotorChannel, m_driveEncoder.getVelocity());
         // SmartDashboard.putNumber("turnOff:"+m_turningMotorChannel, m_turningEncoderOffset);
-  // }
+  }
+
   /**
    * Resets the relative encoder to the absolute encoder.
    */
@@ -150,6 +159,8 @@ public class SwerveModule {
   public void resetDriveEnc(){
     m_driveEncoder.setPosition(0);
   }
+
+
   public void setAngle(Rotation2d rotation, Rotation2d currentRotation) {
     Rotation2d rotationDelta = rotation.minus(currentRotation);
     double position = rotationDelta.getDegrees() + m_turningEncoder.getPosition();
@@ -171,7 +182,7 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     // double fakeSpeed = -0.16666;
-    return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(getAngle() * (Math.PI / 180.0)));
+    return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(getAngle())); //* (Math.PI / 180.0)));
     // return new SwerveModuleState(fakeSpeed, new Rotation2d(Math.PI / 2));
   }
   /**
@@ -182,8 +193,7 @@ public class SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     Rotation2d currentRotation = Rotation2d.fromDegrees(getAngle());
-
-    // Optimize the reference state to avoid spinning further than 90 degrees
+     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state =
         SwerveModuleState.optimize(desiredState, currentRotation);
 
@@ -202,11 +212,12 @@ public class SwerveModule {
     double speed = state.speedMetersPerSecond / SwerveDrivetrain.kMaxSpeed;
     m_driveMotor.set(speed);
         
-  }  
+  }
+  
   public void stop() {
     m_driveMotor.set(0);
     m_turningMotor.set(0);
-} 
+  } 
 }
  
  

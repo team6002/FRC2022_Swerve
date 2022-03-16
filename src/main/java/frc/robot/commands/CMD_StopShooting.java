@@ -28,10 +28,10 @@ public class CMD_StopShooting extends ParallelCommandGroup {
     addCommands(
       new CMD_ShooterOff(m_shooter),
       new CMD_HopperOff(m_intake),
-      new CMD_IndexerOff(m_intake),
-      new CMD_BackIntakeOff(m_intake),
-      new CMD_FrontIntakeOff(m_intake),
-      new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.HOME)
+      new CMD_IndexerOff(m_intake)
+      // new CMD_BackIntakeOff(m_intake),
+      // new CMD_FrontIntakeOff(m_intake),
+      // new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.HOME)
       // new CMD_BackSolonoidRetract(m_intake),
       // new CMD_FrontSolonoidRetract(m_intake),
     );

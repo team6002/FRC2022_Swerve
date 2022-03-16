@@ -15,6 +15,20 @@ import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;
 import frc.robot.autos.AUTO_Trajectory;
 import frc.robot.commands.*;
 
+/** 
+  * IMPROVEMENTS FOR OVERALL CODE, just suggestions :)
+  * -Seperate the parts of Intake (Hopper, Indexer(Prestage), Intake)
+  * -Alter command structure so that commands tell robot what state to be in, and 
+  *   subsystem handles actual movement to state
+  * -Decide flow of subsystems (when shooter turns off, intake when?)
+  *   -Rewrite the commands for better control of states (intake and shooter for sure, turret seems okay) 
+  * -Idle state for Shooter? (lower rpm)
+  *   -TUNE THE SHOOTER
+  * -Global Robot Status (network tables, or constants-like file)
+  * -Singleton Subsystems with getInstance()? 
+  *  (maybe not because of 2020 command base dependency injection)    
+  */
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -26,7 +40,7 @@ public class RobotContainer {
   private final XboxController m_driverController;
   private final XboxController m_operatorController;
   public final SwerveDrivetrain m_drivetrain = new SwerveDrivetrain();
-  public final SUB_Navx m_NavxGyro = new SUB_Navx();
+  // public final SUB_Navx m_NavxGyro = new SUB_Navx();
   public final FSM_IntakeStatus m_intakeStatus = new FSM_IntakeStatus();
   public final SUB_Intake m_intake = new SUB_Intake(m_intakeStatus);
   public final SUB_Climber m_climber = new SUB_Climber();
@@ -78,21 +92,10 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value)
       .whenPressed(new CMD_TurretMode(m_turret));
     
-    new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value)
-      .whenPressed(new CMD_SetTurretJoystickMode(m_turret));
+    new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value)
+      .whenPressed(new CMD_SetTurretJoystickMode(m_turret)); 
 
-   
-   /** 
-    * IMPROVEMENTS:
-    * Alter command structure so that commands tell robot what statee to be in, and 
-    *   subsystem handles actual movement to state
-    * Decide flow of subsystems (when shooter turns off, intake when?)
-    * Idle state for Shooter (lower rpm)
-    * Global Robot Status (network tables, or constants-like file)
-    * Singleton Subsystems? (getInstance())
-  */ 
-
-  // shooting
+    // shooting
     new JoystickButton(m_operatorController, XboxController.Button.kA.value)
       .whenPressed(new CMD_Shooting(m_intake, m_intakeStatus, m_shooter));
 
@@ -117,7 +120,7 @@ public class RobotContainer {
     );
 
     new POVButton(m_driverController, 180)
-      .whenPressed(new CMD_InitalizeClimbMode(m_climber, m_turret).withTimeout(4)
+      .whenPressed(new CMD_InitalizeClimbMode(m_climber, m_turret, m_intake, m_intakeStatus).withTimeout(4)
     );
 
     new POVButton(m_driverController, 0)

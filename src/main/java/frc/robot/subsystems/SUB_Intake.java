@@ -203,30 +203,35 @@ public class SUB_Intake extends SubsystemBase {
   @Override
   public void periodic() {
     if(m_intakeStatus.isState(IntakeState.INTAKE)){
-      if((!getFrontStatus() || !getBackStatus()) && !getHopperStatus()){//zeroballs
-        //keep intaking        
-      } 
-      else if((!getFrontStatus() || !getBackStatus()) && getHopperStatus()){
+      if(getHopperStatus()){
         setHopperOff();
-        if(!previousFrontIntakeStatus || !previousBackIntakeStatus){
-          //keep intaking
-        }else if(previousFrontIntakeStatus || previousBackIntakeStatus){
-          setHopperOff();
-        }
+      }else{
+        setHopperForward();
       }
-      else if((getFrontStatus() || getBackStatus()) && getHopperStatus()){ 
-        if((previousFrontIntakeStatus || previousBackIntakeStatus) && !previousHopperStatus){//first ball
-          //hopper stop, intake continue
-          setHopperOff();
-        }else if((previousFrontIntakeStatus || previousBackIntakeStatus) && previousHopperStatus){//2nd ball
-          //stop hopper and intake
-          setHopperOff();
-          setFrontIntakeOff();
-          setBackIntakeOff();
-          setFrontSolonoidRetract();
-          setBackSolonoidRetract();
-        }
-      } 
+      // if((!getFrontStatus() || !getBackStatus()) && !getHopperStatus()){//zeroballs
+      //   //keep intaking        
+      // } 
+      // else if((!getFrontStatus() || !getBackStatus()) && getHopperStatus()){
+      //   setHopperOff();
+      //   if(!previousFrontIntakeStatus || !previousBackIntakeStatus){
+      //     //keep intaking
+      //   }else if(previousFrontIntakeStatus || previousBackIntakeStatus){
+      //     setHopperOff();
+      //   }
+      // }
+      // else if((getFrontStatus() || getBackStatus()) && getHopperStatus()){ 
+      //   if((previousFrontIntakeStatus || previousBackIntakeStatus) && !previousHopperStatus){//first ball
+      //     //hopper stop, intake continue
+      //     setHopperOff();
+      //   }else if((previousFrontIntakeStatus || previousBackIntakeStatus) && previousHopperStatus){//2nd ball
+      //     //stop hopper and intake
+      //     setHopperOff();
+      //     setFrontIntakeOff();
+      //     setBackIntakeOff();
+      //     setFrontSolonoidRetract();
+      //     setBackSolonoidRetract();
+      //   }
+      // } 
 
     }else if(m_intakeStatus.isState(IntakeState.SHOOTING)) {
     

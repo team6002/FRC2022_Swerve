@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -12,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 
@@ -40,12 +44,12 @@ public class SwerveDrivetrain extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(11.75));
   private final Translation2d m_backRightLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(-11.75));
 
-  private final SwerveModule m_frontLeft = new SwerveModule(25, 16, false);//(15,16)
-  private final SwerveModule m_frontRight = new SwerveModule(13, 14, true);
+  private final SwerveModule m_frontLeft = new SwerveModule(25, 16, true);//(15,16)
+  private final SwerveModule m_frontRight = new SwerveModule(13, 14, false);
   private final SwerveModule m_backLeft = new SwerveModule(3, 4, true);
-  private final SwerveModule m_backRight = new SwerveModule(5, 6, true);
+  private final SwerveModule m_backRight = new SwerveModule(5, 6, false);
 
-  private final SUB_Navx m_Navx = new SUB_Navx();   
+  private final AHRS m_Navx = new AHRS(Port.kMXP);
   // private double EvasiveX = 0;
   // private double EvasiveY = 0;
   private boolean fieldMode = true;
@@ -58,9 +62,23 @@ public class SwerveDrivetrain extends SubsystemBase {
       new SwerveDriveOdometry(m_kinematics, m_Navx.getRotation2d());//, new Pose2d(0, 0, new Rotation2d()
 
   public SwerveDrivetrain() {
-    m_Navx.resetNavx();
     syncAllAngles();
     // resetDriveEncoder();
+  }
+
+  //sets the gyro angle to 0
+  public void zeroGyroscope() {
+    m_Navx.zeroYaw();
+  }
+
+  public Rotation2d getGyroscopeRotation() {
+    if (m_Navx.isMagnetometerCalibrated()) {
+      // We will only get valid fused headings if the magnetometer is calibrated
+      return Rotation2d.fromDegrees(m_Navx.getFusedHeading());
+    }
+
+    //counter-clockwise = positive angle
+    return Rotation2d.fromDegrees(360.0 - m_Navx.getYaw());
   }
 
   public void syncAllAngles() {
@@ -127,7 +145,9 @@ public class SwerveDrivetrain extends SubsystemBase {
   }
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(pose, m_Navx.getRotation2d());
-    // m_odometry.resetPosition(pose, new Rotation2d(0));
+  }
+  public double getDegrees(){
+    return m_Navx.getRotation2d().getDegrees();
   }
 
   // public void LeftEvasive(){
@@ -169,24 +189,20 @@ public class SwerveDrivetrain extends SubsystemBase {
   public boolean getFieldMode(){
     return fieldMode;
   }
-
-  public void resetNavx(){
-    m_Navx.resetNavx();
-  }
   
   @Override
   public void periodic() {
     updateOdometry();
     // SmartDashboard.putBoolean("FieldRelative", fieldMode);
-    // SmartDashboard.putNumber("OdoX", getOdometryX());
-    // SmartDashboard.putNumber("OdoY", getOdometryY());
-    // SmartDashboard.putNumber("OdoRotate", getOdometryRotate());
-    // m_frontLeft.updateSmartDashboard();
-    // m_frontRight.updateSmartDashboard();
-    // m_backLeft.updateSmartDashboard();
-    // m_backRight.updateSmartDashboard()
+    SmartDashboard.putNumber("OdoX", getOdometryX());
+    SmartDashboard.putNumber("OdoY", getOdometryY());
+    SmartDashboard.putNumber("OdoRotate", getOdometryRotate());
+    m_frontLeft.updateSmartDashboard();
+    m_frontRight.updateSmartDashboard();
+    m_backLeft.updateSmartDashboard();
+    m_backRight.updateSmartDashboard();
     
-    // SmartDashboard.putNumber("NavxDegrees", m_Navx.getRotation2d().getDegrees());
+    SmartDashboard.putNumber("NavxDegrees", m_Navx.getRotation2d().getDegrees());
     // SmartDashboard.putNumber("NavxRadians", m_Navx.getRotation2d().getRadians());
 
     // This method will be called once per scheduler run
