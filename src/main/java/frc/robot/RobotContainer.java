@@ -56,7 +56,7 @@ public class RobotContainer {
     m_operatorController = new XboxController(1);
     m_turret = new SUB_Turret(m_operatorController);
 
-    SmartDashboard.putData("SyncAngles", new CMD_SyncSwerveEncoders(m_drivetrain));
+    // SmartDashboard.putData("SyncAngles", new CMD_SyncSwerveEncoders(m_drivetrain));
     SmartDashboard.putData("ResetAngles", new CMD_ResetSwerve(m_drivetrain));
     // SmartDashboard.putData("Secondary Climber Home", new CMD_ClimberSecondarySetHome(m_climber,true));
     // SmartDashboard.putData("Primary Climber Home", new CMD_ClimberPrimarySetHome(m_climber,true));

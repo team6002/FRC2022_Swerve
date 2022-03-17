@@ -44,15 +44,15 @@ public class SwerveDrivetrain extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(11.75));
   private final Translation2d m_backRightLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(-11.75));
 
-  private final SwerveModule m_frontLeft = new SwerveModule(25, 16, true);//(15,16)
-  private final SwerveModule m_frontRight = new SwerveModule(13, 14, false);
-  private final SwerveModule m_backLeft = new SwerveModule(3, 4, true);
-  private final SwerveModule m_backRight = new SwerveModule(5, 6, false);
+  private final SwerveModule m_frontLeft = new SwerveModule(15, 16, false);//(15,16)
+  private final SwerveModule m_frontRight = new SwerveModule(13, 14, true);
+  private final SwerveModule m_backLeft = new SwerveModule(3, 4, false);
+  private final SwerveModule m_backRight = new SwerveModule(5, 6, true);
 
   private final AHRS m_Navx = new AHRS(Port.kMXP);
   // private double EvasiveX = 0;
   // private double EvasiveY = 0;
-  private boolean fieldMode = true;
+  private boolean fieldMode = false;
 
   public final SwerveDriveKinematics m_kinematics =
       new SwerveDriveKinematics(
@@ -62,8 +62,10 @@ public class SwerveDrivetrain extends SubsystemBase {
       new SwerveDriveOdometry(m_kinematics, m_Navx.getRotation2d());//, new Pose2d(0, 0, new Rotation2d()
 
   public SwerveDrivetrain() {
+   
     syncAllAngles();
-    // resetDriveEncoder();
+
+    
   }
 
   //sets the gyro angle to 0
@@ -146,6 +148,7 @@ public class SwerveDrivetrain extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(pose, m_Navx.getRotation2d());
   }
+
   public double getDegrees(){
     return m_Navx.getRotation2d().getDegrees();
   }
@@ -162,6 +165,7 @@ public class SwerveDrivetrain extends SubsystemBase {
   //   EvasiveX = 0;
   //   EvasiveY = 0;
   // }
+ 
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     // var gyroAngle = Rotation2d.fromDegrees(-m_Navx.getAngle());
