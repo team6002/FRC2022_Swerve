@@ -67,7 +67,7 @@ public class AUTO_TwoBall extends SequentialCommandGroup {
       new CMD_FrontIntakeForward(m_Intake),
       new CMD_HopperForward(m_Intake),
       // new CMD_FrontIntakeForward(m_Intake, m_IntakeStatus),
-      m_Trajectory.driveTrajectory(m_Trajectory.FirstBallTrajectory),
+      m_Trajectory.driveTrajectory(m_Trajectory.FirstRedBallTrajectory),
       new WaitCommand(1),
       // new CMD_FrontSolonoidRetract(m_Intake), //Force Ball Clamp for Shooter
       new CMD_SetTwoBall(m_Shooter, true), //Set shooter setpoint higher for second ball cause it's farther.

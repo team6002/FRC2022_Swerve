@@ -19,6 +19,7 @@ import com.revrobotics.SparkMaxAnalogSensor;
 import com.revrobotics.CANSparkMaxLowLevel;
 // import com.revrobotics.AnalogInput;
 import com.revrobotics.SparkMaxPIDController;
+import frc.robot.Constants.DriveConstants;
 
 public class SwerveModule {
 
@@ -27,10 +28,10 @@ public class SwerveModule {
   private static final double kDriveD = 0.1;  //0.1;
   private static final double kDriveF = 0.2;  //0.2;
 
-  private static final double kAngleP = .2;
-  private static final double kAngleI = 0.0;
-  private static final double kAngleD = 0.0;
-  private static final double kAngleFF = 0.0;
+  private static final double kAngleP = 1.0;
+  private static final double kAngleI = 0.00;
+  private static final double kAngleD = 0.00;
+  private static final double kAngleFF = 0.00;
   // private static final double kModuleMaxAngularVelocity = SwerveDrivetrain.kMaxAngularSpeed;
   // private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
@@ -56,7 +57,8 @@ public class SwerveModule {
   public SwerveModule(
     int driveMotorChannel,
     int turningMotorChannel,
-    boolean driveDirection) {
+    boolean driveDirection,
+    boolean turnMotorInverted) {
 
     m_turningMotorChannel = turningMotorChannel;    
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
@@ -69,7 +71,8 @@ public class SwerveModule {
     m_turningMotor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 100);
     m_turningMotor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 20);
     m_turningMotor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 20);
-    
+    m_turningMotor.setInverted(turnMotorInverted);
+   
     
     /**
    * The restoreFactoryDefaults method can be used to reset the configuration parameters
@@ -114,6 +117,9 @@ public class SwerveModule {
     m_drivePIDController.setI(kDriveI);
     m_drivePIDController.setD(kDriveD);
     m_drivePIDController.setFF(kDriveF);
+
+    syncAngle();
+
 }
 
 public double getAbsoluteAngle() {
@@ -137,11 +143,11 @@ public double getAbsoluteAngle() {
   public double getAngle() {
     // Note: This assumes the CANCoders are setup with the default feedback coefficient
     // and the sensor value reports degrees.
-    double angle = ((m_turningEncoder.getPosition()) % 2*Math.PI);// - m_turningEncoderOffset
+    // double angle = ((m_turningEncoder.getPosition()) % 2*Math.PI);// - m_turningEncoderOffset
     // double angle = (m_analogSensor.getPosition() - m_turningEncoderOffset) % 360;
-    if (angle > Math.PI) angle-=2*Math.PI;
-
-    return angle;
+    // if (angle > Math.PI) angle-=2*Math.PI;
+    
+    return m_turningEncoder.getPosition();
   }
  
   public void updateSmartDashboard() {
@@ -150,8 +156,10 @@ public double getAbsoluteAngle() {
   //       if (angle > 180) angle -= 360;
 
         // // SmartDashboard.putNumber("turnRaw:"+m_turningMotorChannel, m_turningEncoder.getPosition());
-        SmartDashboard.putNumber("TurnRelativeEncoder:"+m_turningMotorChannel, getAngle()*180/Math.PI);
-        SmartDashboard.putNumber("TurnAbsoluteEncoder"+m_turningMotorChannel, getAbsoluteAngle()*180/Math.PI);
+        SmartDashboard.putNumber("TurnRelativeEncoder:"+m_turningMotorChannel, Math.toDegrees(m_turningEncoder.getPosition())  );
+        SmartDashboard.putNumber("TurnAbsoluteEncoder"+m_turningMotorChannel,Math.toDegrees(getAbsoluteAngle()) );
+        SmartDashboard.putNumber("Desired Rotation"+m_turningMotorChannel, resetIteration);
+        // SmartDashboard.putNumber("resetIteration"+m_turningMotorChannel, resetIteration);
         // SmartDashboard.putNumber("driveEnc:"+m_turningMotorChannel, m_driveEncoder.getPosition());
         // SmartDashboard.putNumber("rawAnalogEnc:"+m_turningMotorChannel, m_analogSensor.getPosition());
         // SmartDashboard.putNumber("turnAbs:"+m_turningMotorChannel, angle);
@@ -199,16 +207,16 @@ public double getAbsoluteAngle() {
     // Reset the NEO's encoder periodically when the module is not rotating.
     // Sometimes (~5% of the time) when we initialize, the absolute encoder isn't fully set up, and we don't
     // end up getting a good reading. If we reset periodically this won't matter anymore.
-    // if (m_turningEncoder.getVelocity() < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {
-    //     if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
-    //         resetIteration = 0;
-    //         double absoluteAngle = getAbsoluteAngle();
-    //         m_turningEncoder.setPosition(absoluteAngle);
-    //         currentAngleRadians = absoluteAngle;
-    //     }
-    // } else {
-    //     resetIteration = 0;
-    // }
+    if (m_turningEncoder.getVelocity() < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {
+        if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
+            resetIteration = 0;
+            double absoluteAngle = getAbsoluteAngle();
+            m_turningEncoder.setPosition(absoluteAngle);
+            currentAngleRadians = absoluteAngle;
+        }
+    } else {
+        resetIteration = 0;
+    }
 
     double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
     if (currentAngleRadiansMod < 0.0) {
@@ -224,7 +232,9 @@ public double getAbsoluteAngle() {
     }
 
     this.referenceAngleRadians = referenceAngleRadians;
-
+    
+    SmartDashboard.putNumber("Desired Rotation"+m_turningMotorChannel, Math.toDegrees(adjustedReferenceAngleRadians));
+        
     m_turningPIDController.setReference(adjustedReferenceAngleRadians, ControlType.kPosition);
 
   }
@@ -242,10 +252,6 @@ public double getAbsoluteAngle() {
     SwerveModuleState state =
         SwerveModuleState.optimize(desiredState, currentRotation);
 
-      // if (Math.abs(state.speedMetersPerSecond) < 0.001) {
-      //     stop();
-      //     return;
-      // }
       setReferenceAngle(state.angle.getRadians());
     // setAngle(state.angle);
 
@@ -254,7 +260,7 @@ public double getAbsoluteAngle() {
 
 
     // double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
-    double speed = state.speedMetersPerSecond / SwerveDrivetrain.kMaxSpeed;
+    double speed = state.speedMetersPerSecond / DriveConstants.kMaxSpeedMetersPerSecond;
     m_driveMotor.set(speed);
         
   }

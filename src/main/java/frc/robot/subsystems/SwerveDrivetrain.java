@@ -23,8 +23,9 @@ import frc.robot.Constants.DriveConstants;
 
 public class SwerveDrivetrain extends SubsystemBase {
 
-  public static final double kMaxSpeed = Units.feetToMeters(10); // 13.6 feet per second/ 10 feet per second now
+  // public static final double kMaxSpeed = Units.feetToMeters(10); // 13.6 feet per second/ 10 feet per second now
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
+  
 
   /**
    * TODO: These are example values and will need to be adjusted for your robot!
@@ -39,62 +40,73 @@ public class SwerveDrivetrain extends SubsystemBase {
    * https://docs.wpilib.org/en/stable/docs/software/kinematics-and-odometry/swerve-drive-kinematics.html#constructing-the-kinematics-object
    */
 
-  private final Translation2d m_frontLeftLocation = new Translation2d(Units.inchesToMeters(11.75), Units.inchesToMeters(11.75));
-  private final Translation2d m_frontRightLocation = new Translation2d(Units.inchesToMeters(11.75), Units.inchesToMeters(-11.75));
-  private final Translation2d m_backLeftLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(11.75));
-  private final Translation2d m_backRightLocation = new Translation2d(Units.inchesToMeters(-11.75), Units.inchesToMeters(-11.75));
 
-  private final SwerveModule m_frontLeft = new SwerveModule(15, 16, false);//(15,16)
-  private final SwerveModule m_frontRight = new SwerveModule(13, 14, true);
-  private final SwerveModule m_backLeft = new SwerveModule(3, 4, false);
-  private final SwerveModule m_backRight = new SwerveModule(5, 6, true);
-
+  private final SwerveModule m_frontLeft = 
+    new SwerveModule(DriveConstants.kFrontLeftDriveMotorPort
+        , DriveConstants.kFrontLeftTurningMotorPort
+        , DriveConstants.kFrontLeftDriveMotorInverted, false);
+  private final SwerveModule m_frontRight = 
+    new SwerveModule(DriveConstants.kFrontRightDriveMotorPort
+        , DriveConstants.kFrontRightTurningMotorPort
+        , DriveConstants.kFrontRightDriveMotorInverted, false);
+  private final SwerveModule m_rearLeft = 
+    new SwerveModule(DriveConstants.kRearLeftDriveMotorPort
+        , DriveConstants.kRearLeftTurningMotorPort
+        , DriveConstants.kRearLeftDriveMotorInverted, false);
+  private final SwerveModule m_rearRight = 
+    new SwerveModule(DriveConstants.kRearRightDriveMotorPort
+        , DriveConstants.kRearRightTurningMotorPort
+        , DriveConstants.kRearRightDriveMotorInverted, false);
+  
   private final AHRS m_Navx = new AHRS(Port.kMXP);
   // private double EvasiveX = 0;
   // private double EvasiveY = 0;
   private boolean fieldMode = false;
 
-  public final SwerveDriveKinematics m_kinematics =
-      new SwerveDriveKinematics(
-          m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+  // public final SwerveDriveKinematics m_kinematics =
+  //     new SwerveDriveKinematics(
+  //         m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
   public final SwerveDriveOdometry m_odometry =
-      new SwerveDriveOdometry(m_kinematics, m_Navx.getRotation2d());//, new Pose2d(0, 0, new Rotation2d()
+      new SwerveDriveOdometry(DriveConstants.kDriveKinematics, m_Navx.getRotation2d());//, new Pose2d(0, 0, new Rotation2d()
 
   public SwerveDrivetrain() {
    
     syncAllAngles();
-
-    
+  
   }
 
-  //sets the gyro angle to 0
-  public void zeroGyroscope() {
+  /** Zeroes the heading of the robot. */
+  public void zeroHeading() {
     m_Navx.zeroYaw();
   }
 
-  public Rotation2d getGyroscopeRotation() {
+  public Rotation2d getheading() {
     if (m_Navx.isMagnetometerCalibrated()) {
       // We will only get valid fused headings if the magnetometer is calibrated
       return Rotation2d.fromDegrees(m_Navx.getFusedHeading());
     }
-
+ 
     //counter-clockwise = positive angle
     return Rotation2d.fromDegrees(360.0 - m_Navx.getYaw());
   }
 
+  public void setHeading(double rotation){
+    m_Navx.zeroYaw();
+    m_Navx.setAngleAdjustment(rotation);
+  }
   public void syncAllAngles() {
     m_frontLeft.syncAngle();
     m_frontRight.syncAngle();
-    m_backLeft.syncAngle();
-    m_backRight.syncAngle();
+    m_rearLeft.syncAngle();
+    m_rearRight.syncAngle();
   }
   
   public void resetAllAngles(){
     m_frontLeft.resetDriveEnc();
     m_frontRight.resetDriveEnc();
-    m_backLeft.resetDriveEnc();
-    m_backRight.resetDriveEnc();
+    m_rearLeft.resetDriveEnc();
+    m_rearRight.resetDriveEnc();
   }
   // public void stopModules() {
   //   m_frontLeft.stop();
@@ -102,46 +114,56 @@ public class SwerveDrivetrain extends SubsystemBase {
   //   m_backLeft.stop();
   //   m_backRight.stop();
   // }
+      
   /**
    * Method to drive the robot using joystick info.
    *
    * @param xSpeed Speed of the robot in the x direction (forward).
-  //  * @param ySpeed Speed of the robot in the y direction (sideways).
+   * @param ySpeed Speed of the robot in the y direction (sideways).
    * @param rot Angular rate of the robot.
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     var swerveModuleStates =
-        m_kinematics.toSwerveModuleStates(
+        DriveConstants.kDriveKinematics.toSwerveModuleStates(
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_Navx.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);
+    m_rearLeft.setDesiredState(swerveModuleStates[2]);
+    m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
-  
+
+  /**
+   * Sets the swerve ModuleStates.
+   *
+   * @param desiredStates The desired SwerveModule states.
+   */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, kMaxSpeed);
+        desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
-    m_backLeft.setDesiredState(desiredStates[2]);
-    m_backRight.setDesiredState(desiredStates[3]);
+    m_rearLeft.setDesiredState(desiredStates[2]);
+    m_rearRight.setDesiredState(desiredStates[3]);
   }
   
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
+
   public double getOdometryX(){
     return m_odometry.getPoseMeters().getX();
   }
+  
   public double getOdometryY(){
     return m_odometry.getPoseMeters().getY();
   }
+
   public double getOdometryRotate(){
     return m_odometry.getPoseMeters().getRotation().getDegrees();
   }
@@ -153,18 +175,6 @@ public class SwerveDrivetrain extends SubsystemBase {
     return m_Navx.getRotation2d().getDegrees();
   }
 
-  // public void LeftEvasive(){
-  //   EvasiveX = DriveConstants.k_LeftEvasiveX;
-  //   EvasiveY = DriveConstants.k_LeftEvasiveY;
-  // }
-  // public void RightEvasive(){
-  //   EvasiveX = DriveConstants.k_RightEvasiveX;
-  //   EvasiveY = DriveConstants.k_RightEvasiveY;
-  // }
-  // public void NonEvasive(){
-  //   EvasiveX = 0;
-  //   EvasiveY = 0;
-  // }
  
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
@@ -175,15 +185,15 @@ public class SwerveDrivetrain extends SubsystemBase {
         // new Rotation2d(0),
         m_frontLeft.getState(),
         m_frontRight.getState(),
-        m_backLeft.getState(),
-        m_backRight.getState());
+        m_rearLeft.getState(),
+        m_rearRight.getState());
   }
 
   public void resetDriveEncoder(){
     m_frontLeft.resetDriveEnc();
     m_frontRight.resetDriveEnc();
-    m_backLeft.resetDriveEnc();
-    m_backRight.resetDriveEnc();
+    m_rearLeft.resetDriveEnc();
+    m_rearRight.resetDriveEnc();
   }
 
   public void fieldModeChange(){
@@ -194,25 +204,28 @@ public class SwerveDrivetrain extends SubsystemBase {
     return fieldMode;
   }
   
-  @Override
-  public void periodic() {
-    updateOdometry();
+  public void updateSmartDashboard() {
     // SmartDashboard.putBoolean("FieldRelative", fieldMode);
     SmartDashboard.putNumber("OdoX", getOdometryX());
     SmartDashboard.putNumber("OdoY", getOdometryY());
     SmartDashboard.putNumber("OdoRotate", getOdometryRotate());
     m_frontLeft.updateSmartDashboard();
     m_frontRight.updateSmartDashboard();
-    m_backLeft.updateSmartDashboard();
-    m_backRight.updateSmartDashboard();
+    m_rearLeft.updateSmartDashboard();
+    m_rearRight.updateSmartDashboard();
     
     SmartDashboard.putNumber("NavxDegrees", m_Navx.getRotation2d().getDegrees());
-    // SmartDashboard.putNumber("NavxRadians", m_Navx.getRotation2d().getRadians());
+    SmartDashboard.putNumber("NavxRadians", m_Navx.getRotation2d().getRadians());
 
+  };
+
+
+  @Override
+  public void periodic() {
     // This method will be called once per scheduler run
+    updateOdometry();
+    updateSmartDashboard();
   }
-
-
 
   @Override       
   public void simulationPeriodic() {

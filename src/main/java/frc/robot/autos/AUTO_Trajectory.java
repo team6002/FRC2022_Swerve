@@ -23,23 +23,21 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
+
 import frc.robot.subsystems.SwerveDrivetrain;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 /** Add your docs here. */
 
 public class AUTO_Trajectory {
     
-    String trajectoryJSON = "Paths/FirstBall.wpilib.json";
-    Trajectory FirstBallTrajectoryPathweaver = new Trajectory();
+    
+    String FirstRedBallTrajectoryJSON = "Paths/Unnamed.wpilib.json";
+    public Trajectory testTrajectory;
+    // String FirstRedBallTrajectoryJSON = "Paths/FirstRedBall.wpilib.json";
+    Trajectory FirstRedBall = new Trajectory();
     private SwerveDrivetrain m_drivetrain;
-    // public Trajectory threeMetersForwardTrajectory;
-    // public Trajectory threeMetersBackwardTrajectory;
-    // public Trajectory exampleTrajectory;
-    public Trajectory FirstBallTrajectory;
-    public Trajectory SecondBallTrajectory;
-    public Trajectory FirstBallTrajectoryPathWeaver;
-    // public Trajectory FluidThreeBallTrajectory;
-    // public Trajectory ThirdBallTrajectory;
-    // public Trajectory ReturnTrajectory;
+    public Trajectory FirstRedBallTrajectory;
 
     public AUTO_Trajectory(SwerveDrivetrain drivetrain){
         m_drivetrain = drivetrain;
@@ -49,70 +47,25 @@ public class AUTO_Trajectory {
                 AutoConstants.kMaxSpeedMetersPerSecond,
                 AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                 // Add kinematics to ensure max speed is actually obeyed
-                .setKinematics(m_drivetrain.m_kinematics);
+                .setKinematics(DriveConstants.kDriveKinematics);
 
             try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-                FirstBallTrajectoryPathweaver = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+                Path FirstRedBallTrajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(FirstRedBallTrajectoryJSON);
+                FirstRedBall = TrajectoryUtil.fromPathweaverJson(FirstRedBallTrajectoryPath);
             } catch (IOException e) {
                 DriverStation.reportError("Unable to open trajectory", e.getStackTrace());
         }           
-        FirstBallTrajectoryPathWeaver = FirstBallTrajectoryPathweaver;
+      
+        FirstRedBallTrajectory = FirstRedBall;
         //Rotation2d uses RADIANS NOT DEGREES!
         //Use Rotation2d.fromDegrees(desiredDegree) instead
-        FirstBallTrajectory = 
+      
+        testTrajectory =
         TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0,0, new Rotation2d(0)),
-             List.of(
-                //  new Translation2d(0.5, 0)
-            ), 
-            new Pose2d(1.4,0, new Rotation2d(0)), 
-            config
-        );
-
-        SecondBallTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(
-                // new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                // new Pose2d(-0.25, -1, Rotation2d.fromDegrees(0)),
-            ),
-            new Pose2d(-0.8, -1.371, Rotation2d.fromDegrees(45)),
-            config.setReversed(true)
-        );    
-            
-            // ThirdBallTrajectory =
-        // TrajectoryGenerator.generateTrajectory(
-        //     new Pose2d(5,1.8, new Rotation2d(0)),
-        //      List.of(new Translation2d(4,1))
-        //     , new Pose2d(1,1, new Rotation2d(0)), 
-        //     config);
-         // three meters and stop
-            
-           
-        // threeMetersBackwardTrajectory =
-        //     TrajectoryGenerator.generateTrajectory(
-        //         new Pose2d(0, 0, new Rotation2d(0)),
-        //         List.of(new Translation2d(2, 0.1),
-        //         new Translation2d(1,0.1)),
-        //         new Pose2d(0, 0, new Rotation2d(0)),
-        //         config.setReversed(true));
-        
-        //   ReturnTrajectory = 
-        // TrajectoryGenerator.generateTrajectory(
-        //     drivetrain.getPose(),
-        //      List.of(new Translation2d(5,1.8))
-        //     , new Pose2d(5,1.8, new Rotation2d(0)), 
-        //     config);        
-        // exampleTrajectory = 
-        // TrajectoryGenerator.generateTrajectory(
-        //         new Pose2d(0, 0, new Rotation2d(0)),
-        //         List.of(
-        //                 new Translation2d(1, 0),
-        //                 new Translation2d(1, -1)),
-        //         new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
-        //         config);
-
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(0, 0.25)),
+        new Pose2d(0, 0.5, new Rotation2d(0)),
+        config);
         
     }
   
@@ -126,23 +79,26 @@ public class AUTO_Trajectory {
         // thetaController.setTolerance(1);
 
         SwerveControllerCommand swerveControllerCommand =
-            new SwerveControllerCommand(
-                trajectory,
-                m_drivetrain::getPose, // Functional interface to feed supplier
-                m_drivetrain.m_kinematics,
+        new SwerveControllerCommand(
+            trajectory,
+            m_drivetrain::getPose, // Functional interface to feed supplier
+            DriveConstants.kDriveKinematics,
 
-                // Position controllers
-                new PIDController(AutoConstants.kPXController, 0, 0),
-                new PIDController(AutoConstants.kPYController, 0, 0),
-                thetaController,
-                m_drivetrain::setModuleStates,
-                m_drivetrain);
+            // Position controllers
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0),
+            thetaController,
+            m_drivetrain::setModuleStates,
+            m_drivetrain);
 
+
+     
         // Reset odometry to the starting pose of the trajectory.
         m_drivetrain.resetOdometry(trajectory.getInitialPose());
+        m_drivetrain.setHeading(trajectory.getInitialPose().getRotation().getDegrees());
 
         // Run path following command, then stop at the end.
-        return swerveControllerCommand.andThen(() -> m_drivetrain.drive(0, 0, 0, false));
+        return swerveControllerCommand.andThen(() -> m_drivetrain.drive(0.0 ,0.0 ,0.0, true));
     }
 
 

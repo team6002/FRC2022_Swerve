@@ -5,6 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
+
+
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -17,6 +22,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 
 public final class Constants {
+
     public static final class DriveConstants {
         public static double k_frontLeftOffset =0.0;   // 15;
         public static double k_backLeftOffset = 0.0;//40;
@@ -28,7 +34,40 @@ public final class Constants {
         public static double k_RightEvasiveX = 0.6477;
         public static double k_RightEvasiveY = -0.0635;
         
+        public static double kMaxSpeedMetersPerSecond = 6380.0 / 60.0 *
+                (16.0 / 32.0) * ( 15.0 / 45.0) * Units.inchesToMeters(3) * Math.PI;
         public static int kNavXAdjustment = 0;
+    
+        public static final int kFrontLeftDriveMotorPort = 15;
+        public static final int kRearLeftDriveMotorPort = 3;
+        public static final int kFrontRightDriveMotorPort = 13;
+        public static final int kRearRightDriveMotorPort = 5;
+
+        public static final boolean kFrontLeftDriveMotorInverted = true;
+        public static final boolean kFrontRightDriveMotorInverted = false;
+        public static final boolean kRearLeftDriveMotorInverted = true;
+        public static final boolean kRearRightDriveMotorInverted = false;
+
+        public static final int kFrontLeftTurningMotorPort = 16;
+        public static final int kRearLeftTurningMotorPort = 4;
+        public static final int kFrontRightTurningMotorPort = 14;
+        public static final int kRearRightTurningMotorPort = 6;
+
+
+        public static final double kTrackWidth = Units.inchesToMeters(23.5);
+        // Distance between centers of right and left wheels on robot
+        public static final double kWheelBase = Units.inchesToMeters(23.5);
+        // Distance between front and back wheels on robot
+        public static final SwerveDriveKinematics kDriveKinematics =
+            new SwerveDriveKinematics(
+                new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+                new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+                new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+                new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); 
+    
+    
+    
+    
     }
     /*
      * Gear Ratios for Swerve
@@ -190,9 +229,9 @@ public final class Constants {
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI/4;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI/4;
     
-        public static final double kPXController = 6;
-        public static final double kPYController = 6;
-        public static final double kPThetaController = 2*Math.PI;
+        public static final double kPXController = 2;
+        public static final double kPYController = 2;
+        public static final double kPThetaController = 0.8;
     
         // Constraint for the motion profilied robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =

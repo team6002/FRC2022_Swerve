@@ -48,8 +48,8 @@ public class AUTO_TwoBall_Experimental extends SequentialCommandGroup {
     addCommands(
       // new CMD_TurretMode(m_Turret), //switch on auto mode for turret
       // new CMD_FrontIntakeToggle(m_Intake, m_IntakeStatus), //Deploying front intake
-      // new CMD_FrontIntakeForward(m_Intake, m_IntakeStatus),
-      m_Trajectory.driveTrajectory(m_Trajectory.FirstBallTrajectoryPathWeaver)
+      // m_Trajectory.driveTrajectory(m_Trajectory.FirstRedBallTrajectory)
+      m_Trajectory.driveTrajectory(m_Trajectory.FirstRedBallTrajectory)
       // new WaitCommand(0.5),
       // new CMD_Shooting(m_Intake, m_IntakeStatus, m_Shooter),//first ball
       // new WaitCommand(3),

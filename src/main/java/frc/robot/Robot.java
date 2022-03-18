@@ -86,8 +86,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     // m_robotContainer.m_NavxGyro.resetNavx();
+    m_robotContainer.m_drivetrain.zeroHeading();
     m_robotContainer.m_drivetrain.resetDriveEncoder();
-    m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));// temp?
+    m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));// temp?$
     //PLACE AUTONOMOUS COMMANDS HERE
     mAutonomousCommand =
     new AUTO_TwoBall_Experimental(m_robotContainer.m_turret, m_robotContainer.m_intake, m_robotContainer.m_intakeStatus, 
@@ -108,8 +109,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // m_robotContainer.m_drivetrain.resetDriveEncoder();
-    // m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
+    m_robotContainer.m_drivetrain.resetDriveEncoder();
+    m_robotContainer.m_drivetrain.zeroHeading();
+    m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
