@@ -43,10 +43,10 @@ public final class Constants {
         public static final int kFrontRightDriveMotorPort = 13;
         public static final int kRearRightDriveMotorPort = 5;
 
-        public static final boolean kFrontLeftDriveMotorInverted = true;
-        public static final boolean kFrontRightDriveMotorInverted = false;
-        public static final boolean kRearLeftDriveMotorInverted = true;
-        public static final boolean kRearRightDriveMotorInverted = false;
+        public static final boolean kFrontLeftDriveMotorInverted = false;
+        public static final boolean kFrontRightDriveMotorInverted = true;
+        public static final boolean kRearLeftDriveMotorInverted = false;
+        public static final boolean kRearRightDriveMotorInverted = true;
 
         public static final int kFrontLeftTurningMotorPort = 16;
         public static final int kRearLeftTurningMotorPort = 4;
@@ -158,7 +158,7 @@ public final class Constants {
 
         //SPEEDS
         public static final double kIndexerVelocity = 1500;
-        public static final double kHopperVelocity = 1500; 
+        public static final double kHopperVelocity = 1300; 
         public static final double kIntakeVelocity = 1800;
         public static final double HopperOff = 0;
         public static final double IndexerOff = 0;
@@ -224,14 +224,17 @@ public final class Constants {
      
 
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = 0.5;//2.5;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;//1.5;
-        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI/4;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI/4;
+        // public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
+        // public static final double kMaxAccelerationMetersPerSecondSquared = DriveConstants.kMaxSpeedMetersPerSecond;
+        public static final double kMaxSpeedMetersPerSecond = 0.5;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
+     
+        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     
-        public static final double kPXController = 2;
-        public static final double kPYController = 2;
-        public static final double kPThetaController = 0.8;
+        public static final double kPXController = 1;
+        public static final double kPYController = 1;
+        public static final double kPThetaController = 1;
     
         // Constraint for the motion profilied robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =

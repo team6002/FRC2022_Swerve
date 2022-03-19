@@ -57,8 +57,7 @@ public class SwerveModule {
   public SwerveModule(
     int driveMotorChannel,
     int turningMotorChannel,
-    boolean driveDirection,
-    boolean turnMotorInverted) {
+    boolean driveDirection) {
 
     m_turningMotorChannel = turningMotorChannel;    
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
@@ -71,8 +70,7 @@ public class SwerveModule {
     m_turningMotor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 100);
     m_turningMotor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 20);
     m_turningMotor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 20);
-    m_turningMotor.setInverted(turnMotorInverted);
-   
+    
     
     /**
    * The restoreFactoryDefaults method can be used to reset the configuration parameters

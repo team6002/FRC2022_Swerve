@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.FSM_IntakeStatus;
 import frc.robot.subsystems.SUB_Intake;
@@ -31,12 +32,11 @@ public class CMD_Shooting extends SequentialCommandGroup {
       new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.SHOOTING),
       new CMD_ShooterOn(m_shooter),
       new CMD_IndexerForward(m_intake),
-      new CMD_HopperForward(m_intake),
-      new CMD_FrontIntakeForward(m_intake),
-      new CMD_BackIntakeForward(m_intake)
+      new CMD_HopperForward(m_intake)
+      // new CMD_FrontIntakeForward(m_intake),
+      // new CMD_BackIntakeForward(m_intake)
       // new CMD_HopperCheck(m_intake),
       // new CMD_HopperLoad(m_intake)
-      
     );
   }
 }

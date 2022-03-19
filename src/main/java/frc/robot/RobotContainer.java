@@ -1,8 +1,6 @@
 
 package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
@@ -11,9 +9,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;
 import frc.robot.autos.AUTO_Trajectory;
 import frc.robot.commands.*;
+
+
 
 /** 
   * IMPROVEMENTS FOR OVERALL CODE, just suggestions :)
@@ -40,13 +39,12 @@ public class RobotContainer {
   private final XboxController m_driverController;
   private final XboxController m_operatorController;
   public final SwerveDrivetrain m_drivetrain = new SwerveDrivetrain();
-  // public final SUB_Navx m_NavxGyro = new SUB_Navx();
   public final FSM_IntakeStatus m_intakeStatus = new FSM_IntakeStatus();
   public final SUB_Intake m_intake = new SUB_Intake(m_intakeStatus);
   public final SUB_Climber m_climber = new SUB_Climber();
   public final SUB_Turret m_turret;
-  public final AUTO_Trajectory m_autotrajectory = new AUTO_Trajectory(m_drivetrain);
   public final SUB_Shooter m_shooter = new SUB_Shooter();
+  public final AUTO_Trajectory m_trajectory = new AUTO_Trajectory(m_drivetrain);
   Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
   
 
@@ -150,12 +148,6 @@ public class RobotContainer {
     return m_operatorController.getRightX();
   }
 
-  // public void turretOpenLoop(double d) {
-  //   if(Math.abs(d) < .06) {
-  //     m_turret.setOpenLoop(0);
-  //   }
-  //   else {
-  //     m_turret.setOpenLoop(d);
-  //   }
-  // }
+
+
 }

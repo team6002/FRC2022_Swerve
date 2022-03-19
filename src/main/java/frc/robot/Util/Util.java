@@ -10,4 +10,5 @@ public class Util {
     public static boolean isClose(double A, double B, double epsilion){
         return (A - epsilion <= B) && (A + epsilion >= B);
     }
+    
 }

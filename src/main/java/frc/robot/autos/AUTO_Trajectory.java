@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-
+import frc.robot.Util.Util;
 import frc.robot.subsystems.SwerveDrivetrain;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 /** Add your docs here. */
@@ -33,7 +33,10 @@ public class AUTO_Trajectory {
     
     
     String FirstRedBallTrajectoryJSON = "Paths/Unnamed.wpilib.json";
-    public Trajectory testTrajectory;
+    public Trajectory firstTrajectory;
+    public Trajectory secondTrajectory;
+    public Trajectory thirdTrajectory;
+    public Trajectory fourthTrajectory;
     // String FirstRedBallTrajectoryJSON = "Paths/FirstRedBall.wpilib.json";
     Trajectory FirstRedBall = new Trajectory();
     private SwerveDrivetrain m_drivetrain;
@@ -60,13 +63,31 @@ public class AUTO_Trajectory {
         //Rotation2d uses RADIANS NOT DEGREES!
         //Use Rotation2d.fromDegrees(desiredDegree) instead
       
-        testTrajectory =
+        firstTrajectory =
         TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(new Translation2d(0, 0.25)),
-        new Pose2d(0, 0.5, new Rotation2d(0)),
+        List.of(new Translation2d(0.5,0)),
+        new Pose2d(1, 0, new Rotation2d(0)),
         config);
-        
+
+        secondTrajectory =
+        TrajectoryGenerator.generateTrajectory(
+        new Pose2d(1,0, new Rotation2d(0)),
+        List.of(),
+        new Pose2d(-0.3,-2, new Rotation2d(Math.toRadians(45))), 
+        config);
+        thirdTrajectory = 
+        TrajectoryGenerator.generateTrajectory(
+        new Pose2d(-0.3,-2, new Rotation2d(45)),
+        List.of(),
+        new Pose2d(0.25,-5.8, new Rotation2d(Math.toRadians(90))), 
+        config);
+        fourthTrajectory = 
+        TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0.25,-5.8, new Rotation2d(Math.toRadians(90))),
+        List.of(),
+        new Pose2d(-0.3,-2, new Rotation2d(Math.toRadians(90))),
+        config);
     }
   
     public Command driveTrajectory(Trajectory trajectory) {
@@ -94,9 +115,8 @@ public class AUTO_Trajectory {
 
      
         // Reset odometry to the starting pose of the trajectory.
-        m_drivetrain.resetOdometry(trajectory.getInitialPose());
-        m_drivetrain.setHeading(trajectory.getInitialPose().getRotation().getDegrees());
-
+        // m_drivetrain.resetOdometry(trajectory.getInitialPose());
+        
         // Run path following command, then stop at the end.
         return swerveControllerCommand.andThen(() -> m_drivetrain.drive(0.0 ,0.0 ,0.0, true));
     }

@@ -44,28 +44,22 @@ public class SwerveDrivetrain extends SubsystemBase {
   private final SwerveModule m_frontLeft = 
     new SwerveModule(DriveConstants.kFrontLeftDriveMotorPort
         , DriveConstants.kFrontLeftTurningMotorPort
-        , DriveConstants.kFrontLeftDriveMotorInverted, false);
+        , DriveConstants.kFrontLeftDriveMotorInverted);
   private final SwerveModule m_frontRight = 
     new SwerveModule(DriveConstants.kFrontRightDriveMotorPort
         , DriveConstants.kFrontRightTurningMotorPort
-        , DriveConstants.kFrontRightDriveMotorInverted, false);
+        , DriveConstants.kFrontRightDriveMotorInverted);
   private final SwerveModule m_rearLeft = 
     new SwerveModule(DriveConstants.kRearLeftDriveMotorPort
         , DriveConstants.kRearLeftTurningMotorPort
-        , DriveConstants.kRearLeftDriveMotorInverted, false);
+        , DriveConstants.kRearLeftDriveMotorInverted);
   private final SwerveModule m_rearRight = 
     new SwerveModule(DriveConstants.kRearRightDriveMotorPort
         , DriveConstants.kRearRightTurningMotorPort
-        , DriveConstants.kRearRightDriveMotorInverted, false);
+        , DriveConstants.kRearRightDriveMotorInverted);
   
   private final AHRS m_Navx = new AHRS(Port.kMXP);
-  // private double EvasiveX = 0;
-  // private double EvasiveY = 0;
   private boolean fieldMode = false;
-
-  // public final SwerveDriveKinematics m_kinematics =
-  //     new SwerveDriveKinematics(
-  //         m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
   public final SwerveDriveOdometry m_odometry =
       new SwerveDriveOdometry(DriveConstants.kDriveKinematics, m_Navx.getRotation2d());//, new Pose2d(0, 0, new Rotation2d()
@@ -88,13 +82,14 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
  
     //counter-clockwise = positive angle
-    return Rotation2d.fromDegrees(360.0 - m_Navx.getYaw());
+    return Rotation2d.fromDegrees(-m_Navx.getYaw());
   }
 
-  public void setHeading(double rotation){
-    m_Navx.zeroYaw();
-    m_Navx.setAngleAdjustment(rotation);
-  }
+  // public void setHeading(double rotation){
+  //   m_Navx.zeroYaw();
+  //   m_Navx.setAngleAdjustment(rotation);
+  // }
+
   public void syncAllAngles() {
     m_frontLeft.syncAngle();
     m_frontRight.syncAngle();
@@ -108,13 +103,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     m_rearLeft.resetDriveEnc();
     m_rearRight.resetDriveEnc();
   }
-  // public void stopModules() {
-  //   m_frontLeft.stop();
-  //   m_frontRight.stop();
-  //   m_backLeft.stop();
-  //   m_backRight.stop();
-  // }
-      
+
+       
   /**
    * Method to drive the robot using joystick info.
    *
@@ -130,12 +120,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_Navx.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_rearLeft.setDesiredState(swerveModuleStates[2]);
-    m_rearRight.setDesiredState(swerveModuleStates[3]);
+    setModuleStates(swerveModuleStates);
   }
 
   /**
@@ -167,6 +152,7 @@ public class SwerveDrivetrain extends SubsystemBase {
   public double getOdometryRotate(){
     return m_odometry.getPoseMeters().getRotation().getDegrees();
   }
+  
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(pose, m_Navx.getRotation2d());
   }

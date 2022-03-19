@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   SendableChooser<Command> auto = new SendableChooser<Command>();
-  Command mAutonomousCommand;
+  
 
   @Override
   public void robotInit() {
@@ -85,20 +85,22 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // m_robotContainer.m_NavxGyro.resetNavx();
     m_robotContainer.m_drivetrain.zeroHeading();
     m_robotContainer.m_drivetrain.resetDriveEncoder();
     m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));// temp?$
     //PLACE AUTONOMOUS COMMANDS HERE
-    mAutonomousCommand =
-    new AUTO_TwoBall_Experimental(m_robotContainer.m_turret, m_robotContainer.m_intake, m_robotContainer.m_intakeStatus, 
-                    m_robotContainer.m_shooter, m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory);
+    // mAutonomousCommand =
+    // new AUTO_TwoBall_Experimental(m_robotContainer.m_turret, m_robotContainer.m_intake, m_robotContainer.m_intakeStatus, 
+    //                 m_robotContainer.m_shooter, m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory);
     //auto.getSelected();
-    // mAutonomousCommand = new AUTO_ThreeBall(m_robotContainer.m_turret, m_robotContainer.m_intake, 
-                        // m_robotContainer.m_intakeStatus, m_robotContainer.m_shooter, 
-                        // m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory);
-    if (mAutonomousCommand != null) {
-      mAutonomousCommand.schedule();
+
+    m_autonomousCommand = new AUTO_4balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake, 
+                                    m_robotContainer.m_intakeStatus,m_robotContainer.m_trajectory, m_robotContainer.m_shooter);
+    
+    
+
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
     }
   }
 

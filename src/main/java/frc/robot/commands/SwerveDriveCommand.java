@@ -44,14 +44,14 @@ public class SwerveDriveCommand extends CommandBase {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
 
-    final var xSpeed = modifyAxis(controller.getLeftY())
+    final var xSpeed = modifyAxis(-controller.getLeftY())
         * DriveConstants.kMaxSpeedMetersPerSecond;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     
-    final var ySpeed = modifyAxis(controller.getLeftX())
+    final var ySpeed = modifyAxis(-controller.getLeftX())
         * DriveConstants.kMaxSpeedMetersPerSecond;
 
     // Get the rate of angular rotation. We are inverting this because we want a
@@ -59,23 +59,8 @@ public class SwerveDriveCommand extends CommandBase {
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
     
-    final var rot = modifyAxis(controller.getRightX())
+    final var rot = modifyAxis(-controller.getRightX())
         * SwerveDrivetrain.kMaxAngularSpeed;
-
-    // if(controller.getLeftTriggerAxis() >= 0.7){
-    //   //left evasive
-    //   drivetrain.LeftEvasive();
-    // }else if(controller.getRightTriggerAxis() >= 0.7){
-    //   //right evasive
-    //   drivetrain.RightEvasive();
-    // }else{
-    //   drivetrain.NonEvasive();
-    //   //non evasive
-    // }
-
-    // if(controller.getAButtonPressed()){
-    //   drivetrain.fieldModeChange();
-    // }
 
     boolean fieldRelative = true;
     if (controller.getRightTriggerAxis() >= 0.7) {
@@ -88,7 +73,7 @@ public class SwerveDriveCommand extends CommandBase {
     // SmartDashboard.putNumber("yaxis", controller.getLeftY());
     // SmartDashboard.putNumber("x-axis", controller.getRightX());
 
-    // m_drivetrain.drive(xSpeed, ySpeed, rot, fieldRelative);
+
 
     m_drivetrain.drive( xSpeed, ySpeed, rot,true);
   
