@@ -85,14 +85,14 @@ public final class Constants {
         public static final int kShooterSlave = 9;
     
         public static final double kShooterFF = 0.000200;//0.000230;
-        public static final double kShooterP = 0.00012;
-        public static final double kShooterI = 0; 
-        public static final double kShooterD = 0.000;
+        public static final double kShooterP = 0.00032;
+        public static final double kShooterI = 0.0; 
+        public static final double kShooterD = 0.0;
     
         //Shooter is 2:1
         public static final double kMaxShooterVelocity = 5500; //2750;//max working velocity 
-        public static final double kShootingVelocity =  4450;//2475;    
-        public static final double kShootingAccel = 4550;
+        public static final double kShootingVelocity = 5000;    
+        public static final double kShootingAccel = 5000;
     
         public static final double kMinOutput = -1;
         public static final double kMaxOutput = 1;
@@ -137,8 +137,8 @@ public final class Constants {
         public static final double kIndexerP = 0.0003;
         public static final double kIndexerI = 0;  
         public static final double kIndexerD = 0.0001;
-        public static final double kIndexerMaxVelocity = 2000;
-        public static final double kIndexerAccel = 2000;
+        public static final double kIndexerMaxVelocity = 4000;
+        public static final double kIndexerAccel = 4000;
 
         //HOPPER
         public static final double kHopperFF = 0.0003;
@@ -146,7 +146,7 @@ public final class Constants {
         public static final double kHopperI = 0.00000;  
         public static final double kHopperD = 0.00001;
         public static final double kHopperMaxVelocity = 4500;//1500;
-        public static final double kHopperAccel = 2000;
+        public static final double kHopperAccel = 5000;
 
         //INTAKE
         public static final double kIntakeFF = 0.00026; 

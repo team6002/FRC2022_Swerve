@@ -23,13 +23,13 @@ public class CMD_FrontIntakeToggle extends CommandBase {
   public void initialize() {
     if (m_Intake.frontIntakeState != 1){
       m_Intake.setFrontIntakeForward();
-      m_Intake.setHopperForward();
-      m_Intake.setFrontSolonoidExtend();
+      // m_Intake.setHopperForward();
+      m_Intake.setFrontIntakeExtend();
       m_IntakeStatus.setState(IntakeState.INTAKE);
     }else {
       m_Intake.setHopperOff();
       m_Intake.setFrontIntakeOff();
-      m_Intake.setFrontSolonoidRetract();
+      m_Intake.setFrontIntakeRetract();
     }
 
   }

@@ -101,14 +101,11 @@ public class SUB_Shooter extends SubsystemBase{
         m_ShooterSetpoint = SmartDashboard.getNumber("Desired Shooter Setpoint", 
                                                         ShooterConstants.kShootingVelocity);
         if(wantShooter){
-            if(twoBall){// Hack to set different setpoint in auton for tourny, fix -Daniel 3/12/22
-                m_Controller.setReference(4750, ControlType.kVelocity);
-            } else {
                 m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
-            }
         }else{
             m_Controller.setReference(0, ControlType.kDutyCycle);
         }
+        
         SmartDashboard.putBoolean("Shooting", wantShooter);
         SmartDashboard.putNumber("ShooterVelocity", getVelocity());
     }

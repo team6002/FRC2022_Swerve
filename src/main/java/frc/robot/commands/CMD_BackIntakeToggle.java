@@ -23,13 +23,13 @@ public class CMD_BackIntakeToggle extends CommandBase {
   public void initialize() {
     if (m_Intake.backIntakeState != 1){
       m_Intake.setBackIntakeForward();
-      m_Intake.setHopperForward();
-      m_Intake.setBackSolonoidExtend();
+      // m_Intake.setHopperForward();
+      m_Intake.setBackIntakeExtend();
       m_IntakeStatus.setState(IntakeState.INTAKE);
     }else {
       m_Intake.setHopperOff();
       m_Intake.setBackIntakeOff();
-      m_Intake.setBackSolonoidRetract();
+      m_Intake.setBackIntakeRetract();
     }
 
   }

@@ -71,9 +71,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // new JoystickButton(m_driverController, XboxController.Button.kY.value)
-    //   .whenPressed(new CMD_ResetNavX(m_drivetrain)
-    // );
+    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+      .whenPressed(new CMD_ResetNavx(m_drivetrain)
+    );
 
     new POVButton(m_operatorController, 90)
       .whenPressed(new CMD_SideTurret(m_turret));

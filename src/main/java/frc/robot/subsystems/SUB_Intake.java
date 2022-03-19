@@ -43,12 +43,11 @@ public class SUB_Intake extends SubsystemBase {
     public double backIntakeState = 0;
     public double indexerState = 0;
     public double hopperState = 0;
-    public boolean frontIntakeDeployed;
-    public boolean backIntakeDeployed;
     public boolean previousHopperStatus = false;
     public boolean previousFrontIntakeStatus = false;
     public boolean previousBackIntakeStatus = false;
-    // private double ballCount = 0;
+    public boolean frontIntakeDeployed = false;
+    public boolean backIntakeDeployed = false;
     private SparkMaxPIDController m_FrontController = m_FrontIntakeMotor.getPIDController();
     private SparkMaxPIDController m_BackController = m_BackIntakeMotor.getPIDController();    
     private SparkMaxPIDController m_HopperController = m_HopperMotor.getPIDController();
@@ -112,11 +111,11 @@ public class SUB_Intake extends SubsystemBase {
   public double getFrontVelocity(){
       return m_FrontIntakeEncoder.getVelocity();
   }
-  public void setFrontSolonoidExtend(){
+  public void setFrontIntakeExtend(){
     m_FrontIntakeSolenoid.set(true);
     frontIntakeDeployed = true;
   }
-  public void setFrontSolonoidRetract(){
+  public void setFrontIntakeRetract(){
     m_FrontIntakeSolenoid.set(false);
     frontIntakeDeployed = false;
   }
@@ -138,11 +137,11 @@ public class SUB_Intake extends SubsystemBase {
   public double getBackVelocity(){
       return m_BackIntakeEncoder.getVelocity();
   }
-  public void setBackSolonoidExtend(){
+  public void setBackIntakeExtend(){
     m_BackIntakeSolenoid.set(true);
     backIntakeDeployed = true;
   }
-  public void setBackSolonoidRetract(){
+  public void setBackIntakeRetract(){
     m_BackIntakeSolenoid.set(false);
     backIntakeDeployed = false;
   }
@@ -204,39 +203,37 @@ public class SUB_Intake extends SubsystemBase {
   public void periodic() {
     if(m_intakeStatus.isState(IntakeState.INTAKE)){
       if(getHopperStatus()){
-        setHopperOff();
-      }else{
+       setHopperOff();
+      }else
+        if(getBackStatus()||getFrontStatus()){
         setHopperForward();
+      }else {
+        setHopperOff();
       }
-      // if((!getFrontStatus() || !getBackStatus()) && !getHopperStatus()){//zeroballs
-      //   //keep intaking        
-      // } 
-      // else if((!getFrontStatus() || !getBackStatus()) && getHopperStatus()){
-      //   setHopperOff();
-      //   if(!previousFrontIntakeStatus || !previousBackIntakeStatus){
-      //     //keep intaking
-      //   }else if(previousFrontIntakeStatus || previousBackIntakeStatus){
-      //     setHopperOff();
-      //   }
-      // }
-      // else if((getFrontStatus() || getBackStatus()) && getHopperStatus()){ 
-      //   if((previousFrontIntakeStatus || previousBackIntakeStatus) && !previousHopperStatus){//first ball
-      //     //hopper stop, intake continue
-      //     setHopperOff();
-      //   }else if((previousFrontIntakeStatus || previousBackIntakeStatus) && previousHopperStatus){//2nd ball
-      //     //stop hopper and intake
-      //     setHopperOff();
-      //     setFrontIntakeOff();
-      //     setBackIntakeOff();
-      //     setFrontSolonoidRetract();
-      //     setBackSolonoidRetract();
-      //   }
-      // } 
-
-    }else if(m_intakeStatus.isState(IntakeState.SHOOTING)) {
     
+    if (isFrontDeployed()){
+      if(getHopperStatus()){
+        if(getFrontStatus()){
+          setFrontIntakeOff();
+        }else setFrontIntakeForward();
+      }else{
+      setFrontIntakeForward();
+    
+      }
     }
 
+    if (isBackDeployed()){
+      if(getHopperStatus()){
+        if(getBackStatus()){
+          setBackIntakeOff();
+        }else setBackIntakeForward();
+      }else {
+        setBackIntakeForward();
+      }
+    }
+    
+    }else if(m_intakeStatus.isState(IntakeState.SHOOTING)) {
+    }
     previousHopperStatus = getHopperStatus();
     previousFrontIntakeStatus = getFrontStatus();
     previousBackIntakeStatus = getBackStatus();
@@ -249,7 +246,7 @@ public class SUB_Intake extends SubsystemBase {
     SmartDashboard.putBoolean("Front Intake On", isFrontIntaking());
     SmartDashboard.putBoolean("Back Intake On", isBackIntaking());
 
-    // SmartDashboard.putString("IntakeState", m_intakeStatus.getCurrentState().toString());
+    SmartDashboard.putString("IntakeState", m_intakeStatus.getCurrentState().toString());
      // SmartDashboard.putNumber("Hopper Velocity", m_HopperMotor.getEncoder().getVelocity());
     // SmartDashboard.putNumber("Intake Velocity", m_FrontIntakeEncoder.getVelocity());
     // SmartDashboard.putNumber("Indexer Velocity", m_IndexerMotor.getEncoder().getVelocity());
