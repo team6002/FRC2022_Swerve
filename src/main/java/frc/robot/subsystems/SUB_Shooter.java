@@ -6,7 +6,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import frc.lib.util.linearInterpolator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
@@ -24,7 +24,8 @@ public class SUB_Shooter extends SubsystemBase{
     private SparkMaxPIDController m_Controller = m_ShooterMaster.getPIDController();
 
     private double m_ShooterSetpoint = ShooterConstants.kShootingVelocity;
-
+    
+    private linearInterpolator m_ShooterInterpolator;
     private boolean wantShooter = false;
     private boolean twoBall = true;
     public SUB_Shooter()
@@ -46,6 +47,8 @@ public class SUB_Shooter extends SubsystemBase{
         m_Controller.setSmartMotionMaxVelocity(ShooterConstants.kShootingVelocity, 0);
         m_Controller.setSmartMotionMaxAccel(ShooterConstants.kShootingAccel, 0);
         SmartDashboard.putNumber("Desired Shooter Setpoint", ShooterConstants.kShootingVelocity);
+       
+        m_ShooterInterpolator = new linearInterpolator(ShooterConstants.kShooterArray);
     }
 
     // //turns on shooter
@@ -101,7 +104,8 @@ public class SUB_Shooter extends SubsystemBase{
         m_ShooterSetpoint = SmartDashboard.getNumber("Desired Shooter Setpoint", 
                                                         ShooterConstants.kShootingVelocity);
         if(wantShooter){
-                m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
+            m_Controller.setReference(m_ShooterInterpolator.getInterpolatedValue(m_ShooterSetpoint), ControlType.kVelocity);
+            // m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
         }else{
             m_Controller.setReference(0, ControlType.kDutyCycle);
         }

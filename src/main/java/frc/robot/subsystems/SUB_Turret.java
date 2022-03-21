@@ -23,19 +23,12 @@ public class SUB_Turret extends SubsystemBase{
     private SparkMaxLimitSwitch m_ForwardLimitSwitch = m_Turret.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     private SparkMaxLimitSwitch m_ReverseLimitSwitch = m_Turret.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
-    private double center = 80; //center of the camera (160x120)
-    private boolean onTarget = false;
+    private double center = 27; //the limelight x val goes from -27 to 27
     public int huntDirection = 1;
 
     //Network Table
-    NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable table = inst.getTable("Turret");
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-    //alliance color picker variable
-    String RED = "RED";
-    String BLUE = "BLUE";
-    String bColor = "YOSHI";
-    SendableChooser<String> m_color = new SendableChooser<>();
     //joystick
     XboxController joystick;
 
@@ -58,12 +51,6 @@ public class SUB_Turret extends SubsystemBase{
         //testing encoders (figure out converstion factor on real robo)
         m_Encoder.setPositionConversionFactor(12);
         m_Encoder.setPosition(-90);//0
-
-        //add options to sendable chooser
-        m_color.addOption("RED", RED);
-        m_color.addOption("BLUE", BLUE);
-        m_color.setDefaultOption("RED", RED);
-        SmartDashboard.putData("chooser", m_color);
     }
 
     public void turretReset() {
@@ -111,11 +98,11 @@ public class SUB_Turret extends SubsystemBase{
         }
     }
 
-    //Reads from the network table
-    public double readcX() { 
-        double x = -1;
+    //Reads from the network table (x and y val is how far the camera is from the target)
+    public double readtX() { 
+        double x = 0.0;
         try {
-            x = table.getEntry("cX").getDouble(-1);
+            x = table.getEntry("tx").getDouble(0.0);
         }
         catch(Exception e) {
             
@@ -124,28 +111,35 @@ public class SUB_Turret extends SubsystemBase{
         return x;
     }
 
-    public double readcY() {
-        return table.getEntry("cY").getDouble(-1);
+    public double readtY() {
+        double y = 0.0;
+        try {
+            y = table.getEntry("ty").getDouble(0.0);
+        }
+        catch(Exception e) {
+            
+        }
+        
+        return y;
+    }
+
+    //if the limelight sees any targets
+    public double readtV() {
+        double v = 0.0;
+        try {
+            v = table.getEntry("tv").getDouble(0.0);
+        }
+        catch(Exception e) {
+            
+        }
+        
+        return v;
     }
 
     //calculate how far the target is from center
     //right is negative, left is positive
     public double diffFromCenter() {
-        return readcX() - (center + OFFSET);
-    }
-
-    //shooter ball color alliance thangy
-
-    private boolean redBall = true;
-    public void setBallColor(boolean col){
-        redBall = col; 
-    }
-
-    //checks if the alliance color is red or blue
-    public boolean checkChooser(){
-        if (bColor == "RED"){
-            return true;
-        } else return false;
+        return readtX() - (center + OFFSET);
     }
 
     //set offset
@@ -164,22 +158,12 @@ public class SUB_Turret extends SubsystemBase{
 
     @Override
     public void periodic() {
-        double targetX = readcX();
         double sentOutput = 0;
         double diffFromCenter = 0;
 
-        if(redBall != checkChooser()) {
-            setOffset();
-        } else {
-            OFFSET = 0;
-        }
-
-        bColor = m_color.getSelected();
-
         if(turretMode == 0) { //auto mode = 0
             targetPosition = 0;
-            if(targetX == -1) {
-                //no target found
+            if(readtX() == 0) { //no target found
                 //move turret towards hunt direction, hunt direction -1 = counterclockwise +1 = clockwise
                 //A NOTE FOR THE FUTURE:
                 // slow down near the limit switches, maybe lowered voltage or pid.
@@ -195,7 +179,7 @@ public class SUB_Turret extends SubsystemBase{
             }
             else {
                 diffFromCenter = -diffFromCenter();
-                sentOutput = diffFromCenter / center * TurretConstants.kTurretVoltage;
+                sentOutput = readtX() / center * TurretConstants.kTurretVoltage;
 
                 if(Math.abs(diffFromCenter) < 2)
                 {
@@ -268,8 +252,9 @@ public class SUB_Turret extends SubsystemBase{
         }
 
         // //Shuffleboard Output
-        // SmartDashboard.putNumber("X", readcX());
-        // SmartDashboard.putNumber("Y", readcY());
+        SmartDashboard.putNumber("Turret X", readtX());
+        SmartDashboard.putNumber("Turret Y", readtY());
+        SmartDashboard.putNumber("Targets?", readtV());
         // SmartDashboard.putNumber("Voltage", sentOutput);
         // SmartDashboard.putNumber("Difference", diffFromCenter);
         // SmartDashboard.putBoolean("Target?", onTarget);
@@ -277,7 +262,7 @@ public class SUB_Turret extends SubsystemBase{
         SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
         SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
         // SmartDashboard.putBoolean("Ball color???", redBall);
-        // SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());
+        SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());
         // SmartDashboard.putNumber("Target Encoder", targetPosition);
         SmartDashboard.putNumber("Turret Mode", turretMode);
 

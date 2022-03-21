@@ -97,8 +97,17 @@ public final class Constants {
         public static final double kMinOutput = -1;
         public static final double kMaxOutput = 1;
     
-        // public static final double kShooterSpeed = 0.30;
+        public static final double[][] kShooterArray = {
+			{1,3775},
+			{2,3820},
+            {3,4000},
+            {4,4250},
+            {5,4510},
+            {6,4710}
+           
+		};
     }
+    
     public static final class TurretConstants {
         //turret
         public static final int kTurretMotor = 2;
@@ -157,9 +166,9 @@ public final class Constants {
         public static final double kIntakeAccel = 2000;
 
         //SPEEDS
-        public static final double kIndexerVelocity = 1500;
+        public static final double kIndexerVelocity = 1600;
         public static final double kHopperVelocity = 1300; 
-        public static final double kIntakeVelocity = 1800;
+        public static final double kIntakeVelocity = 1900;
         public static final double HopperOff = 0;
         public static final double IndexerOff = 0;
         public static final double IntakeOff = 0;

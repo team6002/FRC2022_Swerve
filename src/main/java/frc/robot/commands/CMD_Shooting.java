@@ -33,7 +33,7 @@ public class CMD_Shooting extends SequentialCommandGroup {
       new CMD_ShooterOn(m_shooter),
       new CMD_IndexerForward(m_intake),
       new CMD_HopperForward(m_intake),
-      new CMD_HopperCheck(m_intake),
+      new CMD_HopperCheck(m_intake).withTimeout(2),
       new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.INTAKE)
 
       );

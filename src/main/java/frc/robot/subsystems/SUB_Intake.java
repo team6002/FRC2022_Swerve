@@ -48,6 +48,8 @@ public class SUB_Intake extends SubsystemBase {
     public boolean previousBackIntakeStatus = false;
     public boolean frontIntakeDeployed = false;
     public boolean backIntakeDeployed = false;
+    public boolean previousFrontIntakeDeployed= false;
+    public boolean previousBackIntakeDeployed= false;
     private SparkMaxPIDController m_FrontController = m_FrontIntakeMotor.getPIDController();
     private SparkMaxPIDController m_BackController = m_BackIntakeMotor.getPIDController();    
     private SparkMaxPIDController m_HopperController = m_HopperMotor.getPIDController();
@@ -217,9 +219,10 @@ public class SUB_Intake extends SubsystemBase {
           setFrontIntakeOff();
         }else setFrontIntakeForward();
       }else{
-      setFrontIntakeForward();
-    
+        setFrontIntakeForward();
       }
+    }else {
+    setFrontIntakeOff();
     }
 
     if (isBackDeployed()){
@@ -228,15 +231,32 @@ public class SUB_Intake extends SubsystemBase {
           setBackIntakeOff();
         }else setBackIntakeForward();
       }else {
-        setBackIntakeForward();
-      }
+       setBackIntakeForward();
+    }
+    }else {
+      setBackIntakeOff();
+    }
+
+    }else if(m_intakeStatus.isState(IntakeState.SHOOTING)) {
     }
     
-    }else if(m_intakeStatus.isState(IntakeState.SHOOTING)) {
+    if (isBackDeployed() && isFrontDeployed()){
+      if (previousFrontIntakeDeployed){
+        setFrontIntakeRetract();
+        setFrontIntakeOff();
+        frontIntakeState = 0;
+      }else
+      {  
+      setBackIntakeRetract();
+      setBackIntakeOff();
+      backIntakeState = 0;
+      }
     }
     previousHopperStatus = getHopperStatus();
     previousFrontIntakeStatus = getFrontStatus();
     previousBackIntakeStatus = getBackStatus();
+    previousFrontIntakeDeployed = isFrontDeployed();
+    previousBackIntakeDeployed = isBackDeployed();
     SmartDashboard.putBoolean("FrontIntake?Full?", getFrontStatus());
     SmartDashboard.putBoolean("BackIntake?Full?", getBackStatus());
     SmartDashboard.putBoolean("HopperFull?", getHopperStatus());
