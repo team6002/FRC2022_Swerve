@@ -109,11 +109,11 @@ public class RobotContainer {
       .whenPressed(new CMD_ClimberSecondarySetHome(m_climber, true)
     );
 
-    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
+    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
       .whenPressed(new CMD_FrontIntakeToggle(m_intake, m_intakeStatus)
     );
 
-    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
       .whenPressed(new CMD_BackIntakeToggle(m_intake, m_intakeStatus)
     );
 

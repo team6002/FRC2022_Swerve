@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 public class SUB_Climber extends SubsystemBase {
-  private final Solenoid m_SecondSolenoid;
-  private final Solenoid m_MainSolenoid;
+  // private final Solenoid m_SecondSolenoid;
+  // private final Solenoid m_MainSolenoid;
  
   private CANSparkMax m_SecondaryClimberMotor2;
   private CANSparkMax m_SecondaryClimberMotor1;
@@ -43,8 +43,9 @@ public class SUB_Climber extends SubsystemBase {
   private boolean climbing = false;
   /** Creates a new SUB_Climber. */
   public SUB_Climber() {
-    m_SecondSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kSecondSolonoid);
-    m_MainSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kMainSolonoid);
+    
+    // m_SecondSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kSecondSolonoid);
+    // m_MainSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kMainSolonoid);
  
     m_SecondaryClimberMotor2 = new CANSparkMax(ClimberConstants.kSecondaryClimberMotor2,MotorType.kBrushless);
     m_SecondaryClimberMotor1 = new CANSparkMax(ClimberConstants.kSecondaryClimberMotor1,MotorType.kBrushless);
@@ -121,22 +122,22 @@ public class SUB_Climber extends SubsystemBase {
   }
 
   public void setPrimaryGearDisengage(){
-    m_MainSolenoid.set(false);
+    // m_MainSolenoid.set(false);
     MainSolonoidState = false;
   }
 
   public void setPrimaryGearEngage(){
-    m_MainSolenoid.set(true);
+    // m_MainSolenoid.set(true);
     MainSolonoidState = true;
   }
 
   public void setSecondaryGearDisengage(){
-    m_SecondSolenoid.set(false);
+    // m_SecondSolenoid.set(false);
     SecondSolonoidState = false;
   }
 
   public void setSecondaryGearEngage(){
-    m_SecondSolenoid.set(true);
+    // m_SecondSolenoid.set(true);
     SecondSolonoidState = true;
   }
 

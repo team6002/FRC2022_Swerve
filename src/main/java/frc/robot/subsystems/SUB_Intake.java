@@ -58,7 +58,7 @@ public class SUB_Intake extends SubsystemBase {
     public SUB_Intake(FSM_IntakeStatus p_IntakeStatus) {
       m_intakeStatus = p_IntakeStatus;
         
-      m_HopperMotor.setInverted(true);
+      m_HopperMotor.setInverted(false);
       m_IndexerMotor.setInverted(true);
 
       m_FrontController.setFF(IndexerConstants.kIntakeFF);
@@ -238,6 +238,7 @@ public class SUB_Intake extends SubsystemBase {
     }
 
     }else if(m_intakeStatus.isState(IntakeState.SHOOTING)) {
+      
     }
     
     if (isBackDeployed() && isFrontDeployed()){
@@ -267,9 +268,10 @@ public class SUB_Intake extends SubsystemBase {
     SmartDashboard.putBoolean("Back Intake On", isBackIntaking());
 
     SmartDashboard.putString("IntakeState", m_intakeStatus.getCurrentState().toString());
-     // SmartDashboard.putNumber("Hopper Velocity", m_HopperMotor.getEncoder().getVelocity());
-    // SmartDashboard.putNumber("Intake Velocity", m_FrontIntakeEncoder.getVelocity());
-    // SmartDashboard.putNumber("Indexer Velocity", m_IndexerMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Hopper Velocity", m_HopperMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("FrontIntake Velocity", m_FrontIntakeEncoder.getVelocity());
+    SmartDashboard.putNumber(("BackIntakeVelocity"), m_BackIntakeEncoder.getVelocity());
+    SmartDashboard.putNumber("Indexer Velocity", m_IndexerMotor.getEncoder().getVelocity());
   }
 }
         

@@ -10,6 +10,8 @@ import frc.lib.util.linearInterpolator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class SUB_Shooter extends SubsystemBase{
     //motors
@@ -28,6 +30,12 @@ public class SUB_Shooter extends SubsystemBase{
     private linearInterpolator m_ShooterInterpolator;
     private boolean wantShooter = false;
     private boolean twoBall = true;
+    private double m_targetDistance;
+
+    //Network Table
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+
     public SUB_Shooter()
     {
         m_ShooterMaster.restoreFactoryDefaults();
@@ -71,6 +79,19 @@ public class SUB_Shooter extends SubsystemBase{
         // m_Controller.setReference(ShooterConstants.kShootingVelocity, CANSparkMax.ControlType.kVelocity);
     }
 
+    public double getDistance() {
+        // double y = 0.0;
+        try {
+            m_targetDistance = table.getEntry("ty").getDouble(0.0);
+        }
+        catch(Exception e) {
+            
+        }
+
+        return m_targetDistance;
+    }
+
+
     //checks if the shooter is ready to shoot
     public boolean isReady(double setpoint, double epsilon)
     {
@@ -101,16 +122,20 @@ public class SUB_Shooter extends SubsystemBase{
     @Override
     public void periodic() {
         //must press tab to set in smartdashboard
-        m_ShooterSetpoint = SmartDashboard.getNumber("Desired Shooter Setpoint", 
-                                                        ShooterConstants.kShootingVelocity);
+        // m_ShooterSetpoint = SmartDashboard.getNumber("Desired Shooter Setpoint", 
+        //                                                 ShooterConstants.kShootingVelocity);
+        m_targetDistance = getDistance();                                                
         if(wantShooter){
-            m_Controller.setReference(m_ShooterInterpolator.getInterpolatedValue(m_ShooterSetpoint), ControlType.kVelocity);
             // m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
+            m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance);
+            m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
         }else{
             m_Controller.setReference(0, ControlType.kDutyCycle);
         }
         
+        SmartDashboard.putNumber("targetDistance", m_targetDistance);
         SmartDashboard.putBoolean("Shooting", wantShooter);
         SmartDashboard.putNumber("ShooterVelocity", getVelocity());
+        SmartDashboard.putNumber("Interpolated value", m_ShooterSetpoint);
     }
 }

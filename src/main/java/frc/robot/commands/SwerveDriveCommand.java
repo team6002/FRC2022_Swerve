@@ -14,9 +14,9 @@ public class SwerveDriveCommand extends CommandBase {
   private final SwerveDrivetrain m_drivetrain;
   private final XboxController controller;
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-  // private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
-  // private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
-  // private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
   public boolean fieldMode = false;
   double deadzone = 0.2;	//variable for amount of deadzone
   double y = 0;           //variable for forward/backward movement
@@ -44,14 +44,14 @@ public class SwerveDriveCommand extends CommandBase {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
 
-    final var xSpeed = modifyAxis(-controller.getLeftY())
+    final var xSpeed = xspeedLimiter.calculate(modifyAxis(-controller.getLeftY()))
         * DriveConstants.kMaxSpeedMetersPerSecond;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     
-    final var ySpeed = modifyAxis(-controller.getLeftX())
+    final var ySpeed = yspeedLimiter.calculate(modifyAxis(-controller.getLeftX()))
         * DriveConstants.kMaxSpeedMetersPerSecond;
 
     // Get the rate of angular rotation. We are inverting this because we want a
@@ -59,7 +59,7 @@ public class SwerveDriveCommand extends CommandBase {
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
     
-    final var rot = modifyAxis(-controller.getRightX())
+    final var rot = rotLimiter.calculate(modifyAxis(-controller.getRightX()))
         * SwerveDrivetrain.kMaxAngularSpeed;
 
     boolean fieldRelative = true;
@@ -102,7 +102,7 @@ public class SwerveDriveCommand extends CommandBase {
     value = deadband(value, 0.2);
 
     // Square the axis
-    value = Math.copySign(value * value, value);
+    // value = Math.copySign(value * value, value);
 
     return value;
   }

@@ -74,19 +74,19 @@ public class AUTO_Trajectory {
         TrajectoryGenerator.generateTrajectory(
         new Pose2d(1,0, new Rotation2d(0)),
         List.of(),
-        new Pose2d(-0.3,-2, new Rotation2d(Math.toRadians(45))), 
+        new Pose2d(0.1,-2.5, new Rotation2d(Math.toRadians(45))), 
         config);
         thirdTrajectory = 
         TrajectoryGenerator.generateTrajectory(
         new Pose2d(-0.3,-2, new Rotation2d(45)),
         List.of(),
-        new Pose2d(0.25,-5.8, new Rotation2d(Math.toRadians(90))), 
+        new Pose2d(0.3,-6.4, new Rotation2d(Math.toRadians(90))), 
         config);
         fourthTrajectory = 
         TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0.25,-5.8, new Rotation2d(Math.toRadians(90))),
+        new Pose2d(0.3,-6.4, new Rotation2d(Math.toRadians(90))),
         List.of(),
-        new Pose2d(-0.3,-2, new Rotation2d(Math.toRadians(90))),
+        new Pose2d(-0.5,-2, new Rotation2d(Math.toRadians(90))),
         config);
     }
   

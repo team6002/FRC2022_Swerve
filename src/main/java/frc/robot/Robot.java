@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     // m_robotContainer.m_NavxGyro.resetNavx();
-    // m_robotContainer.m_drivetrain.syncAllAngles();
+    m_robotContainer.m_drivetrain.syncAllAngles();
     LiveWindow.disableAllTelemetry();
     // auto.addOption("Rightside ThreeBall", 
     //                 new AUTO_ThreeBall(m_robotContainer.m_turret, m_robotContainer.m_intake, 
@@ -85,6 +85,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_robotContainer.m_drivetrain.syncAllAngles();
     m_robotContainer.m_drivetrain.zeroHeading();
     m_robotContainer.m_drivetrain.resetDriveEncoder();
     m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));// temp?$
@@ -113,6 +114,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     // m_robotContainer.m_drivetrain.resetDriveEncoder();
     // m_robotContainer.m_drivetrain.zeroHeading();
+    m_robotContainer.m_drivetrain.syncAllAngles();
     // m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

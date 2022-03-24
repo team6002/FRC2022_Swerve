@@ -85,26 +85,24 @@ public final class Constants {
         public static final int kShooterSlave = 9;
     
         public static final double kShooterFF = 0.000200;//0.000230;
-        public static final double kShooterP = 0.00032;
+        public static final double kShooterP = 0.0004;
         public static final double kShooterI = 0.0; 
         public static final double kShooterD = 0.0;
     
         //Shooter is 2:1
         public static final double kMaxShooterVelocity = 5500; //2750;//max working velocity 
-        public static final double kShootingVelocity = 5000;    
-        public static final double kShootingAccel = 5000;
+        public static final double kShootingVelocity = 4800;    
+        public static final double kShootingAccel = 4500;
     
         public static final double kMinOutput = -1;
         public static final double kMaxOutput = 1;
     
         public static final double[][] kShooterArray = {
-			{1,3775},
-			{2,3820},
-            {3,4000},
-            {4,4250},
-            {5,4510},
-            {6,4710}
-           
+			{-2, 5400},
+			{0, 4975},
+            {4, 4350}, 
+            {13.3, 4200}  
+            
 		};
     }
     
@@ -113,17 +111,17 @@ public final class Constants {
         public static final int kTurretMotor = 2;
     
         //turret PID
-        public static final double kTurretFF = 0;
-        public static final double kTurretP = 0.0049;
-        public static final double kTurretI = 0.00003;
-        public static final double kTurretD = 0.00003;
+        public static final double kTurretFF = 0.1;
+        public static final double kTurretP = 0.0;
+        public static final double kTurretI = 0.0;
+        public static final double kTurretD = 0.0;
     
         //turret speeds
         public static final double kMinTurretOutput = -1;
         public static final double kMaxTurretOutput = 1;
     
-        public static final double kTurretVoltage = 2;
-        public static final double kTurretHuntVoltage = 1;
+        public static final double kTurretVoltage = 5;
+        // public static final double kTurretHuntVoltage = 1;
         public static final double kTurretMannualVoltage = 3;
         public static final double kTurretResetVoltage = 1;
         public static final double kTurretJoystickVoltage = 0.5;
@@ -166,9 +164,9 @@ public final class Constants {
         public static final double kIntakeAccel = 2000;
 
         //SPEEDS
-        public static final double kIndexerVelocity = 1600;
-        public static final double kHopperVelocity = 1300; 
-        public static final double kIntakeVelocity = 1900;
+        public static final double kIndexerVelocity = 3500;
+        public static final double kHopperVelocity = 3500; 
+        public static final double kIntakeVelocity = 3500;
         public static final double HopperOff = 0;
         public static final double IndexerOff = 0;
         public static final double IntakeOff = 0;
@@ -233,13 +231,13 @@ public final class Constants {
      
 
     public static final class AutoConstants {
-        // public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
-        // public static final double kMaxAccelerationMetersPerSecondSquared = DriveConstants.kMaxSpeedMetersPerSecond;
-        public static final double kMaxSpeedMetersPerSecond = 0.5;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
+        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
+        public static final double kMaxAccelerationMetersPerSecondSquared = DriveConstants.kMaxSpeedMetersPerSecond;
+        // public static final double kMaxSpeedMetersPerSecond = 0.5;
+        // public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
      
-        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecond = 2*Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = 2*Math.PI;
     
         public static final double kPXController = 1;
         public static final double kPYController = 1;
