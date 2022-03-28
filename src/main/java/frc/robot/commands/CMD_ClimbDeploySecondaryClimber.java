@@ -19,7 +19,7 @@ public class CMD_ClimbDeploySecondaryClimber extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climber.setSecondaryPosition(ClimberConstants.SecondaryClimberDeploy);
+    m_climber.initializeSecondaryClimber();
     m_climber.setClimbing(true);
   }
 

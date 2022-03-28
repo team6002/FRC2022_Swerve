@@ -4,28 +4,26 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SUB_Intake;
-import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;
-import frc.robot.subsystems.FSM_IntakeStatus;
-public class CMD_FrontIntakeDeploy extends CommandBase {
-  SUB_Intake m_Intake;
-  FSM_IntakeStatus m_IntakeStatus;
-  /** Creates a new CMD_FrontIntakeToggle. */
-  public CMD_FrontIntakeDeploy(SUB_Intake p_Intake, FSM_IntakeStatus p_IntakeStatus) {
-    m_Intake = p_Intake;
-    m_IntakeStatus = p_IntakeStatus;
+import frc.robot.subsystems.SwerveDrivetrain;
+
+public class CMD_DrivetrainReset extends CommandBase {
+  /** Creates a new CMD_DrivetrainReset. */
+  SwerveDrivetrain m_drivetrain;
+  public CMD_DrivetrainReset(SwerveDrivetrain p_drivetrain) {
+    m_drivetrain = p_drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      m_Intake.setFrontIntakeForward();
-      // m_Intake.setHopperForward();
-      m_Intake.setFrontIntakeExtend();
-      m_IntakeStatus.setState(IntakeState.INTAKE);
-
+    m_drivetrain.syncAllAngles();
+    m_drivetrain.zeroHeading();
+    m_drivetrain.resetDriveEncoder();
+    m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -28,7 +28,7 @@ public class CMD_ClimberSecondarySetHome extends CommandBase {
   @Override
   public void execute() {
     m_climber.setSecondaryGearEngage();
-    m_climber.moveSecondaryClimber(-0.1);
+    m_climber.moveSecondaryClimber(-0.2);
   }
 
   // Called once the command ends or is interrupted.

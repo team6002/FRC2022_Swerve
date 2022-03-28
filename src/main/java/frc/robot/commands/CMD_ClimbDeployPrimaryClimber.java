@@ -22,13 +22,13 @@ public class CMD_ClimbDeployPrimaryClimber extends CommandBase {
   public CMD_ClimbDeployPrimaryClimber(SUB_Climber p_climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = p_climber;
-    // addRequirements(m_climber);
+    addRequirements(m_climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climber.setPrimaryPosition(Constants.ClimberConstants.PrimaryClimberDeploy);
+    m_climber.initializePrimaryClimber();
     m_climber.setClimbing(true);
     // System.out.println("INITALIZE CLIMB MODE");
   }

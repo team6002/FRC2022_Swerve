@@ -44,6 +44,9 @@ public class Robot extends TimedRobot {
 
     // m_robotContainer.m_NavxGyro.resetNavx();
     m_robotContainer.m_drivetrain.syncAllAngles();
+    m_robotContainer.m_drivetrain.zeroHeading();
+    m_robotContainer.m_drivetrain.resetDriveEncoder();
+    m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
     LiveWindow.disableAllTelemetry();
     // auto.addOption("Rightside ThreeBall", 
     //                 new AUTO_ThreeBall(m_robotContainer.m_turret, m_robotContainer.m_intake, 
@@ -88,7 +91,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.m_drivetrain.syncAllAngles();
     m_robotContainer.m_drivetrain.zeroHeading();
     m_robotContainer.m_drivetrain.resetDriveEncoder();
-    m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));// temp?$
+    m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
     //PLACE AUTONOMOUS COMMANDS HERE
     // mAutonomousCommand =
     // new AUTO_TwoBall_Experimental(m_robotContainer.m_turret, m_robotContainer.m_intake, m_robotContainer.m_intakeStatus, 

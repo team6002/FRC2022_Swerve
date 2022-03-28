@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 
 import com.revrobotics.CANSparkMax;
@@ -15,9 +16,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 public class SUB_Climber extends SubsystemBase {
   // private final Solenoid m_SecondSolenoid;
   // private final Solenoid m_MainSolenoid;
@@ -38,9 +37,18 @@ public class SUB_Climber extends SubsystemBase {
   private SparkMaxPIDController m_PrimaryClimberPID;
   private SparkMaxPIDController m_SecondaryClimberPID;
 
-  private double PrimarySetpoint = 0;
-  private double SecondarySetpoint = 0;
+  private double PrimaryClimberSetpoint = 0;
+  private double SecondaryClimberSetpoint = 0;
+  private double m_previousPrimaryClimberSetpoint = 0;
+  private double m_previousSecondaryClimberSetpoint = 0;
   private boolean climbing = false;
+  private int m_primaryClimberDirection = 0;
+  private int m_secondaryClimberDirection = 0;
+  private int m_previousPrimaryClimberDirection = 0;
+  private int m_previousSecondaryClimberDirection = 0;
+  
+  private int m_primaryClimberSmartMotionSlotID = 0;
+  private int m_secondaryClimberSmartMotionSlotID = 0;
   /** Creates a new SUB_Climber. */
   public SUB_Climber() {
     
@@ -74,34 +82,63 @@ public class SUB_Climber extends SubsystemBase {
 
     m_SecondaryClimberMotor1.setInverted(true);
 
+    m_PrimaryEncoder.setPositionConversionFactor(0.275);
+    m_SecondaryEncoder.setPositionConversionFactor(0.297);
+
     m_SecondaryClimberMotor1.setIdleMode(IdleMode.kBrake);
     m_SecondaryClimberMotor2.setIdleMode(IdleMode.kBrake);
     m_PrimaryClimberMotor1.setIdleMode(IdleMode.kBrake);
     m_PrimaryClimberMotor2.setIdleMode(IdleMode.kBrake);
 
-    m_PrimaryClimberPID.setFF(ClimberConstants.kPrimaryClimberFF);
-    m_PrimaryClimberPID.setP(ClimberConstants.kPrimaryClimberP);
-    m_PrimaryClimberPID.setI(ClimberConstants.kPrimaryClimberI);
-    m_PrimaryClimberPID.setIZone(ClimberConstants.kPrimaryClimberIz);
-    m_PrimaryClimberPID.setD(ClimberConstants.kPrimaryClimberD);
-    m_PrimaryClimberPID.setSmartMotionMaxVelocity(ClimberConstants.kPrimaryClimberMaxVelocity, 0);
-    m_PrimaryClimberPID.setSmartMotionMinOutputVelocity(0, 0);
-    m_PrimaryClimberPID.setSmartMotionMaxAccel(ClimberConstants.kPrimaryClimberMaxAccel, 0);
-    m_PrimaryClimberPID.setSmartMotionAllowedClosedLoopError(ClimberConstants.kPrimaryClimberAllowedError, 0);
+    // slot = 0 is ascending, slot 1 is descending
+    // Primary PID for ascending
+    m_PrimaryClimberPID.setFF(ClimberConstants.kPrimaryClimberFF,1);
+    m_PrimaryClimberPID.setP(ClimberConstants.kPrimaryClimberP,1);
+    m_PrimaryClimberPID.setI(ClimberConstants.kPrimaryClimberI,1);
+    m_PrimaryClimberPID.setIZone(ClimberConstants.kPrimaryClimberIz,1);
+    m_PrimaryClimberPID.setD(ClimberConstants.kPrimaryClimberD,1);
+    m_PrimaryClimberPID.setSmartMotionMaxVelocity(ClimberConstants.kPrimaryClimberMaxVelocity, 1);
+    m_PrimaryClimberPID.setSmartMotionMinOutputVelocity(0, 1);
+    m_PrimaryClimberPID.setSmartMotionMaxAccel(ClimberConstants.kPrimaryClimberMaxAccel, 1);
+    m_PrimaryClimberPID.setSmartMotionAllowedClosedLoopError(ClimberConstants.kPrimaryClimberAllowedError,1);
     m_PrimaryClimberPID.setOutputRange(ClimberConstants.kPrimaryClimberMinOutput,
-                                       ClimberConstants.kPrimaryClimberMaxOutput);
-
-    m_SecondaryClimberPID.setFF(ClimberConstants.kSecondaryClimberFF);
-    m_SecondaryClimberPID.setP(ClimberConstants.kSecondaryClimberP);
-    m_SecondaryClimberPID.setI(ClimberConstants.kSecondaryClimberI);
-    m_SecondaryClimberPID.setIZone(ClimberConstants.kSecondaryClimberIz);
-    m_SecondaryClimberPID.setD(ClimberConstants.kSecondaryClimberD);
-    m_SecondaryClimberPID.setSmartMotionMaxVelocity(ClimberConstants.kSecondaryClimberMaxVelocity, 0);
-    m_SecondaryClimberPID.setSmartMotionMinOutputVelocity(0, 0);
-    m_SecondaryClimberPID.setSmartMotionMaxAccel(ClimberConstants.kSecondaryClimberMaxAccel, 0);
-    m_SecondaryClimberPID.setSmartMotionAllowedClosedLoopError(ClimberConstants.kSecondaryClimberAllowedError, 0);
+                                       ClimberConstants.kPrimaryClimberMaxOutput,1);
+    //Primary PID for descending
+    m_PrimaryClimberPID.setFF(ClimberConstants.kPrimaryClimberFF2,2);
+    m_PrimaryClimberPID.setP(ClimberConstants.kPrimaryClimberP2,2);
+    m_PrimaryClimberPID.setI(ClimberConstants.kPrimaryClimberI2,2);
+    m_PrimaryClimberPID.setIZone(ClimberConstants.kPrimaryClimberIz2,2);
+    m_PrimaryClimberPID.setD(ClimberConstants.kPrimaryClimberD2,2);
+    m_PrimaryClimberPID.setSmartMotionMaxVelocity(ClimberConstants.kPrimaryClimberMaxVelocity2, 2);
+    m_PrimaryClimberPID.setSmartMotionMinOutputVelocity(0, 2);
+    m_PrimaryClimberPID.setSmartMotionMaxAccel(ClimberConstants.kPrimaryClimberMaxAccel2, 2);
+    m_PrimaryClimberPID.setSmartMotionAllowedClosedLoopError(ClimberConstants.kPrimaryClimberAllowedError2,2);
+    m_PrimaryClimberPID.setOutputRange(ClimberConstants.kPrimaryClimberMinOutput2,
+                                       ClimberConstants.kPrimaryClimberMaxOutput2,2);
+    // Secondary PID for ascending
+    m_SecondaryClimberPID.setFF(ClimberConstants.kSecondaryClimberFF,1);
+    m_SecondaryClimberPID.setP(ClimberConstants.kSecondaryClimberP,1);
+    m_SecondaryClimberPID.setI(ClimberConstants.kSecondaryClimberI,1);
+    m_SecondaryClimberPID.setIZone(ClimberConstants.kSecondaryClimberIz,1);
+    m_SecondaryClimberPID.setD(ClimberConstants.kSecondaryClimberD,1);
+    m_SecondaryClimberPID.setSmartMotionMaxVelocity(ClimberConstants.kSecondaryClimberMaxVelocity, 1);
+    m_SecondaryClimberPID.setSmartMotionMinOutputVelocity(0, 1);
+    m_SecondaryClimberPID.setSmartMotionMaxAccel(ClimberConstants.kSecondaryClimberMaxAccel, 1);
+    m_SecondaryClimberPID.setSmartMotionAllowedClosedLoopError(ClimberConstants.kSecondaryClimberAllowedError, 1);
     m_PrimaryClimberPID.setOutputRange(ClimberConstants.kSecondaryClimberMinOutput,
-                                       ClimberConstants.kSecondaryClimberMaxOutput);
+                                       ClimberConstants.kSecondaryClimberMaxOutput,1);
+    // Secondary PID for descending
+    m_SecondaryClimberPID.setFF(ClimberConstants.kSecondaryClimberFF2,2);
+    m_SecondaryClimberPID.setP(ClimberConstants.kSecondaryClimberP2,2);
+    m_SecondaryClimberPID.setI(ClimberConstants.kSecondaryClimberI2,2);
+    m_SecondaryClimberPID.setIZone(ClimberConstants.kSecondaryClimberIz2,2);
+    m_SecondaryClimberPID.setD(ClimberConstants.kSecondaryClimberD2,2);
+    m_SecondaryClimberPID.setSmartMotionMaxVelocity(ClimberConstants.kSecondaryClimberMaxVelocity2, 2);
+    m_SecondaryClimberPID.setSmartMotionMinOutputVelocity(0, 2);
+    m_SecondaryClimberPID.setSmartMotionMaxAccel(ClimberConstants.kSecondaryClimberMaxAccel2, 2);
+    m_SecondaryClimberPID.setSmartMotionAllowedClosedLoopError(ClimberConstants.kSecondaryClimberAllowedError2, 2);
+    m_PrimaryClimberPID.setOutputRange(ClimberConstants.kSecondaryClimberMinOutput2,
+                                       ClimberConstants.kSecondaryClimberMaxOutput2,2);
 
   }
   
@@ -148,6 +185,14 @@ public class SUB_Climber extends SubsystemBase {
   public void movePrimaryClimber(double value){
     m_PrimaryClimberMotor1.set(value);
   }
+  public double getCurrentPrimaryPosition(){
+    return m_PrimaryEncoder.getPosition();
+  }
+
+  public double getCurrentSecondaryPosition(){
+    return m_SecondaryEncoder.getPosition();
+  }
+
 
   public boolean getPrimaryHomeLimitSwitch(){
     return m_PrimaryHomeLimitSwitch.isPressed();
@@ -155,19 +200,43 @@ public class SUB_Climber extends SubsystemBase {
   public boolean getSecondaryHomeLimitSwitch(){
     return m_SecondaryHomeLimitSwitch.isPressed();
   }
-
-  public void setPrimaryPosition(double pos){
-    setPrimaryGearEngage();
-    m_PrimaryClimberPID.setReference(pos, CANSparkMax.ControlType.kSmartMotion);
-    PrimarySetpoint = pos;
+  public void initializePrimaryClimber(){
+    // this is for initilizing climber faster
+    m_PrimaryClimberPID.setReference(Constants.ClimberConstants.PrimaryClimberDeploy, ControlType.kSmartMotion,1);
+  }
+  public void initializeSecondaryClimber(){
+    m_SecondaryClimberPID.setReference(Constants.ClimberConstants.SecondaryClimberDeploy, ControlType.kSmartMotion,1);
   }
 
-  public void setSecondaryPosition(double pos){
-    setSecondaryGearEngage();
-    m_SecondaryClimberPID.setReference(pos, CANSparkMax.ControlType.kSmartMotion);
-    SecondarySetpoint = pos;
+
+  public void setPrimaryPosition(double p_wantedPosition){
+    if (p_wantedPosition > getCurrentPrimaryPosition()){
+        //Desecending
+        // m_primaryClimberDirection = -1;
+        m_primaryClimberSmartMotionSlotID = 2;
+      }else{ 
+        //Ascending
+        // m_primaryClimberDirection = 1;
+        m_primaryClimberSmartMotionSlotID = 1;
+      }
+      m_PrimaryClimberPID.setReference(p_wantedPosition, CANSparkMax.ControlType.kSmartMotion,m_primaryClimberSmartMotionSlotID);
+      PrimaryClimberSetpoint = p_wantedPosition;
   }
 
+  
+  public void setSecondaryPosition(double p_wantedPosition){
+    if (p_wantedPosition > getCurrentSecondaryPosition()){
+      //Desecending
+      // m_secondaryClimberDirection = -1;
+      m_secondaryClimberSmartMotionSlotID = 2;
+    }else{ 
+      //Ascending
+      // m_secondaryClimberDirection = 1;
+      m_secondaryClimberSmartMotionSlotID = 1;
+    }
+    m_SecondaryClimberPID.setReference(p_wantedPosition, CANSparkMax.ControlType.kSmartMotion,m_secondaryClimberSmartMotionSlotID);
+    SecondaryClimberSetpoint = p_wantedPosition;
+  }
   //enableLimitSwitches and disableLimitSwitches should be done in pairs
   public void enableLimitSwitches(){
     m_PrimaryHomeLimitSwitch.enableLimitSwitch(true);
@@ -180,17 +249,17 @@ public class SUB_Climber extends SubsystemBase {
 
   //ONLY USE FOR STARTUP, skips engaging the gears
   public void setPositionsOverride(double pos){
-    PrimarySetpoint = pos;
-    SecondarySetpoint = pos;
+    PrimaryClimberSetpoint = pos;
+    SecondaryClimberSetpoint = pos;
     m_PrimaryClimberPID.setReference(pos, ControlType.kSmartMotion);
     m_SecondaryClimberPID.setReference(pos, ControlType.kSmartMotion);
   }
 
   public double getPrimarySetpoint(){
-    return PrimarySetpoint;
+    return PrimaryClimberSetpoint;
   }
   public double getSecondarySetpoint(){
-    return SecondarySetpoint;
+    return SecondaryClimberSetpoint;
   }
 
   public double getPrimaryPosition(){
@@ -199,22 +268,27 @@ public class SUB_Climber extends SubsystemBase {
   public double getSecondaryPosition(){
     return m_SecondaryEncoder.getPosition();
   }
+
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("SecondaryClutch", SecondSolonoidState);
-    SmartDashboard.putBoolean("PrimaryClutch", MainSolonoidState);
+    // if (PrimaryClimberSetpoint != m_previousPrimaryClimberSetpoint){
+    // m_PrimaryClimberPID.setReference(PrimaryClimberSetpoint, ControlType.kSmartMotion,m_primaryClimberSmartMotionSlotID);
+    // }
     // SmartDashboard.putBoolean("isClimbing", getClimbing());
     // SmartDashboard.putBoolean("Primaryhomelimitswitch", getPrimaryHomeLimitSwitch());
-    // SmartDashboard.putNumber("PrimaryEncoder", getPrimaryPosition());
+    SmartDashboard.putNumber("PrimaryEncoder", getPrimaryPosition());
+    SmartDashboard.putNumber("PrimaryVelocity", m_PrimaryEncoder.getVelocity());
     // SmartDashboard.putNumber("PrimaryAppliedOutput", m_PrimaryClimberMotor1.getAppliedOutput());
     
     // SmartDashboard.putBoolean("Secondaryhomelimitswitch", getSecondaryHomeLimitSwitch());
-    // SmartDashboard.putNumber("SecondaryEncoder", getSecondaryPosition());
+    SmartDashboard.putNumber("SecondaryEncoder", getSecondaryPosition());
+    SmartDashboard.putNumber("SecnodaryVelocity", m_SecondaryEncoder.getVelocity());
     // SmartDashboard.putNumber("SecondaryAppliedOutput", m_SecondaryClimberMotor1.getAppliedOutput());
 
     // int Ticks = ThroughBore.get(); // 2000 ticks are about a rotation.
     // SmartDashboard.putNumber("ThroughBore", Ticks);
     // moveClimber(0.1);
     // // This method will be called once per schedule;r run
+    m_previousPrimaryClimberSetpoint = PrimaryClimberSetpoint;
   }
 }

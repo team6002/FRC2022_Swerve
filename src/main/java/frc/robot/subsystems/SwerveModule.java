@@ -206,27 +206,27 @@ public double getAbsoluteAngle() {
     // Sometimes (~5% of the time) when we initialize, the absolute encoder isn't fully set up, and we don't
     // end up getting a good reading. If we reset periodically this won't matter anymore.
     if (m_turningEncoder.getVelocity() < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {
-        if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
-            resetIteration = 0;
-            double absoluteAngle = getAbsoluteAngle();
-            m_turningEncoder.setPosition(absoluteAngle);
-            currentAngleRadians = absoluteAngle;
-        }
-    } else {
+      if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
         resetIteration = 0;
+        double absoluteAngle = getAbsoluteAngle();
+        m_turningEncoder.setPosition(absoluteAngle);
+        currentAngleRadians = absoluteAngle;
+      }
+    } else {
+      resetIteration = 0;
     }
 
     double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
     if (currentAngleRadiansMod < 0.0) {
-        currentAngleRadiansMod += 2.0 * Math.PI;
+      currentAngleRadiansMod += 2.0 * Math.PI;
     }
 
     // The reference angle has the range [0, 2pi) but the Neo's encoder can go above that
     double adjustedReferenceAngleRadians = referenceAngleRadians + currentAngleRadians - currentAngleRadiansMod;
     if (referenceAngleRadians - currentAngleRadiansMod > Math.PI) {
-        adjustedReferenceAngleRadians -= 2.0 * Math.PI;
+      adjustedReferenceAngleRadians -= 2.0 * Math.PI;
     } else if (referenceAngleRadians - currentAngleRadiansMod < -Math.PI) {
-        adjustedReferenceAngleRadians += 2.0 * Math.PI;
+      adjustedReferenceAngleRadians += 2.0 * Math.PI;
     }
 
     this.referenceAngleRadians = referenceAngleRadians;

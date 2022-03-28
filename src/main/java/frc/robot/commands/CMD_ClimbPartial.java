@@ -23,21 +23,15 @@ public class CMD_ClimbPartial extends SequentialCommandGroup {
     m_climber = p_climber;
     addCommands(
       new CMD_ClimberPrimaryArmMove(m_climber, 0, 1), //Climber lift to 1st bar
-      // new WaitCommand(0.15),
-      new CMD_ClimberSecondaryArmMove(m_climber, 97, 1), //Climber captures 2nd bar
-      // new WaitCommand(1),
-      new ParallelCommandGroup(
-        new CMD_ClimberPrimaryArmMove(m_climber, 10, 2), //Start rocking down
-        new CMD_ClimberSecondaryArmMove(m_climber, 105, 2)
-      ),
-      new ParallelCommandGroup(
-        new CMD_ClimberPrimaryArmMove(m_climber, 20, 2),
-        new CMD_ClimberSecondaryArmMove(m_climber, 110, 2)
-      ),
-      new CMD_ClimberPrimaryArmMove(m_climber, 30, 2),
-      new CMD_ClimberPrimaryArmMove(m_climber, 75, 2) //The partial release
-      //major swing alert WEEEEEEEEEEEEE
-      
+      new CMD_ClimberSecondaryArmMove(m_climber, 28.809, 1.0) //Climber captures 2nd bar
+
+      ,new ParallelCommandGroup(
+        new CMD_ClimberSecondaryArmMove(m_climber, 33.5, 2.0),
+        new SequentialCommandGroup(
+          new WaitCommand(0.75),
+          new CMD_ClimberPrimaryArmMove(m_climber, 20.0, 2.0)
+        ) //The partial release
+      )//major swing alert WEEEEEEEEEEEEE
     );
   }
 }

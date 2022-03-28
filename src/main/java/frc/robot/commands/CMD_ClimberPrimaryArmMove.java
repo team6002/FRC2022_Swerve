@@ -19,7 +19,7 @@ public class CMD_ClimberPrimaryArmMove extends CommandBase {
     m_climber = p_climber;
     m_setpoint = p_setpoint;
     m_tolerance = p_tolerance;
-    // addRequirements(m_climber);
+    addRequirements(m_climber);
   }
 
   // Called when the command is initially scheduled.

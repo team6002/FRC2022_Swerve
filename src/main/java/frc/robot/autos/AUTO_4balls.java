@@ -10,7 +10,12 @@ import frc.robot.subsystems.SUB_Intake;
 import frc.robot.subsystems.SUB_Shooter;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.FSM_IntakeStatus;
+import frc.robot.commands.CMD_BackIntakeDeploy;
+import frc.robot.commands.CMD_BackIntakeRetract;
 import frc.robot.commands.CMD_BackIntakeToggle;
+import frc.robot.commands.CMD_DrivetrainReset;
+import frc.robot.commands.CMD_FrontIntakeDeploy;
+import frc.robot.commands.CMD_FrontIntakeRetract;
 import frc.robot.commands.CMD_FrontIntakeToggle;
 import frc.robot.commands.CMD_Shooting;
 import frc.robot.commands.CMD_StopShooting;
@@ -36,26 +41,28 @@ public class AUTO_4balls extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(  
       new SequentialCommandGroup(
-      new CMD_FrontIntakeToggle(m_intake, m_IntakeStatus),
+      new CMD_DrivetrainReset(m_drivetrain),
+      new CMD_FrontIntakeDeploy(m_intake, m_IntakeStatus),
       m_trajectory.driveTrajectory(m_trajectory.firstTrajectory),
-      new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter),
-      // new CMD_StopShooting(m_intake, m_IntakeStatus, m_shooter),
       new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter),
       new WaitCommand(0.1),
       new CMD_StopShooting(m_intake, m_IntakeStatus, m_shooter),
-      new CMD_FrontIntakeToggle(m_intake, m_IntakeStatus),
-      new CMD_BackIntakeToggle(m_intake, m_IntakeStatus),
+      new CMD_FrontIntakeRetract(m_intake, m_IntakeStatus),
+      new CMD_BackIntakeDeploy(m_intake, m_IntakeStatus),
       m_trajectory.driveTrajectory(m_trajectory.secondTrajectory),
+      m_trajectory.driveTrajectory(m_trajectory.secondTrajectory2),
       new WaitCommand(0.1),
+      new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter),
       new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter),
       new WaitCommand(0.1),
       new CMD_StopShooting(m_intake, m_IntakeStatus, m_shooter),
       m_trajectory.driveTrajectory(m_trajectory.thirdTrajectory),
       new WaitCommand(1),
       m_trajectory.driveTrajectory(m_trajectory.fourthTrajectory),
-      new WaitCommand(0.1),
+      new WaitCommand(0.2),
       new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter),
-      new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter)
+      new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter),
+      new CMD_BackIntakeRetract(m_intake, m_IntakeStatus)
       )
 
     );

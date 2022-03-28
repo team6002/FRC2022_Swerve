@@ -58,8 +58,12 @@ public class SUB_Intake extends SubsystemBase {
     public SUB_Intake(FSM_IntakeStatus p_IntakeStatus) {
       m_intakeStatus = p_IntakeStatus;
         
-      m_HopperMotor.setInverted(false);
+      m_HopperMotor.setInverted(true);
       m_IndexerMotor.setInverted(true);
+
+      // m_FrontIntakeMotor.setSmartCurrentLimit(IndexerConstants.kIntakeCurrentLimit);
+      // m_BackIntakeMotor.setSmartCurrentLimit(IndexerConstants.kIntakeCurrentLimit);
+      // m_HopperMotor.setSmartCurrentLimit(IndexerConstants.kHopperCurrentLimit);
 
       m_FrontController.setFF(IndexerConstants.kIntakeFF);
       m_FrontController.setP(IndexerConstants.kIntakeP);

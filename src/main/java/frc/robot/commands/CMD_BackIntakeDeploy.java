@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Intake;
 import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;
 import frc.robot.subsystems.FSM_IntakeStatus;
-public class CMD_FrontIntakeDeploy extends CommandBase {
+public class CMD_BackIntakeDeploy extends CommandBase {
   SUB_Intake m_Intake;
   FSM_IntakeStatus m_IntakeStatus;
-  /** Creates a new CMD_FrontIntakeToggle. */
-  public CMD_FrontIntakeDeploy(SUB_Intake p_Intake, FSM_IntakeStatus p_IntakeStatus) {
+  /** Creates a new CMD_BackIntakeToggle. */
+  public CMD_BackIntakeDeploy(SUB_Intake p_Intake, FSM_IntakeStatus p_IntakeStatus) {
     m_Intake = p_Intake;
     m_IntakeStatus = p_IntakeStatus;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -21,9 +21,9 @@ public class CMD_FrontIntakeDeploy extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      m_Intake.setFrontIntakeForward();
+      m_Intake.setBackIntakeForward();
       // m_Intake.setHopperForward();
-      m_Intake.setFrontIntakeExtend();
+      m_Intake.setBackIntakeExtend();
       m_IntakeStatus.setState(IntakeState.INTAKE);
 
   }

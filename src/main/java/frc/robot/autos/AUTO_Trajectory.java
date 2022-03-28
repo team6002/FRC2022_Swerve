@@ -8,11 +8,14 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -37,6 +40,7 @@ public class AUTO_Trajectory {
     public Trajectory secondTrajectory;
     public Trajectory thirdTrajectory;
     public Trajectory fourthTrajectory;
+    public Trajectory secondTrajectory2;
     // String FirstRedBallTrajectoryJSON = "Paths/FirstRedBall.wpilib.json";
     Trajectory FirstRedBall = new Trajectory();
     private SwerveDrivetrain m_drivetrain;
@@ -66,27 +70,36 @@ public class AUTO_Trajectory {
         firstTrajectory =
         TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(new Translation2d(0.5,0)),
-        new Pose2d(1, 0, new Rotation2d(0)),
+        List.of(),
+        new Pose2d(Units.inchesToMeters(43.3), 0, new Rotation2d(0)),
         config);
 
         secondTrajectory =
         TrajectoryGenerator.generateTrajectory(
-        new Pose2d(1,0, new Rotation2d(0)),
+        new Pose2d(Units.inchesToMeters(43.3),0, new Rotation2d(0)),
         List.of(),
-        new Pose2d(0.1,-2.5, new Rotation2d(Math.toRadians(45))), 
+        new Pose2d(Units.inchesToMeters(4),Units.inchesToMeters(-100), new Rotation2d(Math.toRadians(45))), 
         config);
+        
+        secondTrajectory2 =
+        TrajectoryGenerator.generateTrajectory(
+        new Pose2d(Units.inchesToMeters(4),Units.inchesToMeters(-100), new Rotation2d(Math.toRadians(45))),
+        List.of(),
+        new Pose2d(Units.inchesToMeters(-24),Units.inchesToMeters(-85), new Rotation2d(Math.toRadians(45))), 
+        config);
+
         thirdTrajectory = 
         TrajectoryGenerator.generateTrajectory(
-        new Pose2d(-0.3,-2, new Rotation2d(45)),
-        List.of(),
-        new Pose2d(0.3,-6.4, new Rotation2d(Math.toRadians(90))), 
+        new Pose2d(Units.inchesToMeters(-24),Units.inchesToMeters(-85), new Rotation2d(Math.toRadians(45))),
+        List.of(new Translation2d(Units.inchesToMeters(24),Units.inchesToMeters(-252))),
+        new Pose2d(Units.inchesToMeters(12),Units.inchesToMeters(-264), new Rotation2d(Math.toRadians(90))), 
         config);
+
         fourthTrajectory = 
         TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0.3,-6.4, new Rotation2d(Math.toRadians(90))),
+        new Pose2d(Units.inchesToMeters(12),Units.inchesToMeters(-264), new Rotation2d(Math.toRadians(90))),
         List.of(),
-        new Pose2d(-0.5,-2, new Rotation2d(Math.toRadians(90))),
+        new Pose2d(Units.inchesToMeters(-24),Units.inchesToMeters(-67), new Rotation2d(Math.toRadians(90))),
         config);
     }
   

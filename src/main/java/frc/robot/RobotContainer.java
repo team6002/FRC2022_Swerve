@@ -75,16 +75,16 @@ public class RobotContainer {
       .whenPressed(new CMD_ResetNavx(m_drivetrain)
     );
 
-    new POVButton(m_operatorController, 90)
+    new POVButton(m_operatorController, 90) //right d-pad
       .whenPressed(new CMD_SideTurret(m_turret));
     
-    new POVButton(m_operatorController, 0)
+    new POVButton(m_operatorController, 0) //up d-pad
       .whenPressed(new CMD_FrontTurret(m_turret));
     
-    new POVButton(m_operatorController, 180)
+    new POVButton(m_operatorController, 180) //down d-pad
       .whenPressed(new CMD_BackTurret(m_turret));
     
-    new POVButton(m_operatorController, 270)
+    new POVButton(m_operatorController, 270) //left d-pad
       .whenPressed(new CMD_ResetTurret(m_turret));
 
     new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value)

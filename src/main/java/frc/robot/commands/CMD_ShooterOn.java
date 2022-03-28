@@ -9,7 +9,7 @@ public class CMD_ShooterOn extends CommandBase {
     SUB_Shooter m_Shooter;
     private Timer m_runtime = new Timer();
     private double m_maxRuntime = 3; // 3 second
-
+    
 
     public CMD_ShooterOn(SUB_Shooter p_Shooter)
     {
@@ -27,6 +27,10 @@ public class CMD_ShooterOn extends CommandBase {
     public void execute(){
       
     }
+    
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {}
 
     @Override
     public boolean isFinished() {
