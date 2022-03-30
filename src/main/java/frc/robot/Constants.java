@@ -79,7 +79,7 @@ public final class Constants {
     */
 
     public static final class ShooterConstants {
-    
+
         //shooter
         public static final int kShooterMaster = 8;
         public static final int kShooterSlave = 9;
@@ -89,7 +89,7 @@ public final class Constants {
         public static final double kShooterI = 0.0; 
         public static final double kShooterD = 0.0;
     
-        //Shooter is 2:1
+        //Shooter is 1:1
         public static final double kMaxShooterVelocity = 5500; //2750;//max working velocity 
         public static final double kShootingVelocity = 4800;    
         public static final double kShootingAccel = 2000;
@@ -191,8 +191,7 @@ public final class Constants {
         public static final int kPrimaryClimberMotor2 = 19;
         public static final int kMainSolonoid = 3;
         public static final int kSecondSolonoid = 2;
-        public static final double ThroughBoreEncoderPort1 = 3;
-        public static final double ThroughBoreEncoderPort2 = 4;
+         
         //PID VALUES
         //Primary
         // first set for ascending
@@ -264,15 +263,14 @@ public final class Constants {
         
     }
      
-
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
-        public static final double kMaxAccelerationMetersPerSecondSquared = DriveConstants.kMaxSpeedMetersPerSecond;
-        // public static final double kMaxSpeedMetersPerSecond = 0.5;
-        // public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
+        // public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
+        // public static final double kMaxAccelerationMetersPerSecondSquared = DriveConstants.kMaxSpeedMetersPerSecond;
+        public static final double kMaxSpeedMetersPerSecond = 1.0;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 1.0;
      
-        public static final double kMaxAngularSpeedRadiansPerSecond = 8*Math.PI;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = 8*Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecond = 2*Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = 2*Math.PI;
     
         public static final double kPXController = 1;
         public static final double kPYController = 1;

@@ -12,8 +12,6 @@ import frc.robot.subsystems.*;
 import frc.robot.autos.AUTO_Trajectory;
 import frc.robot.commands.*;
 
-
-
 /* 
   To do
   Make data logging that exports to a file.

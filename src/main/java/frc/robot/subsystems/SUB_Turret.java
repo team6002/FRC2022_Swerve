@@ -26,10 +26,11 @@ public class SUB_Turret extends SubsystemBase{
     private double center = 27; //the limelight x val goes from -27 to 27
     public int huntDirection = 1; //goes positive initially
     private double targetPosition = Math.toRadians(90); //-Math.PI/2; //-90;
+    double validAngle = 0;
 
     //turretMode: auto = 0; mannual = 1; reset = -1; joystick = 2
     private int turretMode = 0;
-    private final double RESET_TURRET = Math.toRadians(140); //value of encoder when left (reverse) limit switch is triggered
+    private final double RESET_TURRET = Math.toRadians(-140); //value of encoder when left (reverse) limit switch is triggered
 
     //Network Table
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -113,11 +114,11 @@ public class SUB_Turret extends SubsystemBase{
     }
 
     public void setFrontPosition() {
-        targetPosition = -Math.PI/2; //90;
+        targetPosition = -Math.PI/2; //-90;
     }
 
     public void setBackPosition() {
-        targetPosition = Math.PI/2; //-90;
+        targetPosition = Math.PI/2; //90;
     }
 
     public void setSidePosition() {
@@ -143,40 +144,36 @@ public class SUB_Turret extends SubsystemBase{
     }
 
     public double validateAngle(double p_angle) {
-        // System.out.println("validating angle");
-        // System.out.println(p_angle);
-        if(Math.abs(p_angle) < RESET_TURRET) {
+        if(Math.abs(p_angle) < Math.abs(RESET_TURRET)) {
             return p_angle;
         }
-        
         return Math.copySign(RESET_TURRET, p_angle);
     }
 
-    public void setReferenceAngle(double referenceAngleRadians)  {
+    public void setReferenceAngle(double referenceAngleRadians) {
 
-        double currentAngleRadians = m_Encoder.getPosition();
+        // double currentAngleRadians = m_Encoder.getPosition();
     
-        double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
-        if (currentAngleRadiansMod < 0.0) {
-          currentAngleRadiansMod += 2.0 * Math.PI;
-        }
+        // double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
+        // if (currentAngleRadiansMod < 0.0) {
+        //   currentAngleRadiansMod += 2.0 * Math.PI;
+        // }
     
-        // The reference angle has the range [0, 2pi) but the Neo's encoder can go above that
-        double adjustedReferenceAngleRadians = referenceAngleRadians + currentAngleRadians - currentAngleRadiansMod;
-        if (referenceAngleRadians - currentAngleRadiansMod > Math.PI) {
-          adjustedReferenceAngleRadians -= 2.0 * Math.PI;
-        } else if (referenceAngleRadians - currentAngleRadiansMod < -Math.PI) {
-          adjustedReferenceAngleRadians += 2.0 * Math.PI;
-        }
+        // // The reference angle has the range [0, 2pi) but the Neo's encoder can go above that
+        // double adjustedReferenceAngleRadians = referenceAngleRadians + currentAngleRadians - currentAngleRadiansMod;
+        // if (referenceAngleRadians - currentAngleRadiansMod > Math.PI) {
+        //   adjustedReferenceAngleRadians -= 2.0 * Math.PI;
+        // } else if (referenceAngleRadians - currentAngleRadiansMod < -Math.PI) {
+        //   adjustedReferenceAngleRadians += 2.0 * Math.PI;
+        // }
     
         // targetPosition = referenceAngleRadians;
         
-        SmartDashboard.putNumber("Desired Turret Position", Math.toDegrees(adjustedReferenceAngleRadians));
+        SmartDashboard.putNumber("Desired Turret Position", Math.toDegrees(referenceAngleRadians));
             
-        m_Controller.setReference(adjustedReferenceAngleRadians, ControlType.kSmartMotion);
+        m_Controller.setReference(referenceAngleRadians, ControlType.kSmartMotion);
     }
     
-    double validAngle = 0;
     @Override
     public void periodic() {
         // double sentOutput = 0;
@@ -195,8 +192,6 @@ public class SUB_Turret extends SubsystemBase{
                 double newAngle = Math.toRadians(readtX()) + m_Encoder.getPosition(); //gets wanted position
 
                 validAngle = validateAngle(newAngle);
-                // System.out.println("validated angle");
-                // System.out.println(validAngle);
                 setReferenceAngle(validAngle);
             }
         }
@@ -204,34 +199,24 @@ public class SUB_Turret extends SubsystemBase{
             validAngle =  validateAngle(targetPosition);
             setReferenceAngle(validAngle);
         }
-        else if(turretMode == -1) { //reset turret position
-            // if(m_ForwardLimitSwitch.isPressed() == true) {
-            //     m_Turret.setVoltage(0);
-            //     m_Encoder.setPosition(RESET_TURRET); //resets encoder
-            //     validAngle = validateAngle(-Math.PI/2); //goes to back position
-            //     setReferenceAngle(validAngle);
-            //     turretMode = 0;
-            // } else {
-            //     m_Turret.setVoltage(-1); //goes towards forward limit switch
-            // }
-            // if(m_ForwardLimitSwitch.isPressed() == true) {
-            //     sentOutput = 0;
-            //     m_Encoder.setPosition(RESET_TURRET);
-            //     targetPosition = 0;
-            //     turretMode = 1;
-            // }
-            // else {
-            //     sentOutput = TurretConstants.kTurretResetVoltage;
-            // }
-
-            // m_Turret.setVoltage(sentOutput);
+        else if(turretMode == -1) { //reset turret encoder and moves turret to back
+            if(m_ReverseLimitSwitch.isPressed() == true) {
+                m_Turret.setVoltage(0);
+                m_Encoder.setPosition(RESET_TURRET); //resets encoder
+                validAngle = validateAngle(-Math.PI/2); //goes to front position
+                setReferenceAngle(validAngle);
+                turretMode = 0;
+            } else {
+                m_Turret.setVoltage(-1); //goes towards forward limit switch
+            }
         } 
         else if(turretMode == 2) { //joystick mode
-        //     double xVal = joystick.getLeftX();
-        //     if(Math.abs(xVal) < 0.1) {
-        //         xVal = 0;
-        //     }
-        //     sentOutput = xVal * TurretConstants.kTurretJoystickVoltage;
+            // m_Turret.setVoltage(-1);
+            // double xVal = joystick.getLeftX();
+            // if(Math.abs(xVal) < 0.1) {
+            //     xVal = 0;
+            // }
+            // sentOutput = xVal * TurretConstants.kTurretJoystickVoltage;
         }
 
         //Shuffleboard Output
