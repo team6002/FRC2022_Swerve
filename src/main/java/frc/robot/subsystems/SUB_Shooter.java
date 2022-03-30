@@ -31,7 +31,7 @@ public class SUB_Shooter extends SubsystemBase{
     private boolean wantShooter = false;
     private boolean twoBall = true;
     private double m_targetDistance;
-
+    private boolean m_autoMode; // used in AUTO
     //Network Table
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -114,10 +114,6 @@ public class SUB_Shooter extends SubsystemBase{
     // public void setShooterSetpoint(double setpoint){
         // m_ShooterSetpoint = setpoint;
     // }
-
-    public void setTwoBall(boolean auto){
-        twoBall = auto;
-    }
     
     @Override
     public void periodic() {
@@ -126,8 +122,17 @@ public class SUB_Shooter extends SubsystemBase{
         //                                                 ShooterConstants.kShootingVelocity);
         m_targetDistance = getDistance();                                                
         if(wantShooter){
+            /* Twisted Devil's field 
+            2.65 with front bumper on the tarmac.
+            
+            */
             // m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
-            m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance);
+            // m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance);
+            // if (m_autoMode){
+            //     m_ShooterSetpoint = 
+            // }else{
+            m_ShooterSetpoint = (m_targetDistance*-30)+3000;
+            // }
             m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
         }else{
             m_Controller.setReference(0, ControlType.kDutyCycle);

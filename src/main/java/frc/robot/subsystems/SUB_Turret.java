@@ -206,6 +206,15 @@ public class SUB_Turret extends SubsystemBase{
         }
         else if(turretMode == -1) { //reset turret position
             // if(m_ForwardLimitSwitch.isPressed() == true) {
+            //     m_Turret.setVoltage(0);
+            //     m_Encoder.setPosition(RESET_TURRET); //resets encoder
+            //     validAngle = validateAngle(-Math.PI/2); //goes to back position
+            //     setReferenceAngle(validAngle);
+            //     turretMode = 0;
+            // } else {
+            //     m_Turret.setVoltage(-1); //goes towards forward limit switch
+            // }
+            // if(m_ForwardLimitSwitch.isPressed() == true) {
             //     sentOutput = 0;
             //     m_Encoder.setPosition(RESET_TURRET);
             //     targetPosition = 0;

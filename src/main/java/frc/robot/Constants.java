@@ -34,6 +34,7 @@ public final class Constants {
         public static double k_RightEvasiveX = 0.6477;
         public static double k_RightEvasiveY = -0.0635;
         
+    
         public static double kMaxSpeedMetersPerSecond = 6380.0 / 60.0 *
                 (16.0 / 32.0) * ( 15.0 / 45.0) * Units.inchesToMeters(3) * Math.PI;
         public static int kNavXAdjustment = 0;
@@ -83,8 +84,8 @@ public final class Constants {
         public static final int kShooterMaster = 8;
         public static final int kShooterSlave = 9;
     
-        public static final double kShooterFF = 0.000200;//0.000230;
-        public static final double kShooterP = 0.0004;
+        public static final double kShooterFF = 0.00022;
+        public static final double kShooterP = 0.0002;
         public static final double kShooterI = 0.0; 
         public static final double kShooterD = 0.0;
     
@@ -97,11 +98,11 @@ public final class Constants {
         public static final double kMaxOutput = 1;
     
         public static final double[][] kShooterArray = {
-			{-1.5, 5200},
-			{0, 5000},
-            {2, 4500}, 
-            {13.3, 4100},
-            {17, 3900}  
+			{-1.5, 2600},
+			{0, 2500},
+            {2, 2250}, 
+            {13.3, 2050},
+            {17, 2450}  
             
 		};
     }
@@ -161,12 +162,12 @@ public final class Constants {
         public static final int kHopperCurrentLimit = 50;
 
         //INTAKE
-        public static final double kIntakeFF = 0.00018; 
+        public static final double kIntakeFF = 0.0002; 
         public static final double kIntakeP = 0;  //0.000032;
         public static final double kIntakeI = 0;  
         public static final double kIntakeD = 0.0000;
-        public static final double kIntakeMaxVelocity = 4000;
-        public static final double kIntakeAccel = 1000;
+        public static final double kIntakeMaxVelocity = 5000;
+        public static final double kIntakeAccel = 3000;
         public static final int kIntakeCurrentLimit = 40;
 
         //SPEEDS
@@ -270,8 +271,8 @@ public final class Constants {
         // public static final double kMaxSpeedMetersPerSecond = 0.5;
         // public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
      
-        public static final double kMaxAngularSpeedRadiansPerSecond = 2*Math.PI;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = 2*Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecond = 8*Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = 8*Math.PI;
     
         public static final double kPXController = 1;
         public static final double kPYController = 1;

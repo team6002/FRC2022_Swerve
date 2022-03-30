@@ -50,7 +50,7 @@ public class AUTO_4balls extends SequentialCommandGroup {
       new CMD_FrontIntakeRetract(m_intake, m_IntakeStatus),
       new CMD_BackIntakeDeploy(m_intake, m_IntakeStatus),
       m_trajectory.driveTrajectory(m_trajectory.secondTrajectory),
-      m_trajectory.driveTrajectory(m_trajectory.secondTrajectory2),
+      // m_trajectory.driveTrajectory(m_trajectory.secondTrajectory2),
       new WaitCommand(0.1),
       new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter),
       new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter),

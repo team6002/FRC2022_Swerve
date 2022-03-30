@@ -164,7 +164,7 @@ public class SwerveDrivetrain extends SubsystemBase {
  
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
-    // var gyroAngle = Rotation2d.fromDegrees(-m_Navx.getAngle());
+    // var gyroAngle = Rotation2d.fromDegrees(-m_Navx.getYaw());
     m_odometry.update(
         // gyroAngle,
         m_Navx.getRotation2d(),

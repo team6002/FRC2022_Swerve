@@ -14,20 +14,11 @@ import frc.robot.commands.*;
 
 
 
-/** 
-  * IMPROVEMENTS FOR OVERALL CODE, just suggestions :)
-  * -Seperate the parts of Intake (Hopper, Indexer(Prestage), Intake)
-  * -Alter command structure so that commands tell robot what state to be in, and 
-  *   subsystem handles actual movement to state
-  * -Decide flow of subsystems (when shooter turns off, intake when?)
-  *   -Rewrite the commands for better control of states (intake and shooter for sure, turret seems okay) 
-  * -Idle state for Shooter? (lower rpm)
-  *   -TUNE THE SHOOTER
-  * -Global Robot Status (network tables, or constants-like file)
-  * -Singleton Subsystems with getInstance()? 
-  *  (maybe not because of 2020 command base dependency injection)    
-  */
-
+/* 
+  To do
+  Make data logging that exports to a file.
+  Fix the auto not turning properly
+  make calibrating routine
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
