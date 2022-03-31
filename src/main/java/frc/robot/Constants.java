@@ -54,6 +54,12 @@ public final class Constants {
         public static final int kRearRightTurningMotorPort = 6;
         public static final int kRearRightDriveMotorPort = 5;
 
+        public static final int kFrontLeftDriveAnalogPort = 0;
+        public static final int kFrontRightDriveAnalogPort = 1;
+        public static final int kRearLeftDriveAnalogPort = 2;
+        public static final int kRearRightDriveAnalogPort = 3;
+        
+
         public static final double kTrackWidth = Units.inchesToMeters(23.5);
         // Distance between centers of right and left wheels on robot
         public static final double kWheelBase = Units.inchesToMeters(23.5);
@@ -98,11 +104,10 @@ public final class Constants {
         public static final double kMaxOutput = 1;
     
         public static final double[][] kShooterArray = {
-			{-1.5, 2600},
-			{0, 2500},
-            {2, 2250}, 
-            {13.3, 2050},
-            {17, 2450}  
+			{-1, 3300}, // bumper against the safe zone
+	        {4, 2550}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
+            {8, 2430}, // front frame on the tarmac and about 9 feet from tarmac
+            {17, 2400}  // a tiny bit in the tarmac line
             
 		};
     }

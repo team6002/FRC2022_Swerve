@@ -19,8 +19,9 @@ public class CMD_ShooterOn extends CommandBase {
   
     @Override
     public void initialize() {
-       m_Shooter.readyShooter();
-       m_runtime.reset();
+      m_shooterConfirms = 0;
+      m_Shooter.readyShooter();
+      m_runtime.reset();
     }
 
     @Override

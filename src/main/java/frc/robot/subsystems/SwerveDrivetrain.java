@@ -44,19 +44,23 @@ public class SwerveDrivetrain extends SubsystemBase {
   private final SwerveModule m_frontLeft = 
     new SwerveModule(DriveConstants.kFrontLeftDriveMotorPort
         , DriveConstants.kFrontLeftTurningMotorPort
-        , DriveConstants.kFrontLeftDriveMotorInverted);
+        , DriveConstants.kFrontLeftDriveMotorInverted
+        , DriveConstants.kFrontLeftDriveAnalogPort);
   private final SwerveModule m_frontRight = 
     new SwerveModule(DriveConstants.kFrontRightDriveMotorPort
         , DriveConstants.kFrontRightTurningMotorPort
-        , DriveConstants.kFrontRightDriveMotorInverted);
+        , DriveConstants.kFrontRightDriveMotorInverted
+        , DriveConstants.kFrontRightDriveAnalogPort);
   private final SwerveModule m_rearLeft = 
     new SwerveModule(DriveConstants.kRearLeftDriveMotorPort
         , DriveConstants.kRearLeftTurningMotorPort
-        , DriveConstants.kRearLeftDriveMotorInverted);
+        , DriveConstants.kRearLeftDriveMotorInverted
+        , DriveConstants.kRearLeftDriveAnalogPort);
   private final SwerveModule m_rearRight = 
     new SwerveModule(DriveConstants.kRearRightDriveMotorPort
         , DriveConstants.kRearRightTurningMotorPort
-        , DriveConstants.kRearRightDriveMotorInverted);
+        , DriveConstants.kRearRightDriveMotorInverted
+        , DriveConstants.kRearRightDriveAnalogPort);
   
   private final AHRS m_Navx = new AHRS(Port.kMXP);
   private boolean fieldMode = false;

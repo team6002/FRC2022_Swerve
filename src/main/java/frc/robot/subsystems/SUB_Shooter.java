@@ -122,9 +122,9 @@ public class SUB_Shooter extends SubsystemBase{
             
             */
             // m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
-            // m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance);
+            m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance);
             // if (m_autoMode){
-                m_ShooterSetpoint = 1000;
+                // m_ShooterSetpoint = 1000;
             // }else{
             // m_ShooterSetpoint = (m_targetDistance*-30)+3000;
             // }
