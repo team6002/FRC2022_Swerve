@@ -29,9 +29,9 @@ public class SUB_Shooter extends SubsystemBase{
     
     private linearInterpolator m_ShooterInterpolator;
     private boolean wantShooter = false;
-    private boolean twoBall = true;
     private double m_targetDistance;
     private boolean m_autoMode; // used in AUTO
+    private double m_autoShooterSetpoint = 1000; // Used to set Setpoint in AUTO
     //Network Table
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -59,11 +59,14 @@ public class SUB_Shooter extends SubsystemBase{
         m_ShooterInterpolator = new linearInterpolator(ShooterConstants.kShooterArray);
     }
 
-    // //turns on shooter
-    // public void shooterOn()
-    // {
-    //     m_ShooterMaster.set(ShooterConstants.kShooterSpeed);
-    // }
+    public void setAutoShooterSetpoint(double p_wantedSetpoint)
+    {
+    m_autoShooterSetpoint = p_wantedSetpoint;
+    }
+
+    public void setAutoMode(boolean mode){
+        m_autoMode = mode;
+    }
 
     //turns off shooter
     public void shooterOff()
@@ -107,14 +110,6 @@ public class SUB_Shooter extends SubsystemBase{
         return m_ShooterSetpoint;
     }
 
-    //AUTONOMOUS USE ONLY
-    // public void twoBallSecondShot(){
-    //     m_ShooterSetpoint = 
-    // }
-    // public void setShooterSetpoint(double setpoint){
-        // m_ShooterSetpoint = setpoint;
-    // }
-    
     @Override
     public void periodic() {
         //must press tab to set in smartdashboard
@@ -128,12 +123,11 @@ public class SUB_Shooter extends SubsystemBase{
             */
             // m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
             // m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance);
-            if (m_autoMode){
+            // if (m_autoMode){
                 m_ShooterSetpoint = 1000;
-            }else{
-            m_ShooterSetpoint = (m_targetDistance*-30)+3000;
-            }
-            // m_ShooterSetpoint = 1000;
+            // }else{
+            // m_ShooterSetpoint = (m_targetDistance*-30)+3000;
+            // }
             m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
         }else{
             m_Controller.setReference(0, ControlType.kDutyCycle);

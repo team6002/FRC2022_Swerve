@@ -6,10 +6,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Climber;
-public class CMD_ClimberSecondaryExtend extends CommandBase {
+public class CMD_ClimberSecondarySolonoidExtend extends CommandBase {
   /** Creates a new CMD_ClimberExtend. */
   SUB_Climber m_climber;
-  public CMD_ClimberSecondaryExtend(SUB_Climber p_climber) {
+  public CMD_ClimberSecondarySolonoidExtend(SUB_Climber p_climber) {
     m_climber = p_climber;
     // Use addRequirements() here to declare subsystem dependencies.
   }

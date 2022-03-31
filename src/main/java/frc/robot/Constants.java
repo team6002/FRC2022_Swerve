@@ -191,7 +191,7 @@ public final class Constants {
         public static final int kPrimaryClimberMotor2 = 19;
         public static final int kMainSolonoid = 3;
         public static final int kSecondSolonoid = 2;
-         
+
         //PID VALUES
         //Primary
         // first set for ascending
@@ -266,15 +266,15 @@ public final class Constants {
     public static final class AutoConstants {
         // public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
         // public static final double kMaxAccelerationMetersPerSecondSquared = DriveConstants.kMaxSpeedMetersPerSecond;
-        public static final double kMaxSpeedMetersPerSecond = 1.0;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 1.0;
+        public static final double kMaxSpeedMetersPerSecond = 4.0;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 4.0;
      
-        public static final double kMaxAngularSpeedRadiansPerSecond = 2*Math.PI;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = 2*Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecond = 4*Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = 4*Math.PI;
     
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
+        public static final double kPXController = 2;
+        public static final double kPYController = 2;
+        public static final double kPThetaController = 2;
     
         // Constraint for the motion profilied robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =

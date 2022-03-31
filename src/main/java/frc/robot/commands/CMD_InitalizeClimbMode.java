@@ -37,12 +37,12 @@ public class CMD_InitalizeClimbMode extends ParallelCommandGroup {
       new CMD_ClimberSetClimb(m_climber, true),
       new CMD_TurretPrepareForClimb(m_turret),
       new SequentialCommandGroup(
-        new CMD_ClimberPrimarySetHome(m_climber, false),
-        new CMD_ClimbDeployPrimaryClimber(m_climber)
+        new CMD_ClimberPrimarySetHome(m_climber, false)
+        // new CMD_ClimbDeployPrimaryClimber(m_climber)
       ),
       new SequentialCommandGroup(
-        new CMD_ClimberSecondarySetHome(m_climber, false),
-        new CMD_ClimbDeploySecondaryClimber(m_climber)
+        new CMD_ClimberSecondarySetHome(m_climber, false)
+        // new CMD_ClimbDeploySecondaryClimber(m_climber)
       )
       
     );

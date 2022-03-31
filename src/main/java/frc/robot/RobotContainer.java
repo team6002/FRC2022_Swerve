@@ -60,9 +60,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, XboxController.Button.kY.value)
-      .whenPressed(new CMD_ResetNavx(m_drivetrain)
-    );
 
     new POVButton(m_operatorController, 90) //right d-pad
       .whenPressed(new CMD_SideTurret(m_turret));
@@ -98,6 +95,18 @@ public class RobotContainer {
       .whenPressed(new CMD_ClimberSecondarySetHome(m_climber, true)
     );
 
+    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+      .whenPressed(new CMD_ResetNavx(m_drivetrain)
+    );
+
+    new JoystickButton(m_driverController, XboxController.Button.kX.value)
+      .whenPressed(new CMD_ClimberSecondarySolonoidExtend(m_climber)
+    );
+
+    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+      .whenPressed(new CMD_ClimberRelease(m_climber)
+    );
+
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
       .whenPressed(new CMD_FrontIntakeToggle(m_intake, m_intakeStatus)
     );
@@ -119,7 +128,7 @@ public class RobotContainer {
     );
 
     new JoystickButton(m_driverController, XboxController.Button.kStart.value)
-      .whenPressed(new CMD_ClimbFull(m_climber)
+      .whenPressed(new CMD_SafeAndSlowClimbFull(m_climber)
     );
 
   }

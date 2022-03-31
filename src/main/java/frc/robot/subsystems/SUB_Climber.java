@@ -16,10 +16,12 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SUB_Climber extends SubsystemBase {
-  // private final Solenoid m_SecondSolenoid;
-  // private final Solenoid m_MainSolenoid;
+  private final Solenoid m_SecondSolenoid;
+  private final Solenoid m_MainSolenoid;
  
   private CANSparkMax m_SecondaryClimberMotor2;
   private CANSparkMax m_SecondaryClimberMotor1;
@@ -52,8 +54,8 @@ public class SUB_Climber extends SubsystemBase {
   /** Creates a new SUB_Climber. */
   public SUB_Climber() {
     
-    // m_SecondSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kSecondSolonoid);
-    // m_MainSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kMainSolonoid);
+    m_SecondSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kSecondSolonoid);
+    m_MainSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kMainSolonoid);
  
     m_SecondaryClimberMotor2 = new CANSparkMax(ClimberConstants.kSecondaryClimberMotor2,MotorType.kBrushless);
     m_SecondaryClimberMotor1 = new CANSparkMax(ClimberConstants.kSecondaryClimberMotor1,MotorType.kBrushless);
@@ -169,13 +171,13 @@ public class SUB_Climber extends SubsystemBase {
   }
 
   public void setSecondaryGearDisengage(){
-    // m_SecondSolenoid.set(false);
+    m_SecondSolenoid.set(false);
     SecondSolonoidState = false;
   }
 
   public void setSecondaryGearEngage(){
-    // m_SecondSolenoid.set(true);
-    SecondSolonoidState = true;
+    m_SecondSolenoid.set(true);
+    // SecondSolonoidState = true;
   }
 
   public void moveSecondaryClimber(double value){
