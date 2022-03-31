@@ -46,6 +46,8 @@ public class AUTO_2balls extends SequentialCommandGroup {
       m_trajectory.driveTrajectory(m_trajectory.firstTrajectory),
       new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter),
       new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter)
+      ,new CMD_SpinInPlace(m_drivetrain, 180)
+      ,new CMD_DrivetrainReset(m_drivetrain)
       )
 
     );

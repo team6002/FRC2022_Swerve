@@ -104,7 +104,7 @@ public class RobotContainer {
     );
 
     new JoystickButton(m_driverController, XboxController.Button.kB.value)
-      .whenPressed(new CMD_ClimberRelease(m_climber)
+      .whenPressed(new CMD_SpinInPlace(m_drivetrain, 90)
     );
 
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
