@@ -30,6 +30,7 @@ public class SUB_Shooter extends SubsystemBase{
     private linearInterpolator m_ShooterInterpolator;
     private boolean wantShooter = false;
     private double m_targetDistance;
+    private double m_shooterOffset;
     private boolean m_autoMode; // used in AUTO
     private double m_autoShooterSetpoint = 1000; // Used to set Setpoint in AUTO
     //Network Table
@@ -109,6 +110,9 @@ public class SUB_Shooter extends SubsystemBase{
     public double getShooterSetpoint(){
         return m_ShooterSetpoint;
     }
+    public void setShooterOffset(double value){
+        m_shooterOffset += value;
+    };
 
     @Override
     public void periodic() {
@@ -122,7 +126,7 @@ public class SUB_Shooter extends SubsystemBase{
             
             */
             // m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
-            m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance);
+            m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance) + m_shooterOffset;
             // if (m_autoMode){
                 // m_ShooterSetpoint = 1000;
             // }else{
@@ -134,6 +138,7 @@ public class SUB_Shooter extends SubsystemBase{
         }
         
         SmartDashboard.putNumber("targetDistance", m_targetDistance);
+        SmartDashboard.putNumber("ShooterOffset", m_shooterOffset);
         SmartDashboard.putBoolean("Shooting", wantShooter);
         SmartDashboard.putNumber("ShooterVelocity", getVelocity());
         SmartDashboard.putNumber("Interpolated value", m_ShooterSetpoint);

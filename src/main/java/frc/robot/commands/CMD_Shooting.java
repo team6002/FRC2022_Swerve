@@ -25,25 +25,26 @@ public class CMD_Shooting extends SequentialCommandGroup {
   SUB_Shooter m_shooter;
   public CMD_Shooting(SUB_Intake p_intake, FSM_IntakeStatus p_intakeStatus, 
                     SUB_Shooter p_shooter) {//SUB_Turret pTurret, 
-  
     m_intake = p_intake;
     m_intakeStatus = p_intakeStatus;
     m_shooter = p_shooter;
+    addRequirements(m_shooter);
+    
     // m_intakeStatus.setState(IntakeState.SHOOTING);
     addCommands(
       new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.SHOOTING),
-      new PrintCommand("changed state to shooter"),
+      // new PrintCommand("changed state to shooter"),
       new CMD_ShooterOn(m_shooter),
-      new PrintCommand("turned on shooter"),
+      // new PrintCommand("turned on shooter"),
       new CMD_IndexerForward(m_intake),
-      new PrintCommand("turned on indexer"),
+      // new PrintCommand("turned on indexer"),
       new CMD_HopperForward(m_intake),
-      new PrintCommand("turned on hopper"),
+      // new PrintCommand("turned on hopper"),
       // new WaitCommand(0.75),
       new CMD_HopperCheck(m_intake),
-      new PrintCommand("checked hopper"),
-      new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.INTAKE),
-      new PrintCommand("changed state to intake")
+      // new PrintCommand("checked hopper"),
+      new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.INTAKE)
+      // new PrintCommand("changed state to intake")
       );
   }
 }

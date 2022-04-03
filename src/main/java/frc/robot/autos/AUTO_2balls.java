@@ -18,6 +18,7 @@ import frc.robot.commands.CMD_FrontIntakeDeploy;
 import frc.robot.commands.CMD_FrontIntakeRetract;
 import frc.robot.commands.CMD_FrontIntakeToggle;
 import frc.robot.commands.CMD_Shooting;
+import frc.robot.commands.CMD_SpinInPlace;
 import frc.robot.commands.CMD_StopShooting;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -44,8 +45,8 @@ public class AUTO_2balls extends SequentialCommandGroup {
       new CMD_DrivetrainReset(m_drivetrain),
       new CMD_FrontIntakeDeploy(m_intake, m_IntakeStatus),
       m_trajectory.driveTrajectory(m_trajectory.firstTrajectory),
-      new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter),
-      new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter)
+      new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter).withTimeout(3),
+      new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter).withTimeout(3)
       ,new CMD_SpinInPlace(m_drivetrain, 180)
       ,new CMD_DrivetrainReset(m_drivetrain)
       )

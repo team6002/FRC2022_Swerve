@@ -90,8 +90,8 @@ public final class Constants {
         public static final int kShooterMaster = 8;
         public static final int kShooterSlave = 9;
     
-        public static final double kShooterFF = 0.00022;
-        public static final double kShooterP = 0.0002;
+        public static final double kShooterFF = 0.00024;
+        public static final double kShooterP = 0.0004;
         public static final double kShooterI = 0.0; 
         public static final double kShooterD = 0.0;
     
@@ -104,10 +104,15 @@ public final class Constants {
         public static final double kMaxOutput = 1;
     
         public static final double[][] kShooterArray = {
-			{-1, 3300}, // bumper against the safe zone
-	        {4, 2550}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
-            {8, 2430}, // front frame on the tarmac and about 9 feet from tarmac
-            {17, 2400}  // a tiny bit in the tarmac line
+			// {-1, 3300}, // bumper against the safe zone
+	        // {4, 2550}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
+            // {8, 2430}, // front frame on the tarmac and about 9 feet from tarmac
+            // {17, 2400}  // a tiny bit in the tarmac line
+            //lake view tournamet
+            {-2.5, 5300}, // bumper against the safe zone
+	        {2, 5200}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
+            {10, 4500}, // front frame on the tarmac and about 9 feet from center
+            {17, 4510}  // a tiny bit in the tarmac line
             
 		};
     }

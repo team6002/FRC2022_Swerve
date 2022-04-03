@@ -86,6 +86,17 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, XboxController.Button.kB.value)
       .whenPressed(new CMD_StopShooting(m_intake, m_intakeStatus, m_shooter)
     );
+<<<<<<< HEAD
+=======
+    
+    // new JoystickButton(m_operatorController, XboxController.Button.kX.value)
+    //   .whenPressed(new CMD_TurretOffsetLeft(m_turret)
+    // );
+
+    // new JoystickButton(m_operatorController, XboxController.Button.kY.value)
+    //   .whenPressed(new CMD_TurretOffRight(m_turret)
+    // );
+>>>>>>> 21b125e (lakeview Tournament end)
 
     new JoystickButton(m_operatorController, XboxController.Button.kBack.value)
       .whenPressed(new CMD_ClimberPrimarySetHome(m_climber, true)
@@ -103,9 +114,15 @@ public class RobotContainer {
       .whenPressed(new CMD_ClimberSecondarySolonoidExtend(m_climber)
     );
 
+<<<<<<< HEAD
     new JoystickButton(m_driverController, XboxController.Button.kB.value)
       .whenPressed(new CMD_SpinInPlace(m_drivetrain, 90)
     );
+=======
+    // new JoystickButton(m_driverController, XboxController.Button.kB.value)
+      // .whenPressed(new CMD_SpinInPlace(m_drivetrain, 90)
+    // );
+>>>>>>> 21b125e (lakeview Tournament end)
 
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
       .whenPressed(new CMD_FrontIntakeToggle(m_intake, m_intakeStatus)
@@ -116,11 +133,19 @@ public class RobotContainer {
     );
 
     new POVButton(m_driverController, 180)
+<<<<<<< HEAD
       .whenPressed(new CMD_InitalizeClimbMode(m_climber, m_turret, m_intake, m_intakeStatus).withTimeout(4)
     );
 
     new POVButton(m_driverController, 0)
       .whenPressed(new CMD_InitalizeClimbModeNoHome(m_climber, m_turret).withTimeout(4)
+=======
+      .whenPressed(new CMD_InitalizeClimbModeNoHome(m_climber, m_turret).withTimeout(4)
+    );
+
+    new POVButton(m_driverController, 0)
+      .whenPressed(new CMD_InitalizeClimbMode(m_climber, m_turret, m_intake, m_intakeStatus).withTimeout(4)
+>>>>>>> 21b125e (lakeview Tournament end)
     );
 
     new JoystickButton(m_driverController, XboxController.Button.kBack.value)

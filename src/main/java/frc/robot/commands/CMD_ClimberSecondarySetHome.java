@@ -27,7 +27,7 @@ public class CMD_ClimberSecondarySetHome extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climber.setSecondaryGearEngage();
+    // m_climber.setSecondaryGearEngage();
     m_climber.moveSecondaryClimber(-0.2);
   }
 
@@ -37,9 +37,9 @@ public class CMD_ClimberSecondarySetHome extends CommandBase {
     // System.out.println("FINISHED HOMING SECONDARY CLIMBER");
     m_climber.setSecondaryEncoder(0); //reset encoder
     m_climber.moveSecondaryClimber(0); //stop moving
-    if(m_disengageOnCompletion){
-      m_climber.setSecondaryGearDisengage(); //latch
-    }
+    // if(m_disengageOnCompletion){
+    //   m_climber.setSecondaryGearDisengage(); //latch
+    // }
   }
 
   // Returns true when the command should end.

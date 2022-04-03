@@ -143,6 +143,15 @@ public class SUB_Turret extends SubsystemBase{
         }
     }
 
+    public double OFFSET = 0;
+    public void turretOffsetRight() {
+        OFFSET -= 5;
+    }
+
+    public void turretOffsetLeft() {
+        OFFSET += 5;
+    }
+
     public double validateAngle(double p_angle) {
         if(Math.abs(p_angle) < Math.abs(RESET_TURRET)) {
             return p_angle;
@@ -189,7 +198,8 @@ public class SUB_Turret extends SubsystemBase{
                 get degree offset from limelight, add to current pos, check if position is valid
                 set smart controller to vaild pos 
                 */
-                double newAngle = Math.toRadians(readtX()) + m_Encoder.getPosition(); //gets wanted position
+                //gets wanted position
+                double newAngle = Math.toRadians(readtX()) + m_Encoder.getPosition(); //+ Math.toDegrees(OFFSET); // + Math.toRadians(1); //0.5 offset
 
                 validAngle = validateAngle(newAngle);
                 setReferenceAngle(validAngle);

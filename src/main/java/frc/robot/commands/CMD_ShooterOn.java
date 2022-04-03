@@ -8,12 +8,14 @@ import frc.robot.subsystems.SUB_Shooter;
 public class CMD_ShooterOn extends CommandBase {
     SUB_Shooter m_Shooter;
     private Timer m_runtime = new Timer();
-    private double m_maxRuntime = 3; // 3 second
+    private double m_maxRuntime = 1; // 1 second
     private double m_shooterConfirms = 0;
 
     public CMD_ShooterOn(SUB_Shooter p_Shooter)
     {
         m_Shooter = p_Shooter;
+        addRequirements(m_Shooter);
+    
     }
   
   

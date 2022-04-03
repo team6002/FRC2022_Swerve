@@ -32,19 +32,22 @@ public class CMD_InitalizeClimbMode extends ParallelCommandGroup {
     m_intake = p_intake;
     m_intakeStatus = p_intakeStatus;
     addCommands(
-      new CMD_HopperOff(m_intake),
-      new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.HOME),
-      new CMD_ClimberSetClimb(m_climber, true),
-      new CMD_TurretPrepareForClimb(m_turret),
-      new SequentialCommandGroup(
+      new CMD_HopperOff(m_intake)
+      ,new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.HOME)
+      ,new CMD_BackIntakeRetract(m_intake, m_intakeStatus)
+      ,new CMD_FrontIntakeRetract(m_intake, m_intakeStatus)
+      ,new CMD_ClimberSetClimb(m_climber, true),
+      new CMD_TurretPrepareForClimb(m_turret)
+      , new SequentialCommandGroup(
+      new ParallelCommandGroup(
         new CMD_ClimberPrimarySetHome(m_climber, false)
-        // new CMD_ClimbDeployPrimaryClimber(m_climber)
+        ,new CMD_ClimberSecondarySetHome(m_climber, false)
       ),
-      new SequentialCommandGroup(
-        new CMD_ClimberSecondarySetHome(m_climber, false)
-        // new CMD_ClimbDeploySecondaryClimber(m_climber)
+      new ParallelCommandGroup(
+      new CMD_ClimbDeployPrimaryClimber(m_climber)
+      ,new CMD_ClimbDeploySecondaryClimber(p_climber)
       )
-      
+      )
     );
   }
     

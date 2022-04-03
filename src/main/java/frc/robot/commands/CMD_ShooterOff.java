@@ -8,7 +8,9 @@ public class CMD_ShooterOff extends CommandBase {
 
     public CMD_ShooterOff(SUB_Shooter p_Shooter)
     {
-        m_Shooter = p_Shooter;
+      m_Shooter = p_Shooter;
+      addRequirements(m_Shooter);
+    
     }
 
     @Override
