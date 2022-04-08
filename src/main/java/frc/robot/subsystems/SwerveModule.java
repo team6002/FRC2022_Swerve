@@ -9,6 +9,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.DutyCycle;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 // import edu.wpi.first.wpilibj.motorcontrol.Spark;
 // import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +26,7 @@ import com.revrobotics.SparkMaxPIDController;
 import frc.robot.Constants.DriveConstants;
 
 public class SwerveModule {
+  
 
   private static final double kDriveP = 0.005;  //15.0;
   private static final double kDriveI = 0;//0;  //0.01;
@@ -47,9 +50,10 @@ public class SwerveModule {
   private final SparkMaxPIDController m_drivePIDController;
   private final SparkMaxPIDController m_turningPIDController;
  
-  private final SparkMaxAnalogSensor m_analogSensor;
-  private final int m_analogPortID;
-  private final AnalogPotentiometer m_analogRoborioPort;
+  // private final SparkMaxAnalogSensor m_analogSensor;
+  // private final int m_analogPortID;
+  // private final AnalogPotentiometer m_analogRoborioPort;
+  private final DutyCycleEncoder m_turningDutyCycleEncoder;
   
   private static final int ENCODER_RESET_ITERATIONS = 500;
   private static final double ENCODER_RESET_MAX_ANGULAR_VELOCITY = Math.toRadians(0.5);
@@ -61,7 +65,9 @@ public class SwerveModule {
     int driveMotorChannel,
     int turningMotorChannel,
     boolean driveDirection
-    , int p_analogPortID) {
+    ,int p_turningDutyCycleEncoder
+    // , int p_analogPortID,
+) {
 
     m_turningMotorChannel = turningMotorChannel;    
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
@@ -99,15 +105,22 @@ public class SwerveModule {
     m_turningEncoder.setVelocityConversionFactor(2 * Math.PI * ksteeringReduction / 60);
       
     // Lamprey encoder attached to the sparkmax
-    m_analogSensor = m_turningMotor.getAnalog(SparkMaxAnalogSensor.Mode.kAbsolute);
-    m_analogSensor.setInverted(true);
+    // m_analogSensor = m_turningMotor.getAnalog(SparkMaxAnalogSensor.Mode.kAbsolute);
+    // m_analogSensor.setInverted(true);
     double analogPositionConversionFactor = (2 * Math.PI / 3.3); // analog signal => 0 to 3.3
-    m_analogSensor.setPositionConversionFactor(analogPositionConversionFactor);
-
+    // m_analogSensor.setPositionConversionFactor(analogPositionConversionFactor);
 
     // Lamprey encoder attached to the roborio
-    m_analogPortID = p_analogPortID;
-    m_analogRoborioPort =  new AnalogPotentiometer(m_analogPortID, 2 * Math.PI * (5 / 3.3), 0);
+    m_turningDutyCycleEncoder = new DutyCycleEncoder(p_turningDutyCycleEncoder);
+    m_turningDutyCycleEncoder.reset();
+    m_turningDutyCycleEncoder.setDutyCycleRange(0.05,.1);
+    m_turningDutyCycleEncoder.setDistancePerRotation(2 *Math.PI);
+    // m_turningDutyCycleEncoder.setPositionOffset(0);
+    // m_turningDutyCycleEncoder.setConnectedFrequencyThreshold(1);;
+    // Lamprey encoder attached to the roborio
+    // m_analogPortID = p_analogPortID;
+
+    // m_analogRoborioPort =  new AnalogPotentiometer(m_analogPortID, 2 * Math.PI * (5 / 3.3), 0);
 
 
 
@@ -138,8 +151,9 @@ public double getAbsoluteAngle() {
   // double absoluteAngle = m_analogSensor.getPosition();
 
   // lamprey attached to roborio
-  double absoluteAngle = 2*Math.PI - m_analogRoborioPort.get();
-
+  // double absoluteAngle = 2*Math.PI - m_analogRoborioPort.get();
+  double absoluteAngle =  2*Math.PI - (2*Math.PI * m_turningDutyCycleEncoder.getAbsolutePosition());
+  
   return absoluteAngle;
 }
 
@@ -166,8 +180,10 @@ public double getAbsoluteAngle() {
 
         // // SmartDashboard.putNumber("turnRaw:"+m_turningMotorChannel, m_turningEncoder.getPosition());
         SmartDashboard.putNumber("TurnRelativeEncoder:"+m_turningMotorChannel, Math.toDegrees(m_turningEncoder.getPosition())  );
-        SmartDashboard.putNumber("TurnAbsoluteEncoder"+m_turningMotorChannel,Math.toDegrees(getAbsoluteAngle()) );
+        // SmartDashboard.putNumber("TurnAbsoluteEncoder"+m_turningMotorChannel,(m_turningDutyCycleEncoder.getAbsolutePosition()) );
+        SmartDashboard.putNumber("TurnAbsoluteEncoder"+m_turningMotorChannel,(Math.toDegrees(getAbsoluteAngle())));
         SmartDashboard.putNumber("Desired Rotation"+m_turningMotorChannel, resetIteration);
+        SmartDashboard.putNumber("getFrequency"+m_turningMotorChannel, m_turningDutyCycleEncoder.getFrequency());
         // SmartDashboard.putNumber("resetIteration"+m_turningMotorChannel, resetIteration);
         // SmartDashboard.putNumber("driveEnc:"+m_turningMotorChannel, m_driveEncoder.getPosition());
         // SmartDashboard.putNumber("rawAnalogEnc:"+m_turningMotorChannel, m_analogSensor.getPosition());

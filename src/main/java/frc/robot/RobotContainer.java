@@ -14,9 +14,16 @@ import frc.robot.commands.*;
 
 /* 
   To do
-  Make data logging that exports to a file.
-  Fix the auto not turning properly
-  make calibrating routine
+  Urgent
+  Make sendable chooser with display what it will pick
+  add solonoid for Shooter and engage and disengage
+  make short mode
+  Make shooting shoot 2 balls
+  change climber to skip high bar
+  Make a camera stream that switchs sides based on which intake is down
+  Low
+Make data logging that exports to a file.
+make calibrating routine
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -81,13 +88,11 @@ public class RobotContainer {
 
     // shooting
     new JoystickButton(m_operatorController, XboxController.Button.kA.value)
-      .whenPressed(new CMD_Shooting(m_intake, m_intakeStatus, m_shooter));
+      .whenPressed(new CMD_Shooting(m_intake, m_intakeStatus, m_shooter, m_turret));
 
     new JoystickButton(m_operatorController, XboxController.Button.kB.value)
       .whenPressed(new CMD_StopShooting(m_intake, m_intakeStatus, m_shooter)
     );
-<<<<<<< HEAD
-=======
     
     // new JoystickButton(m_operatorController, XboxController.Button.kX.value)
     //   .whenPressed(new CMD_TurretOffsetLeft(m_turret)
@@ -96,7 +101,6 @@ public class RobotContainer {
     // new JoystickButton(m_operatorController, XboxController.Button.kY.value)
     //   .whenPressed(new CMD_TurretOffRight(m_turret)
     // );
->>>>>>> 21b125e (lakeview Tournament end)
 
     new JoystickButton(m_operatorController, XboxController.Button.kBack.value)
       .whenPressed(new CMD_ClimberPrimarySetHome(m_climber, true)
@@ -110,6 +114,7 @@ public class RobotContainer {
       .whenPressed(new CMD_ResetNavx(m_drivetrain)
     );
 
+<<<<<<< HEAD
     new JoystickButton(m_driverController, XboxController.Button.kX.value)
       .whenPressed(new CMD_ClimberSecondarySolonoidExtend(m_climber)
     );
@@ -124,6 +129,8 @@ public class RobotContainer {
     // );
 >>>>>>> 21b125e (lakeview Tournament end)
 
+=======
+>>>>>>> c7ce70b (changed wheel encoders to duty cycles)
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
       .whenPressed(new CMD_FrontIntakeToggle(m_intake, m_intakeStatus)
     );
@@ -156,6 +163,17 @@ public class RobotContainer {
       .whenPressed(new CMD_SafeAndSlowClimbFull(m_climber)
     );
 
+    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+      .whenPressed(new CMD_ShortShooting(m_intake, m_intakeStatus, m_shooter, m_turret)
+    );
+
+    new JoystickButton(m_driverController, XboxController.Button.kX.value)
+      .whenPressed(new CMD_ShooterHoodExtend(m_shooter)
+    );
+
+    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+      .whenPressed(new CMD_ShooterHoodRetract(m_shooter)
+    );
   }
   
 

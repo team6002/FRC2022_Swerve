@@ -7,6 +7,8 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.lib.util.linearInterpolator;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
@@ -18,6 +20,8 @@ public class SUB_Shooter extends SubsystemBase{
     private CANSparkMax m_ShooterMaster = new CANSparkMax(ShooterConstants.kShooterMaster, MotorType.kBrushless);
     private CANSparkMax m_ShooterSlave = new CANSparkMax(ShooterConstants.kShooterSlave, MotorType.kBrushless);
 
+    // solenoids
+    private Solenoid m_HoodSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ShooterConstants.kShooterHoodSolonoid);
     //encoders
     private RelativeEncoder m_ShooterMasterEncoder = m_ShooterMaster.getEncoder();
     // private RelativeEncoder m_ShooterSlaveEncoder = m_ShooterSlave.getEncoder();
@@ -29,6 +33,7 @@ public class SUB_Shooter extends SubsystemBase{
     
     private linearInterpolator m_ShooterInterpolator;
     private boolean wantShooter = false;
+    private boolean m_manualShooting = true;
     private double m_targetDistance;
     private double m_shooterOffset;
     private boolean m_autoMode; // used in AUTO
@@ -83,6 +88,16 @@ public class SUB_Shooter extends SubsystemBase{
         // m_Controller.setReference(ShooterConstants.kShootingVelocity, CANSparkMax.ControlType.kVelocity);
     }
 
+    public void maunalShooting(){
+        m_manualShooting = true;
+    }
+    public void autoShooting(){
+        m_manualShooting = false;
+    }
+
+    public void setShooterSetpoint(double p_value){
+        m_ShooterSetpoint = p_value;
+    }
     public double getDistance() {
         // double y = 0.0;
         try {
@@ -114,25 +129,26 @@ public class SUB_Shooter extends SubsystemBase{
         m_shooterOffset += value;
     };
 
+    public void extendHood(){
+        m_HoodSolenoid.set(false);
+    }
+    public void retractHood(){
+        m_HoodSolenoid.set(true);
+    }
     @Override
     public void periodic() {
-        //must press tab to set in smartdashboard
-        // m_ShooterSetpoint = SmartDashboard.getNumber("Desired Shooter Setpoint", 
-        //                                                 ShooterConstants.kShootingVelocity);
         m_targetDistance = getDistance();                                                
         if(wantShooter){
             /* Twisted Devil's field 
             2.65 with front bumper on the tarmac.
-            
             */
-            // m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
-            m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance) + m_shooterOffset;
-            // if (m_autoMode){
-                // m_ShooterSetpoint = 1000;
-            // }else{
-            // m_ShooterSetpoint = (m_targetDistance*-30)+3000;
-            // }
-            m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
+            if (m_manualShooting){
+                m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
+            }else{
+                m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance) + m_shooterOffset;
+                m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
+            }
+
         }else{
             m_Controller.setReference(0, ControlType.kDutyCycle);
         }

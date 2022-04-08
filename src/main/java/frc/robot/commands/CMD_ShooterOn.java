@@ -29,7 +29,7 @@ public class CMD_ShooterOn extends CommandBase {
     @Override
     public void execute(){
       if (m_Shooter.getVelocity() >= m_Shooter.getShooterSetpoint() &&
-       m_Shooter.getVelocity() <= m_Shooter.getShooterSetpoint()+200){
+       m_Shooter.getVelocity() <= m_Shooter.getShooterSetpoint()+100){
         m_shooterConfirms += 1;
       }
     }
@@ -40,7 +40,7 @@ public class CMD_ShooterOn extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        boolean isFinish = (m_shooterConfirms == 3);
+        boolean isFinish = (m_shooterConfirms == 5);
         if (m_runtime.get() > m_maxRuntime) isFinish = true;
         
         return isFinish;

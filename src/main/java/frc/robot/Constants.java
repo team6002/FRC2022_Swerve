@@ -58,6 +58,11 @@ public final class Constants {
         public static final int kFrontRightDriveAnalogPort = 1;
         public static final int kRearLeftDriveAnalogPort = 2;
         public static final int kRearRightDriveAnalogPort = 3;
+
+        public static final int kFrontLeftTurningDutyCycleEncoder = 6;
+        public static final int kFrontRightTurningDutyCycleEncoder = 7;
+        public static final int kRearLeftTurningDutyCycleEncoder = 8;
+        public static final int kRearRightTurningDutyCycleEncoder = 9;
         
 
         public static final double kTrackWidth = Units.inchesToMeters(23.5);
@@ -89,17 +94,19 @@ public final class Constants {
         //shooter
         public static final int kShooterMaster = 8;
         public static final int kShooterSlave = 9;
+        public static final int kShooterHoodSolonoid = 3;
+       
     
-        public static final double kShooterFF = 0.00024;
-        public static final double kShooterP = 0.0004;
-        public static final double kShooterI = 0.0; 
-        public static final double kShooterD = 0.0;
+        public static final double kShooterFF = 0.000206;
+        public static final double kShooterP = 0.000;//8;//0.0004;
+        public static final double kShooterI = 0.00000001; 
+        public static final double kShooterD = 0.000;
     
         //Shooter is 1:1
-        public static final double kMaxShooterVelocity = 5500; //2750;//max working velocity 
-        public static final double kShootingVelocity = 4800;    
-        public static final double kShootingAccel = 2000;
-    
+        public static final double kMaxShooterVelocity = 7000; //2750;//max working velocity 
+        public static final double kShootingVelocity = 2000;    
+        public static final double kShootingAccel = 5000;
+        public static final double kCloseShootingVelocity = 2300;
         public static final double kMinOutput = -1;
         public static final double kMaxOutput = 1;
     
@@ -109,10 +116,10 @@ public final class Constants {
             // {8, 2430}, // front frame on the tarmac and about 9 feet from tarmac
             // {17, 2400}  // a tiny bit in the tarmac line
             //lake view tournamet
-            {-2.5, 5300}, // bumper against the safe zone
-	        {2, 5200}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
-            {10, 4500}, // front frame on the tarmac and about 9 feet from center
-            {17, 4510}  // a tiny bit in the tarmac line
+            {-2, 3150}, // bumper against the safe zone
+	        {2, 2700}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
+            {10, 2350}, // front frame on the tarmac and about 9 feet from center
+            {17, 2200}  // the front of the robot is 7FT and 10 inches away from center and back bumper on the tarmac
             
 		};
     }
@@ -199,8 +206,7 @@ public final class Constants {
         public static final int kSecondaryClimberMotor2 = 11;
         public static final int kPrimaryClimberMotor1 = 18;
         public static final int kPrimaryClimberMotor2 = 19;
-        public static final int kMainSolonoid = 3;
-        public static final int kSecondSolonoid = 2;
+        public static final int kSecondHookSolonoid = 2;
 
         //PID VALUES
         //Primary

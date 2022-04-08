@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   
 
   @Override
-  public void robotInit() {
+  public void robotInit() { 
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -48,18 +48,21 @@ public class Robot extends TimedRobot {
     m_robotContainer.m_drivetrain.resetDriveEncoder();
     m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
     LiveWindow.disableAllTelemetry();
-  //   auto.addOption("5 balls", 
-  //                   new AUTO_4balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake, 
-  //                   m_robotContainer.m_intakeStatus,  m_robotContainer.m_trajectory
-  //                 ,m_robotContainer.m_shooter
-  //  ));
-  //  auto.addOption("2 balls", 
-  //                   new AUTO_2balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake, 
-  //                   m_robotContainer.m_intakeStatus,  m_robotContainer.m_trajectory
-  //                 ,m_robotContainer.m_shooter
-  //  ));
-  //   SmartDashboard.putData("Auto Mode", auto);
-  //   SmartDashboard.putData(CommandScheduler.getInstance());
+    auto.setDefaultOption("5 balls", 
+                    new AUTO_4balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake, 
+                    m_robotContainer.m_intakeStatus,  m_robotContainer.m_trajectory
+                  ,m_robotContainer.m_shooter, m_robotContainer.m_turret
+   ));
+   auto.addOption("2 balls", 
+                    new AUTO_2balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake, 
+                    m_robotContainer.m_intakeStatus,  m_robotContainer.m_trajectory
+                  ,m_robotContainer.m_shooter, m_robotContainer.m_turret
+   ));
+   auto.addOption("nothing", new AUTO_Nothing());
+    SmartDashboard.putData("Auto Mode", auto);
+    // SmartDashboard.putData(CommandScheduler.getInstance());
+
+   
   }
 
   /**
@@ -79,7 +82,9 @@ public class Robot extends TimedRobot {
     
     // m_robotContainer.updateOdometry();
 
-    // double shooterSetpoint = 
+    SmartDashboard.putString("Selected Auto", auto.getSelected().getName());
+  
+    // double shooterSetpoint = /
       // SmartDashboard.getNumber("Desired Shooter Setpoint", Constants.ShooterConstants.kShootingVelocity);
     // m_robotContainer.m_shooter.setShooterSetpoint(shooterSetpoint);
   }
@@ -103,11 +108,10 @@ public class Robot extends TimedRobot {
     // new AUTO_TwoBall_Experimental(m_robotContainer.m_turret, m_robotContainer.m_intake, m_robotContainer.m_intakeStatus, 
     //                 m_robotContainer.m_shooter, m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory);
 
-    m_autonomousCommand = 
-    new AUTO_4balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake, 
-                                    m_robotContainer.m_intakeStatus,m_robotContainer.m_trajectory, m_robotContainer.m_shooter);
-    // auto.getSelected(); 
-
+    m_autonomousCommand = auto.getSelected(); 
+    // new AUTO_4balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake, 
+    //                                 m_robotContainer.m_intakeStatus,m_robotContainer.m_trajectory, m_robotContainer.m_shooter);
+    
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }

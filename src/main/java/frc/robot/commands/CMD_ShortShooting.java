@@ -17,14 +17,14 @@ import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class CMD_Shooting extends SequentialCommandGroup {
+public class CMD_ShortShooting extends SequentialCommandGroup {
   /** Shoots every ball that we are holding, emptying out the hopper in the process */
 
   SUB_Intake m_intake;
   FSM_IntakeStatus m_intakeStatus;
   SUB_Shooter m_shooter;
   SUB_Turret m_turret;
-  public CMD_Shooting(SUB_Intake p_intake, FSM_IntakeStatus p_intakeStatus, 
+  public CMD_ShortShooting(SUB_Intake p_intake, FSM_IntakeStatus p_intakeStatus, 
                     SUB_Shooter p_shooter, SUB_Turret p_turret) {//SUB_Turret pTurret, 
     m_intake = p_intake;
     m_intakeStatus = p_intakeStatus;
@@ -34,11 +34,13 @@ public class CMD_Shooting extends SequentialCommandGroup {
     
     // m_intakeStatus.setState(IntakeState.SHOOTING);
     addCommands(
-      new CMD_setTurretMode(0,m_turret)
-      ,new CMD_ShooterAutoMode(m_shooter)
-      ,new CMD_ShooterHoodExtend(m_shooter)
+      new CMD_setTurretMode(1,m_turret)
+      ,new CMD_ShooterManualMode(m_shooter)
+      ,new CMD_SideTurret(m_turret)
+      ,new CMD_ShooterHoodRetract(p_shooter)
       ,new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.SHOOTING),
       new PrintCommand("changed state to shooter")
+      ,new CMD_setShooterSetpoint(m_shooter, 2250)
       ,new CMD_ShooterOn(m_shooter),
       new PrintCommand("turned on shooter"),
       new CMD_IndexerForward(m_intake),
@@ -50,6 +52,8 @@ public class CMD_Shooting extends SequentialCommandGroup {
       new PrintCommand("checked hopper")
       ,new WaitCommand(0.35)
       ,new CMD_HopperOff(m_intake)
+      ,new WaitCommand(0.5)
+      ,new CMD_setShooterSetpoint(m_shooter, 2375)
       ,new CMD_HopperForward(m_intake)
       ,new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.INTAKE)
       ,new PrintCommand("changed state to intake")

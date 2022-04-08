@@ -29,7 +29,7 @@ public class SUB_Turret extends SubsystemBase{
     double validAngle = 0;
 
     //turretMode: auto = 0; mannual = 1; reset = -1; joystick = 2
-    private int turretMode = 0;
+    private int turretMode = 1;
     private final double RESET_TURRET = Math.toRadians(-140); //value of encoder when left (reverse) limit switch is triggered
 
     //Network Table

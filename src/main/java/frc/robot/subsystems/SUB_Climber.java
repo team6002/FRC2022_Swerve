@@ -20,8 +20,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SUB_Climber extends SubsystemBase {
-  private final Solenoid m_SecondSolenoid;
-  private final Solenoid m_MainSolenoid;
+  private final Solenoid m_SecondHookSolenoid;
  
   private CANSparkMax m_SecondaryClimberMotor2;
   private CANSparkMax m_SecondaryClimberMotor1;
@@ -30,7 +29,6 @@ public class SUB_Climber extends SubsystemBase {
  
   private SparkMaxLimitSwitch m_PrimaryHomeLimitSwitch;
   private SparkMaxLimitSwitch m_SecondaryHomeLimitSwitch;
-  public boolean MainSolonoidState = false;
   public boolean SecondSolonoidState = false;
   
   private RelativeEncoder m_PrimaryEncoder;
@@ -41,21 +39,15 @@ public class SUB_Climber extends SubsystemBase {
 
   private double PrimaryClimberSetpoint = 0;
   private double SecondaryClimberSetpoint = 0;
-  private double m_previousPrimaryClimberSetpoint = 0;
-  private double m_previousSecondaryClimberSetpoint = 0;
   private boolean climbing = false;
-  private int m_primaryClimberDirection = 0;
-  private int m_secondaryClimberDirection = 0;
-  private int m_previousPrimaryClimberDirection = 0;
-  private int m_previousSecondaryClimberDirection = 0;
   
   private int m_primaryClimberSmartMotionSlotID = 0;
   private int m_secondaryClimberSmartMotionSlotID = 0;
   /** Creates a new SUB_Climber. */
   public SUB_Climber() {
     
-    m_SecondSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kSecondSolonoid);
-    m_MainSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kMainSolonoid);
+    m_SecondHookSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.kSecondHookSolonoid);
+ 
  
     m_SecondaryClimberMotor2 = new CANSparkMax(ClimberConstants.kSecondaryClimberMotor2,MotorType.kBrushless);
     m_SecondaryClimberMotor1 = new CANSparkMax(ClimberConstants.kSecondaryClimberMotor1,MotorType.kBrushless);
@@ -160,23 +152,13 @@ public class SUB_Climber extends SubsystemBase {
     m_SecondaryEncoder.setPosition(pos);
   }
 
-  public void setPrimaryGearDisengage(){
-    // m_MainSolenoid.set(false);
-    MainSolonoidState = false;
-  }
-
-  public void setPrimaryGearEngage(){
-    // m_MainSolenoid.set(true);
-    MainSolonoidState = true;
-  }
-
   public void setSecondaryGearDisengage(){
-    m_SecondSolenoid.set(false);
+    m_SecondHookSolenoid.set(false);
     SecondSolonoidState = false;
   }
 
   public void setSecondaryGearEngage(){
-    m_SecondSolenoid.set(true);
+    m_SecondHookSolenoid.set(true);
     // SecondSolonoidState = true;
   }
 
@@ -291,6 +273,5 @@ public class SUB_Climber extends SubsystemBase {
     // SmartDashboard.putNumber("ThroughBore", Ticks);
     // moveClimber(0.1);
     // // This method will be called once per schedule;r run
-    m_previousPrimaryClimberSetpoint = PrimaryClimberSetpoint;
   }
 }

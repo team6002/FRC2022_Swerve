@@ -5,26 +5,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SUB_Climber;
-public class CMD_ClimberPrimaryToggle extends CommandBase {
-  /** Creates a new CMD_ClimberExtend. */
-  SUB_Climber m_climber;
-  public CMD_ClimberPrimaryToggle(SUB_Climber p_climber) {
-    m_climber = p_climber;
+import frc.robot.subsystems.SUB_Shooter;
+
+public class CMD_setShooterSetpoint extends CommandBase {
+  /** Creates a new CMD_setShooterSetpoint. */
+  SUB_Shooter m_shooter;
+  double m_wantedShooterValue;
+  public CMD_setShooterSetpoint(SUB_Shooter p_shooter, double p_wantedShooterValue) {
+    m_shooter = p_shooter;
+    m_wantedShooterValue = p_wantedShooterValue;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (!m_climber.MainSolonoidState){
-      m_climber.setPrimaryGearEngage();
-    }else{ 
-      m_climber.setPrimaryGearDisengage();
-    }
-    System.out.println("TOOGLE");
+    m_shooter.setShooterSetpoint(m_wantedShooterValue);
   }
-  
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
