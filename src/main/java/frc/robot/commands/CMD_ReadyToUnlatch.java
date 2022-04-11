@@ -5,20 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SUB_Shooter;
+import frc.robot.subsystems.SUB_Climber;
 
-public class CMD_ShooterAutoMode extends CommandBase {
-  /** Creates a new CMD_ShooterAutoMode. */
-  SUB_Shooter m_shooter;
-  public CMD_ShooterAutoMode(SUB_Shooter p_shooter) {
-    m_shooter = p_shooter;
+public class CMD_ReadyToUnlatch extends CommandBase {
+  /** Creates a new CMD_SetLatchState. */
+  SUB_Climber m_climber;
+  public CMD_ReadyToUnlatch(SUB_Climber p_climber) {
+    m_climber = p_climber;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.autoShooting();
+    m_climber.readyToUnlatch();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

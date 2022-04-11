@@ -33,11 +33,12 @@ public class SUB_Shooter extends SubsystemBase{
     
     private linearInterpolator m_ShooterInterpolator;
     private boolean wantShooter = false;
-    private boolean m_manualShooting = true;
+    private int m_shooterMode = 0;
+    private int m_previousShooterMode = 0;
     private double m_targetDistance;
     private double m_shooterOffset;
-    private boolean m_autoMode; // used in AUTO
-    private double m_autoShooterSetpoint = 1000; // Used to set Setpoint in AUTO
+    private boolean m_firstBall = false;
+    private double m_waitTime = 0;
     //Network Table
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -65,15 +66,19 @@ public class SUB_Shooter extends SubsystemBase{
         m_ShooterInterpolator = new linearInterpolator(ShooterConstants.kShooterArray);
     }
 
-    public void setAutoShooterSetpoint(double p_wantedSetpoint)
-    {
-    m_autoShooterSetpoint = p_wantedSetpoint;
+    public void setFirstBall(boolean p_wantedAmount){
+        m_firstBall = p_wantedAmount;
     }
-
-    public void setAutoMode(boolean mode){
-        m_autoMode = mode;
+    // set the mode to different ones 0 is auto, 1 is short, 2 is low mode, 4 is Reverse.
+    public void setShooterMode(int p_wantedMode){
+        m_shooterMode = p_wantedMode;
     }
-
+    public int getShooterMode(){
+        return m_shooterMode;
+    }
+    public int getPreviousShooterMode(){
+        return m_previousShooterMode;
+    }
     //turns off shooter
     public void shooterOff()
     {
@@ -86,13 +91,6 @@ public class SUB_Shooter extends SubsystemBase{
     {
         wantShooter = true;
         // m_Controller.setReference(ShooterConstants.kShootingVelocity, CANSparkMax.ControlType.kVelocity);
-    }
-
-    public void maunalShooting(){
-        m_manualShooting = true;
-    }
-    public void autoShooting(){
-        m_manualShooting = false;
     }
 
     public void setShooterSetpoint(double p_value){
@@ -127,13 +125,19 @@ public class SUB_Shooter extends SubsystemBase{
     }
     public void setShooterOffset(double value){
         m_shooterOffset += value;
-    };
-
+    }
+    
+    public double getWaitTime(){
+        return m_waitTime;
+    }
     public void extendHood(){
         m_HoodSolenoid.set(false);
     }
     public void retractHood(){
         m_HoodSolenoid.set(true);
+    }
+    public void reverseShooter(){
+        setShooterMode(4);
     }
     @Override
     public void periodic() {
@@ -142,21 +146,40 @@ public class SUB_Shooter extends SubsystemBase{
             /* Twisted Devil's field 
             2.65 with front bumper on the tarmac.
             */
-            if (m_manualShooting){
+            if (m_shooterMode == 0){
+            m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance) + m_shooterOffset;
+            m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
+            m_waitTime = 0;
+            extendHood();
+            }else if (m_shooterMode == 1){
+                m_waitTime = 0.5;
+                retractHood();
+                if (m_firstBall){
+                    m_ShooterSetpoint = ShooterConstants.kCloseShootingVelocityFirstShot;
+                    m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
+                }else{
+                    m_ShooterSetpoint = ShooterConstants.kCloseShootingVelocitySecondShot;
+                    m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
+                }
+            }else if (m_shooterMode == 2){
+                extendHood();
+                m_ShooterSetpoint = ShooterConstants.kLowShootingVelocity;
                 m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
-            }else{
-                m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance) + m_shooterOffset;
-                m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
+                m_waitTime = 0;
+            }
+            else if (m_shooterMode == 4){
+                m_Controller.setReference(ShooterConstants.kReverseShooterVelocity, ControlType.kVelocity);
             }
 
         }else{
             m_Controller.setReference(0, ControlType.kDutyCycle);
         }
-        
         SmartDashboard.putNumber("targetDistance", m_targetDistance);
         SmartDashboard.putNumber("ShooterOffset", m_shooterOffset);
         SmartDashboard.putBoolean("Shooting", wantShooter);
         SmartDashboard.putNumber("ShooterVelocity", getVelocity());
         SmartDashboard.putNumber("Interpolated value", m_ShooterSetpoint);
+        SmartDashboard.putNumber("Shooter Mode", m_shooterMode);
+        m_previousShooterMode = m_shooterMode;
     }
 }

@@ -30,7 +30,7 @@ public class SUB_Climber extends SubsystemBase {
   private SparkMaxLimitSwitch m_PrimaryHomeLimitSwitch;
   private SparkMaxLimitSwitch m_SecondaryHomeLimitSwitch;
   public boolean SecondSolonoidState = false;
-  
+  public boolean m_readyToUnlatch = false;
   private RelativeEncoder m_PrimaryEncoder;
   private RelativeEncoder m_SecondaryEncoder;
 
@@ -144,6 +144,17 @@ public class SUB_Climber extends SubsystemBase {
     return climbing;
   }
 
+  public void readyToUnlatch(){
+    m_readyToUnlatch = true;
+  }
+  
+  public void notReadyToUnlatch(){
+    m_readyToUnlatch = false;
+  }
+  
+  public boolean getUnlatchState(){
+    return m_readyToUnlatch;
+  }
   public void setPrimaryEncoder(int pos){
     m_PrimaryEncoder.setPosition(pos);
   }
@@ -152,14 +163,14 @@ public class SUB_Climber extends SubsystemBase {
     m_SecondaryEncoder.setPosition(pos);
   }
 
-  public void setSecondaryGearDisengage(){
+  public void setSecondaryHookDisengage(){
     m_SecondHookSolenoid.set(false);
     SecondSolonoidState = false;
   }
 
-  public void setSecondaryGearEngage(){
+  public void setSecondaryHookEngage(){
     m_SecondHookSolenoid.set(true);
-    // SecondSolonoidState = true;
+    SecondSolonoidState = true;
   }
 
   public void moveSecondaryClimber(double value){
@@ -267,6 +278,8 @@ public class SUB_Climber extends SubsystemBase {
     // SmartDashboard.putBoolean("Secondaryhomelimitswitch", getSecondaryHomeLimitSwitch());
     SmartDashboard.putNumber("SecondaryEncoder", getSecondaryPosition());
     SmartDashboard.putNumber("SecnodaryVelocity", m_SecondaryEncoder.getVelocity());
+
+    SmartDashboard.putBoolean("Ready To Unlatch", getUnlatchState());
     // SmartDashboard.putNumber("SecondaryAppliedOutput", m_SecondaryClimberMotor1.getAppliedOutput());
 
     // int Ticks = ThroughBore.get(); // 2000 ticks are about a rotation.

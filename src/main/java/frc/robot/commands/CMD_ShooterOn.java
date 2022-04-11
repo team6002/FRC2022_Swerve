@@ -28,7 +28,7 @@ public class CMD_ShooterOn extends CommandBase {
 
     @Override
     public void execute(){
-      if (m_Shooter.getVelocity() >= m_Shooter.getShooterSetpoint() &&
+      if (m_Shooter.getVelocity() >= m_Shooter.getShooterSetpoint()-100 &&
        m_Shooter.getVelocity() <= m_Shooter.getShooterSetpoint()+100){
         m_shooterConfirms += 1;
       }

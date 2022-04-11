@@ -7,10 +7,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Shooter;
 
-public class CMD_ShooterManualMode extends CommandBase {
-  /** Creates a new CMD_ShooterManualMode. */
+public class CMD_ReverseShooter extends CommandBase {
+  /** Creates a new CMD_ReverseShooter. */
   SUB_Shooter m_shooter;
-  public CMD_ShooterManualMode(SUB_Shooter p_shooter) {
+  public CMD_ReverseShooter(SUB_Shooter p_shooter) {
     m_shooter = p_shooter;
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -18,7 +18,7 @@ public class CMD_ShooterManualMode extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.maunalShooting();
+    m_shooter.reverseShooter();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

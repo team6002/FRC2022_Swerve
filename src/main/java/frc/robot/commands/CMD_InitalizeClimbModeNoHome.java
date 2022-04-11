@@ -22,8 +22,9 @@ public class CMD_InitalizeClimbModeNoHome extends ParallelCommandGroup {
     m_turret = p_turret;
     addCommands(
       new CMD_ClimberSetClimb(m_climber, true),
-      new CMD_TurretPrepareForClimb(m_turret),
-      new CMD_ClimbDeployPrimaryClimber(m_climber),
+      new CMD_TurretPrepareForClimb(m_turret)
+      ,new CMD_ClimberSecondarySolonoidRetract(m_climber)
+      ,new CMD_ClimbDeployPrimaryClimber(m_climber),
       new CMD_ClimbDeploySecondaryClimber(p_climber)
     );
   }

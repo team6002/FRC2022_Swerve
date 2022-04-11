@@ -29,7 +29,7 @@ public class SUB_Turret extends SubsystemBase{
     double validAngle = 0;
 
     //turretMode: auto = 0; mannual = 1; reset = -1; joystick = 2
-    private int turretMode = 1;
+    private int turretMode = 0;
     private final double RESET_TURRET = Math.toRadians(-140); //value of encoder when left (reverse) limit switch is triggered
 
     //Network Table
@@ -210,14 +210,14 @@ public class SUB_Turret extends SubsystemBase{
             setReferenceAngle(validAngle);
         }
         else if(turretMode == -1) { //reset turret encoder and moves turret to back
-            if(m_ReverseLimitSwitch.isPressed() == true) {
+            if(m_ForwardLimitSwitch.isPressed() == true) {
                 m_Turret.setVoltage(0);
-                m_Encoder.setPosition(RESET_TURRET); //resets encoder
-                validAngle = validateAngle(-Math.PI/2); //goes to front position
+                m_Encoder.setPosition(-RESET_TURRET); //resets encoder
+                validAngle = validateAngle(Math.PI/2); //goes to front position
                 setReferenceAngle(validAngle);
                 turretMode = 0;
             } else {
-                m_Turret.setVoltage(-1); //goes towards forward limit switch
+                m_Turret.setVoltage(1); //goes towards forward limit switch
             }
         } 
         else if(turretMode == 2) { //joystick mode

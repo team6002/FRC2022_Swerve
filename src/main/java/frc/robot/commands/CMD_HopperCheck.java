@@ -6,11 +6,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SUB_Intake;
+import frc.robot.subsystems.SUB_Shooter;
 public class CMD_HopperCheck extends CommandBase {
   /** After Shooting */
   SUB_Intake m_intake;
-  public CMD_HopperCheck(SUB_Intake p_intake) {
+  SUB_Shooter m_shooter;
+  public CMD_HopperCheck(SUB_Intake p_intake, SUB_Shooter p_shooter) {
     m_intake = p_intake;
+    m_shooter = p_shooter;
     // Use addRequirements() here to declare subsystem dependencies.      
   }
 

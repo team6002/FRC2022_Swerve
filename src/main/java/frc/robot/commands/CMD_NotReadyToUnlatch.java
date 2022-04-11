@@ -5,20 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SUB_Turret;
+import frc.robot.subsystems.SUB_Climber;
 
-public class CMD_TurretPrepareForClimb extends CommandBase {
-  /** Homes and reset the turret then puts it in the position for climb */
-  SUB_Turret m_turret;
-  public CMD_TurretPrepareForClimb(SUB_Turret p_turret) {
+public class CMD_NotReadyToUnlatch extends CommandBase {
+  /** Creates a new CMD_SetLatchState. */
+  SUB_Climber m_climber;
+  public CMD_NotReadyToUnlatch(SUB_Climber p_climber) {
+    m_climber = p_climber;
     // Use addRequirements() here to declare subsystem dependencies.
-    m_turret = p_turret;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // m_turret.turretReset();
+    m_climber.notReadyToUnlatch();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -27,13 +27,11 @@ public class CMD_TurretPrepareForClimb extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    // m_turret.setBackPosition();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (m_turret.getTurretMode() == 1);
+    return true;
   }
 }

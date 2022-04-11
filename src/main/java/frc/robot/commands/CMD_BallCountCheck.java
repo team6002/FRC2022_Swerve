@@ -5,20 +5,26 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SUB_Turret;
-
-public class CMD_TurretPrepareForClimb extends CommandBase {
-  /** Homes and reset the turret then puts it in the position for climb */
-  SUB_Turret m_turret;
-  public CMD_TurretPrepareForClimb(SUB_Turret p_turret) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_turret = p_turret;
+import frc.robot.subsystems.SUB_Intake;
+import frc.robot.subsystems.SUB_Shooter;
+public class CMD_BallCountCheck extends CommandBase {
+  /** After Shooting */
+  SUB_Intake m_intake;
+  SUB_Shooter m_shooter;
+  public CMD_BallCountCheck(SUB_Intake p_intake, SUB_Shooter p_shooter) {
+    m_intake = p_intake;
+    m_shooter = p_shooter;
+    // Use addRequirements() here to declare subsystem dependencies.      
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // m_turret.turretReset();
+    if (m_intake.getHopperStatus() && m_intake.getFrontStatus() || m_intake.getBackStatus()){
+      m_shooter.setFirstBall(true);
+    }else{
+      m_shooter.setFirstBall(false);
+    } 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -27,13 +33,12 @@ public class CMD_TurretPrepareForClimb extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    // m_turret.setBackPosition();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (m_turret.getTurretMode() == 1);
+   
+    return true;
   }
 }

@@ -15,10 +15,6 @@ import frc.robot.commands.*;
 /* 
   To do
   Urgent
-  Make sendable chooser with display what it will pick
-  add solonoid for Shooter and engage and disengage
-  make short mode
-  Make shooting shoot 2 balls
   change climber to skip high bar
   Make a camera stream that switchs sides based on which intake is down
   Low
@@ -94,9 +90,9 @@ public class RobotContainer {
       .whenPressed(new CMD_StopShooting(m_intake, m_intakeStatus, m_shooter)
     );
     
-    // new JoystickButton(m_operatorController, XboxController.Button.kX.value)
-    //   .whenPressed(new CMD_TurretOffsetLeft(m_turret)
-    // );
+    new JoystickButton(m_operatorController, XboxController.Button.kX.value)
+      .whenPressed(new CMD_ChangeShooterMode(m_shooter,m_turret)
+    );
 
     // new JoystickButton(m_operatorController, XboxController.Button.kY.value)
     //   .whenPressed(new CMD_TurretOffRight(m_turret)
@@ -114,23 +110,10 @@ public class RobotContainer {
       .whenPressed(new CMD_ResetNavx(m_drivetrain)
     );
 
-<<<<<<< HEAD
-    new JoystickButton(m_driverController, XboxController.Button.kX.value)
-      .whenPressed(new CMD_ClimberSecondarySolonoidExtend(m_climber)
-    );
-
-<<<<<<< HEAD
-    new JoystickButton(m_driverController, XboxController.Button.kB.value)
-      .whenPressed(new CMD_SpinInPlace(m_drivetrain, 90)
-    );
-=======
     // new JoystickButton(m_driverController, XboxController.Button.kB.value)
       // .whenPressed(new CMD_SpinInPlace(m_drivetrain, 90)
     // );
->>>>>>> 21b125e (lakeview Tournament end)
 
-=======
->>>>>>> c7ce70b (changed wheel encoders to duty cycles)
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
       .whenPressed(new CMD_FrontIntakeToggle(m_intake, m_intakeStatus)
     );
@@ -140,19 +123,11 @@ public class RobotContainer {
     );
 
     new POVButton(m_driverController, 180)
-<<<<<<< HEAD
-      .whenPressed(new CMD_InitalizeClimbMode(m_climber, m_turret, m_intake, m_intakeStatus).withTimeout(4)
-    );
-
-    new POVButton(m_driverController, 0)
-      .whenPressed(new CMD_InitalizeClimbModeNoHome(m_climber, m_turret).withTimeout(4)
-=======
       .whenPressed(new CMD_InitalizeClimbModeNoHome(m_climber, m_turret).withTimeout(4)
     );
 
     new POVButton(m_driverController, 0)
-      .whenPressed(new CMD_InitalizeClimbMode(m_climber, m_turret, m_intake, m_intakeStatus).withTimeout(4)
->>>>>>> 21b125e (lakeview Tournament end)
+      .whenPressed(new CMD_InitalizeClimbMode(m_climber, m_turret, m_intake, m_intakeStatus,m_shooter).withTimeout(4)
     );
 
     new JoystickButton(m_driverController, XboxController.Button.kBack.value)
@@ -160,20 +135,22 @@ public class RobotContainer {
     );
 
     new JoystickButton(m_driverController, XboxController.Button.kStart.value)
-      .whenPressed(new CMD_SafeAndSlowClimbFull(m_climber)
+      .whenPressed(new CMD_ClimbFull(m_climber)
     );
-
+    
     new JoystickButton(m_driverController, XboxController.Button.kA.value)
-      .whenPressed(new CMD_ShortShooting(m_intake, m_intakeStatus, m_shooter, m_turret)
+      .whenPressed(new CMD_FlushShooter(m_intake,m_intakeStatus,m_shooter)
+      // .whenPressed(new CMD_ClimberSecondarySolonoidRetract(m_climber)
     );
-
+    
     new JoystickButton(m_driverController, XboxController.Button.kX.value)
-      .whenPressed(new CMD_ShooterHoodExtend(m_shooter)
+      .whenPressed(new CMD_ClimberSecondarySolonoidRetract(m_climber)
     );
 
     new JoystickButton(m_driverController, XboxController.Button.kB.value)
-      .whenPressed(new CMD_ShooterHoodRetract(m_shooter)
+      .whenPressed(new CMD_ClimberHookRelease(m_climber)
     );
+
   }
   
 

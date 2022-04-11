@@ -34,25 +34,25 @@ public class CMD_Shooting extends SequentialCommandGroup {
     
     // m_intakeStatus.setState(IntakeState.SHOOTING);
     addCommands(
-      new CMD_setTurretMode(0,m_turret)
-      ,new CMD_ShooterAutoMode(m_shooter)
-      ,new CMD_ShooterHoodExtend(m_shooter)
-      ,new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.SHOOTING),
-      new PrintCommand("changed state to shooter")
+      new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.SHOOTING)
+      ,new CMD_BallCountCheck(m_intake,m_shooter)
+      // new PrintCommand("changed state to shooter")
       ,new CMD_ShooterOn(m_shooter),
-      new PrintCommand("turned on shooter"),
+      // new PrintCommand("turned on shooter"),
       new CMD_IndexerForward(m_intake),
-      new PrintCommand("turned on indexer"),
-      new CMD_HopperForward(m_intake),
-      new PrintCommand("turned on hopper"),
+      // new PrintCommand("turned on indexer"),
+      new CMD_HopperForward(m_intake)
+      // new PrintCommand("turned on hopper"),
       // new WaitCommand(0.75),
-      new CMD_HopperCheck(m_intake),
-      new PrintCommand("checked hopper")
+      ,new CMD_HopperCheck(m_intake,m_shooter)
+      ,new CMD_BallCountCheck(m_intake,m_shooter)
+      // new PrintCommand("checked hopper")
       ,new WaitCommand(0.35)
       ,new CMD_HopperOff(m_intake)
+      ,new WaitCommand(m_shooter.getWaitTime())
       ,new CMD_HopperForward(m_intake)
       ,new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.INTAKE)
-      ,new PrintCommand("changed state to intake")
+      // ,new PrintCommand("changed state to intake")
       );
   }
 }

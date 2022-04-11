@@ -97,8 +97,8 @@ public final class Constants {
         public static final int kShooterHoodSolonoid = 3;
        
     
-        public static final double kShooterFF = 0.000206;
-        public static final double kShooterP = 0.000;//8;//0.0004;
+        public static final double kShooterFF = 0.00021;
+        public static final double kShooterP = 0.0000;//8;//0.0004;
         public static final double kShooterI = 0.00000001; 
         public static final double kShooterD = 0.000;
     
@@ -106,20 +106,19 @@ public final class Constants {
         public static final double kMaxShooterVelocity = 7000; //2750;//max working velocity 
         public static final double kShootingVelocity = 2000;    
         public static final double kShootingAccel = 5000;
-        public static final double kCloseShootingVelocity = 2300;
+        public static final double kCloseShootingVelocityFirstShot = 2150;
+        public static final double kCloseShootingVelocitySecondShot = 2275;
+        public static final double kReverseShooterVelocity = -1000;
+        public static final double kLowShootingVelocity = 1750;
         public static final double kMinOutput = -1;
         public static final double kMaxOutput = 1;
     
         public static final double[][] kShooterArray = {
-			// {-1, 3300}, // bumper against the safe zone
-	        // {4, 2550}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
-            // {8, 2430}, // front frame on the tarmac and about 9 feet from tarmac
-            // {17, 2400}  // a tiny bit in the tarmac line
             //lake view tournamet
-            {-2, 3150}, // bumper against the safe zone
-	        {2, 2700}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
-            {10, 2350}, // front frame on the tarmac and about 9 feet from center
-            {17, 2200}  // the front of the robot is 7FT and 10 inches away from center and back bumper on the tarmac
+            {-2, 3000}, // bumper against the safe zone
+	        {2, 2600}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
+            {11, 2250}, // front frame on the tarmac and about 9 feet from center
+            {17, 2100}  // the front of the robot is 7ft and 10 inches away from center and back bumper on the tarmac
             
 		};
     }
