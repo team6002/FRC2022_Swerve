@@ -72,15 +72,17 @@ public class AUTO_Trajectory {
         TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
         List.of(),
-        new Pose2d(Units.inchesToMeters(40), 0, new Rotation2d(0)),
+        new Pose2d(Units.inchesToMeters(30), 0, new Rotation2d(0)),
         config);
 
         secondTrajectory =
         TrajectoryGenerator.generateTrajectory(
-        new Pose2d(Units.inchesToMeters(40),0, new Rotation2d(0)),
-        List.of(new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(-0))),
-        new Pose2d(Units.inchesToMeters(5),Units.inchesToMeters(-87), new Rotation2d(Math.toRadians(90))), 
-        config);
+        new Pose2d(Units.inchesToMeters(30),0, new Rotation2d(0)),
+        List.of(new Translation2d(Units.inchesToMeters(16), Units.inchesToMeters(0)), 
+        new Translation2d(Units.inchesToMeters(-12),Units.inchesToMeters(-45)),
+         new Translation2d(Units.inchesToMeters(-8),Units.inchesToMeters(-70))),
+        new Pose2d(Units.inchesToMeters(-7),Units.inchesToMeters(-112), new Rotation2d(Math.toRadians(90))), 
+        config);//-9 is close 
         
         // secondTrajectory2 =
         // TrajectoryGenerator.generateTrajectory(
@@ -91,17 +93,19 @@ public class AUTO_Trajectory {
 
         thirdTrajectory = 
         TrajectoryGenerator.generateTrajectory(
-        new Pose2d(Units.inchesToMeters(-2),Units.inchesToMeters(-87), new Rotation2d(Math.toRadians(45))),    
-        List.of(new Translation2d(Units.inchesToMeters(16),Units.inchesToMeters(-150))),
-        new Pose2d(Units.inchesToMeters(24),Units.inchesToMeters(-250), new Rotation2d(Math.toRadians(90))), 
+        new Pose2d(Units.inchesToMeters(-7),Units.inchesToMeters(-112), new Rotation2d(Math.toRadians(90))),    
+        List.of(new Translation2d(Units.inchesToMeters(12),Units.inchesToMeters(-150)),
+        new Translation2d(Units.inchesToMeters(16), Units.inchesToMeters(-200)),
+        new Translation2d(Units.inchesToMeters(12), Units.inchesToMeters(-230))),
+        new Pose2d(Units.inchesToMeters(15),Units.inchesToMeters(-250), new Rotation2d(Math.toRadians(90))), 
         config);
 
         fourthTrajectory = 
         TrajectoryGenerator.generateTrajectory(
-        new Pose2d(Units.inchesToMeters(24),Units.inchesToMeters(-250), new Rotation2d(Math.toRadians(90))),
+        new Pose2d(Units.inchesToMeters(15),Units.inchesToMeters(-250), new Rotation2d(Math.toRadians(90))),
         List.of(),
         new Pose2d(Units.inchesToMeters(12),Units.inchesToMeters(-121), new Rotation2d(Math.toRadians(90))),
-        config);
+        config);// 16 was the best
         
         // fifthTrajectory = 
         // TrajectoryGenerator.generateTrajectory(

@@ -8,6 +8,9 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
@@ -178,7 +181,7 @@ public class SUB_Turret extends SubsystemBase{
     
         // targetPosition = referenceAngleRadians;
         
-        SmartDashboard.putNumber("Desired Turret Position", Math.toDegrees(referenceAngleRadians));
+        // SmartDashboard.putNumber("Desired Turret Position", Math.toDegrees(referenceAngleRadians));
             
         m_Controller.setReference(referenceAngleRadians, ControlType.kSmartMotion);
     }
@@ -213,9 +216,10 @@ public class SUB_Turret extends SubsystemBase{
             if(m_ForwardLimitSwitch.isPressed() == true) {
                 m_Turret.setVoltage(0);
                 m_Encoder.setPosition(-RESET_TURRET); //resets encoder
-                validAngle = validateAngle(Math.PI/2); //goes to front position
+                setBackPosition();
+                validAngle = validateAngle(targetPosition); //goes to back position
                 setReferenceAngle(validAngle);
-                turretMode = 0;
+                turretMode = 1;
             } else {
                 m_Turret.setVoltage(1); //goes towards forward limit switch
             }
@@ -240,16 +244,13 @@ public class SUB_Turret extends SubsystemBase{
         SmartDashboard.putBoolean("Forward Limit Switch", m_ForwardLimitSwitch.isPressed());
         SmartDashboard.putBoolean("Reverse Limit Switch", m_ReverseLimitSwitch.isPressed());
         SmartDashboard.putNumber("Turret Encoder", m_Encoder.getPosition());
-        SmartDashboard.putNumber("Valid Position", validAngle);
-        SmartDashboard.putNumber("Target Encoder", targetPosition);
+        // SmartDashboard.putNumber("Valid Position", validAngle);
+        // SmartDashboard.putNumber("Target Encoder", targetPosition);
         SmartDashboard.putNumber("Turret Mode", turretMode);
-        SmartDashboard.putNumber("Turret Velocity", m_Encoder.getVelocity());
+        // SmartDashboard.putNumber("Turret Velocity", m_Encoder.getVelocity());
         // SmartDashboard.putNumber("Turret Velocity Conversion", m_Encoder.getVelocityConversionFactor());
 
         // SmartDashboard.putBoolean("Forward Enabled", m_ForwardLimitSwitch.isLimitSwitchEnabled());
         // SmartDashboard.putBoolean("Reverse Enabled", m_ReverseLimitSwitch.isLimitSwitchEnabled());
     }
-
-    //soft limit forward = 43
-    //soft limit reverse = -16
 }

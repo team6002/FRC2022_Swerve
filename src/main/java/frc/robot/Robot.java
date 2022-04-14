@@ -8,6 +8,7 @@ import javax.swing.text.StyleContext.SmallAttributeSet;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -16,7 +17,6 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
-
 
 
 /**
@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   SendableChooser<Command> auto = new SendableChooser<Command>();
-  
+  // int AutoCommand = 1; // used if selector doesn't show up
 
   @Override
   public void robotInit() { 
@@ -48,21 +48,23 @@ public class Robot extends TimedRobot {
     m_robotContainer.m_drivetrain.resetDriveEncoder();
     m_robotContainer.m_drivetrain.resetOdometry(new Pose2d(0,0, new Rotation2d(0)));
     LiveWindow.disableAllTelemetry();
-    auto.setDefaultOption("5 balls", 
-                    new AUTO_4balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake, 
-                    m_robotContainer.m_intakeStatus,  m_robotContainer.m_trajectory
-                  ,m_robotContainer.m_shooter, m_robotContainer.m_turret
-   ));
-   auto.addOption("2 balls", 
-                    new AUTO_2balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake, 
-                    m_robotContainer.m_intakeStatus,  m_robotContainer.m_trajectory
-                  ,m_robotContainer.m_shooter, m_robotContainer.m_turret
-   ));
-   auto.addOption("nothing", new AUTO_Nothing());
+    
+    // sendable chooser
+    auto.addOption("5 balls"
+      ,new AUTO_4balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake
+      ,m_robotContainer.m_intakeStatus,  m_robotContainer.m_trajectory
+      ,m_robotContainer.m_shooter, m_robotContainer.m_turret
+    ));
+    auto.setDefaultOption("2 balls"
+      ,new AUTO_2balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake
+      ,m_robotContainer.m_intakeStatus,  m_robotContainer.m_trajectory
+      ,m_robotContainer.m_shooter, m_robotContainer.m_turret
+    ));
+    auto.addOption("nothing", new AUTO_Nothing());
     SmartDashboard.putData("Auto Mode", auto);
     // SmartDashboard.putData(CommandScheduler.getInstance());
-
-   
+    // SmartDashboard.putNumber("Auto Selecter", AutoCommand);
+    PortForwarder.add(5801, "limelight.local", 5801);
   }
 
   /**
@@ -81,7 +83,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     
     // m_robotContainer.updateOdometry();
-
+    // SmartDashboard.getNumber("Auto Selecter", AutoCommand);
     SmartDashboard.putString("Selected Auto", auto.getSelected().getName());
   
     // double shooterSetpoint = /
@@ -109,6 +111,17 @@ public class Robot extends TimedRobot {
     //                 m_robotContainer.m_shooter, m_robotContainer.m_drivetrain, m_robotContainer.m_autotrajectory);
 
     m_autonomousCommand = auto.getSelected(); 
+    // if (AutoCommand == 0){
+    //   m_autonomousCommand = new AUTO_4balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake
+    //   ,m_robotContainer.m_intakeStatus,  m_robotContainer.m_trajectory
+    //   ,m_robotContainer.m_shooter, m_robotContainer.m_turret
+    //   );
+    // }else if (AutoCommand == 1){
+    //   m_autonomousCommand = new AUTO_2balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake
+    //   ,m_robotContainer.m_intakeStatus,  m_robotContainer.m_trajectory
+    //   ,m_robotContainer.m_shooter, m_robotContainer.m_turret
+    //   );
+    // }else m_autonomousCommand = new AUTO_Nothing();
     // new AUTO_4balls(m_robotContainer.m_drivetrain, m_robotContainer.m_intake, 
     //                                 m_robotContainer.m_intakeStatus,m_robotContainer.m_trajectory, m_robotContainer.m_shooter);
     
@@ -135,7 +148,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    
+
+    // m_robotContainer.m_turret.setCam(0);
   }
 
   /** This function is called periodically during operator control. */

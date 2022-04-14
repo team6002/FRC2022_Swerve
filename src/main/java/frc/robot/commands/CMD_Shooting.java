@@ -35,24 +35,29 @@ public class CMD_Shooting extends SequentialCommandGroup {
     // m_intakeStatus.setState(IntakeState.SHOOTING);
     addCommands(
       new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.SHOOTING)
+      ,new PrintCommand("changed state to shooter")
       ,new CMD_BallCountCheck(m_intake,m_shooter)
-      // new PrintCommand("changed state to shooter")
-      ,new CMD_ShooterOn(m_shooter),
-      // new PrintCommand("turned on shooter"),
-      new CMD_IndexerForward(m_intake),
-      // new PrintCommand("turned on indexer"),
-      new CMD_HopperForward(m_intake)
-      // new PrintCommand("turned on hopper"),
+      ,new PrintCommand("checked ball count")
+      ,new CMD_ShooterOn(m_shooter)
+      ,new PrintCommand("turned on shooter")
+      ,new CMD_IndexerForward(m_intake)
+      ,new PrintCommand("turned on indexer")
+      ,new CMD_HopperForward(m_intake)
+      ,new PrintCommand("turned on hopper")
       // new WaitCommand(0.75),
-      ,new CMD_HopperCheck(m_intake,m_shooter)
+      // ,new CMD_HopperCheck(m_intake,m_shooter)
+      ,new PrintCommand("checked Hopper")
+ 
       ,new CMD_BallCountCheck(m_intake,m_shooter)
-      // new PrintCommand("checked hopper")
+      ,new PrintCommand("checked ball count")
       ,new WaitCommand(0.35)
       ,new CMD_HopperOff(m_intake)
+      ,new PrintCommand("Turned off hopper")
       ,new WaitCommand(m_shooter.getWaitTime())
       ,new CMD_HopperForward(m_intake)
+      ,new PrintCommand("Turned on Hopper")
       ,new CMD_SetIntakeStatus(p_intakeStatus, IntakeState.INTAKE)
-      // ,new PrintCommand("changed state to intake")
+      ,new PrintCommand("changed state to intake")
       );
   }
 }

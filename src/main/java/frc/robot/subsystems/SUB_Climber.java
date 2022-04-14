@@ -271,15 +271,15 @@ public class SUB_Climber extends SubsystemBase {
     // }
     // SmartDashboard.putBoolean("isClimbing", getClimbing());
     // SmartDashboard.putBoolean("Primaryhomelimitswitch", getPrimaryHomeLimitSwitch());
-    SmartDashboard.putNumber("PrimaryEncoder", getPrimaryPosition());
-    SmartDashboard.putNumber("PrimaryVelocity", m_PrimaryEncoder.getVelocity());
+    SmartDashboard.putNumber("PrimaryClimberEncoder", getPrimaryPosition());
+    // SmartDashboard.putNumber("PrimaryVelocity", m_PrimaryEncoder.getVelocity());
     // SmartDashboard.putNumber("PrimaryAppliedOutput", m_PrimaryClimberMotor1.getAppliedOutput());
     
     // SmartDashboard.putBoolean("Secondaryhomelimitswitch", getSecondaryHomeLimitSwitch());
-    SmartDashboard.putNumber("SecondaryEncoder", getSecondaryPosition());
-    SmartDashboard.putNumber("SecnodaryVelocity", m_SecondaryEncoder.getVelocity());
+    SmartDashboard.putNumber("SecondaryClimberEncoder", getSecondaryPosition());
+    // SmartDashboard.putNumber("SecnodaryVelocity", m_SecondaryEncoder.getVelocity());
 
-    SmartDashboard.putBoolean("Ready To Unlatch", getUnlatchState());
+    // SmartDashboard.putBoolean("Ready To Unlatch", getUnlatchState());
     // SmartDashboard.putNumber("SecondaryAppliedOutput", m_SecondaryClimberMotor1.getAppliedOutput());
 
     // int Ticks = ThroughBore.get(); // 2000 ticks are about a rotation.

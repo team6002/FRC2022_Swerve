@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.FSM_IntakeStatus;
 import frc.robot.subsystems.SUB_Climber;
 import frc.robot.subsystems.SUB_Intake;
@@ -38,9 +39,8 @@ public class CMD_InitalizeClimbMode extends ParallelCommandGroup {
       new CMD_HopperOff(m_intake)
       ,new CMD_SetIntakeStatus(m_intakeStatus, IntakeState.HOME)
       ,new CMD_ShooterHoodRetract(m_shooter)
-      ,new CMD_ResetTurret(m_turret)
-      ,new CMD_TurretPrepareForClimb(m_turret)
       ,new CMD_ClimberSecondarySolonoidExtend(m_climber)
+      ,new CMD_ResetTurret(m_turret)
       ,new CMD_setTurretMode(1,m_turret)
       ,new CMD_BackTurret(m_turret)
       ,new CMD_BackIntakeRetract(m_intake, m_intakeStatus)

@@ -49,25 +49,17 @@ public class AUTO_4balls extends SequentialCommandGroup {
       new CMD_FrontIntakeDeploy(m_intake, m_IntakeStatus),
       m_trajectory.driveTrajectory(m_trajectory.firstTrajectory),
       new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter,m_turret).withTimeout(3),
-      new WaitCommand(0.1),
-      new CMD_StopShooting(m_intake, m_IntakeStatus, m_shooter),
       new CMD_FrontIntakeRetract(m_intake, m_IntakeStatus),
       new CMD_BackIntakeDeploy(m_intake, m_IntakeStatus),
       m_trajectory.driveTrajectory(m_trajectory.secondTrajectory),
-      // m_trajectory.driveTrajectory(m_trajectory.secondTrajectory2),
-      new WaitCommand(0.1),
       new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter,m_turret).withTimeout(3),
       new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter,m_turret).withTimeout(3),
-      new WaitCommand(0.1),
-      new CMD_StopShooting(m_intake, m_IntakeStatus, m_shooter),
       m_trajectory.driveTrajectory(m_trajectory.thirdTrajectory),
-      new WaitCommand(1),
+      new WaitCommand(0.5),
       m_trajectory.driveTrajectory(m_trajectory.fourthTrajectory),
-      new WaitCommand(0.2),
       new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter,m_turret).withTimeout(3),
       new CMD_Shooting(m_intake, m_IntakeStatus, m_shooter,m_turret).withTimeout(3),
       new CMD_BackIntakeRetract(m_intake, m_IntakeStatus)
-      ,new CMD_SpinInPlace(m_drivetrain, 180)
       ,new CMD_DrivetrainReset(m_drivetrain)
       )
 

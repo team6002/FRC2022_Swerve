@@ -37,13 +37,18 @@ public class CMD_ClimbFull extends SequentialCommandGroup {
         // ) //The partial release
       // ,new CMD_ClimberPrimaryArmMove(m_climber, 20.0, 0.5)
       // )//major swing alert WEEEEEEEEEEEEE
-      // ,new ParallelCommandGroup( 
-      ,new CMD_ClimberSecondaryArmMove(m_climber, 2, 0.1).withTimeout(3)
+      // ,new ParallelCommandGroup(       
+      ,new CMD_ClimberSecondaryArmMove(m_climber,0, 0.1).withTimeout(3)
       // new SequentialCommandGroup(2)
-      , new CMD_ClimberPrimaryArmMove(m_climber, 33.5, 0.5)
+      // , new CMD_ClimberPrimaryArmMove(m_climber, 34, 0.5)
+      ,new CMD_ClimbDeployPrimaryClimber(m_climber)
       // )
-      // , new WaitCommand(1)
-      // , new CMD_ClimberSecondaryArmMove(m_climber, 8, 0.5).withTimeout(3)
+      , new WaitCommand(0.5)
+      , new CMD_ClimberSecondaryArmMove(m_climber, 1, 0.5).withTimeout(3)
+      , new WaitCommand(0.5)
+      , new CMD_ClimberSecondaryArmMove(m_climber, 2, 0.5).withTimeout(3)
+      , new WaitCommand(0.5)
+      , new CMD_ClimberSecondaryArmMove(m_climber, 5,0.5).withTimeout(3)
       , new CMD_ReadyToUnlatch(m_climber)
       
       

@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.subsystems.FSM_IntakeStatus.IntakeState;
 
-
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
 
 /** Add your docs here. */
 public class SUB_Intake extends SubsystemBase {
@@ -54,6 +56,11 @@ public class SUB_Intake extends SubsystemBase {
     private SparkMaxPIDController m_BackController = m_BackIntakeMotor.getPIDController();    
     private SparkMaxPIDController m_HopperController = m_HopperMotor.getPIDController();
     private SparkMaxPIDController m_IndexerController = m_IndexerMotor.getPIDController();
+
+    // // Camera!
+    // UsbCamera camera0 = CameraServer.startAutomaticCapture(0);
+    // UsbCamera camera1 = CameraServer.startAutomaticCapture(1);
+    // VideoSink server = CameraServer.getServer();
     
     public SUB_Intake(FSM_IntakeStatus p_IntakeStatus) {
       m_intakeStatus = p_IntakeStatus;
@@ -100,6 +107,10 @@ public class SUB_Intake extends SubsystemBase {
       m_IndexerController.setOutputRange(IndexerConstants.kMinOutput, IndexerConstants.kMaxOutput);
       m_IndexerController.setSmartMotionMaxVelocity(IndexerConstants.kIndexerVelocity, 0);
       m_IndexerController.setSmartMotionMaxAccel(IndexerConstants.kIndexerAccel, 0);
+
+      // // Sets camera resolution (front is 0, back is 1)
+      // camera0.setResolution(120, 80);
+      // camera1.setResolution(120, 80);
     }
     
   public void setFrontIntakeForward(){
@@ -120,6 +131,7 @@ public class SUB_Intake extends SubsystemBase {
   public void setFrontIntakeExtend(){
     m_FrontIntakeSolenoid.set(true);
     frontIntakeDeployed = true;
+    // server.setSource(camera0);
   }
   public void setFrontIntakeRetract(){
     m_FrontIntakeSolenoid.set(false);
@@ -146,6 +158,7 @@ public class SUB_Intake extends SubsystemBase {
   public void setBackIntakeExtend(){
     m_BackIntakeSolenoid.set(true);
     backIntakeDeployed = true;
+    // server.setSource(camera1);
   }
   public void setBackIntakeRetract(){
     m_BackIntakeSolenoid.set(false);
@@ -272,10 +285,10 @@ public class SUB_Intake extends SubsystemBase {
     SmartDashboard.putBoolean("Back Intake On", isBackIntaking());
 
     SmartDashboard.putString("IntakeState", m_intakeStatus.getCurrentState().toString());
-    SmartDashboard.putNumber("Hopper Velocity", m_HopperMotor.getEncoder().getVelocity());
-    SmartDashboard.putNumber("FrontIntake Velocity", m_FrontIntakeEncoder.getVelocity());
-    SmartDashboard.putNumber(("BackIntakeVelocity"), m_BackIntakeEncoder.getVelocity());
-    SmartDashboard.putNumber("Indexer Velocity", m_IndexerMotor.getEncoder().getVelocity());
+    // SmartDashboard.putNumber("Hopper Velocity", m_HopperMotor.getEncoder().getVelocity());
+    // SmartDashboard.putNumber("FrontIntake Velocity", m_FrontIntakeEncoder.getVelocity());
+    // SmartDashboard.putNumber(("BackIntakeVelocity"), m_BackIntakeEncoder.getVelocity());
+    // SmartDashboard.putNumber("Indexer Velocity", m_IndexerMotor.getEncoder().getVelocity());
   }
 }
         

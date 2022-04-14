@@ -183,7 +183,6 @@ public double getAbsoluteAngle() {
         // SmartDashboard.putNumber("TurnAbsoluteEncoder"+m_turningMotorChannel,(m_turningDutyCycleEncoder.getAbsolutePosition()) );
         SmartDashboard.putNumber("TurnAbsoluteEncoder"+m_turningMotorChannel,(Math.toDegrees(getAbsoluteAngle())));
         SmartDashboard.putNumber("Desired Rotation"+m_turningMotorChannel, resetIteration);
-        SmartDashboard.putNumber("getFrequency"+m_turningMotorChannel, m_turningDutyCycleEncoder.getFrequency());
         // SmartDashboard.putNumber("resetIteration"+m_turningMotorChannel, resetIteration);
         // SmartDashboard.putNumber("driveEnc:"+m_turningMotorChannel, m_driveEncoder.getPosition());
         // SmartDashboard.putNumber("rawAnalogEnc:"+m_turningMotorChannel, m_analogSensor.getPosition());

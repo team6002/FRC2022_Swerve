@@ -97,7 +97,7 @@ public final class Constants {
         public static final int kShooterHoodSolonoid = 3;
        
     
-        public static final double kShooterFF = 0.00021;
+        public static final double kShooterFF = 0.00023;
         public static final double kShooterP = 0.0000;//8;//0.0004;
         public static final double kShooterI = 0.00000001; 
         public static final double kShooterD = 0.000;
@@ -114,11 +114,26 @@ public final class Constants {
         public static final double kMaxOutput = 1;
     
         public static final double[][] kShooterArray = {
-            //lake view tournamet
-            {-2, 3000}, // bumper against the safe zone
-	        {2, 2600}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
-            {11, 2250}, // front frame on the tarmac and about 9 feet from center
-            {17, 2100}  // the front of the robot is 7ft and 10 inches away from center and back bumper on the tarmac
+            // // Twisted Devil field
+            // {-5, 3000}
+            // ,{0, 2600}
+            // ,{7, 2250}
+            // ,{14, 2100}
+            // //lake view tournamet
+            // {-2, 3000}, // bumper against the safe zone
+	        // {2, 2600}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
+            // {11, 2250}, // front frame on the tarmac and about 9 feet from center
+            // {17, 2100}  // the front of the robot is 7ft and 10 inches away from center and back bumper on the tarmac
+            
+            {-2, 3200}, // bumper against the safe zone
+	        {2, 2800}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
+            {7, 2600}, // front frame on the tarmac and about 9 feet from center
+            {10, 2550}  // the front of the robot is 7ft and 10 inches away from center and back bumper on the tarmac
+            
+            // {-5, 3000}, // bumper against the safe zone
+	        // {-1, 2700}, // center of the robot on O ring and the  front of the robot is 11 feet 9 inches 
+            // {5, 2250}, // front frame on the tarmac and about 9 feet from center
+            // {8, 2100}  // the front of the robot is 7ft and 10 inches away from center and back bumper on the tarmac
             
 		};
     }
@@ -223,14 +238,14 @@ public final class Constants {
         public static final double kPrimaryClimberMaxOutput = 1;
        
         //Second set of PID for descending
-        public static final double kPrimaryClimberFF2 = 0.0008;
+        public static final double kPrimaryClimberFF2 = 0.0004;
         public static final double kPrimaryClimberP2 = 0.000001;
         public static final double kPrimaryClimberI2 = 0;
         public static final double kPrimaryClimberD2 = 0;
         public static final double kPrimaryClimberIz2 = 0;
 
-        public static final double kPrimaryClimberMaxVelocity2 = 400;
-        public static final double kPrimaryClimberMaxAccel2 = 150;
+        public static final double kPrimaryClimberMaxVelocity2 = 500;
+        public static final double kPrimaryClimberMaxAccel2 = 300;
         public static final double kPrimaryClimberAllowedError2 = 0.5;
         public static final double kPrimaryClimberMinOutput2 = -1;
         public static final double kPrimaryClimberMaxOutput2 = 1;
@@ -263,8 +278,8 @@ public final class Constants {
         public static final double kSecondaryClimberMaxOutput2 = 1;
 
         //Climb Positions
-        public static final double PrimaryClimberFullyExtended = 35;//116; 
-        public static final double PrimaryClimberDeploy = 35; //116;
+        public static final double PrimaryClimberFullyExtended = 34;//116; 
+        public static final double PrimaryClimberDeploy = 34; //116;
         public static final double PrimaryClimberLevitate = 25.85;//94;// pid test height
         public static final double PrimaryClimberLift = 0;
         public static final double PrimaryClimberFivePointsLower = 1.375;
@@ -282,7 +297,7 @@ public final class Constants {
         // public static final double kMaxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
         // public static final double kMaxAccelerationMetersPerSecondSquared = DriveConstants.kMaxSpeedMetersPerSecond;
         public static final double kMaxSpeedMetersPerSecond = 4.0;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 4.0;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3.0;
      
         public static final double kMaxAngularSpeedRadiansPerSecond = 4*Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = 4*Math.PI;

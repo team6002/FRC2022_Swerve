@@ -60,9 +60,7 @@ public class SUB_Shooter extends SubsystemBase{
 
         m_Controller.setOutputRange(ShooterConstants.kMinOutput, ShooterConstants.kMaxOutput);
         m_Controller.setSmartMotionMaxVelocity(ShooterConstants.kShootingVelocity, 0);
-        m_Controller.setSmartMotionMaxAccel(ShooterConstants.kShootingAccel, 0);
-        SmartDashboard.putNumber("Desired Shooter Setpoint", ShooterConstants.kShootingVelocity);
-       
+        m_Controller.setSmartMotionMaxAccel(ShooterConstants.kShootingAccel, 0);  
         m_ShooterInterpolator = new linearInterpolator(ShooterConstants.kShooterArray);
     }
 
@@ -143,9 +141,6 @@ public class SUB_Shooter extends SubsystemBase{
     public void periodic() {
         m_targetDistance = getDistance();                                                
         if(wantShooter){
-            /* Twisted Devil's field 
-            2.65 with front bumper on the tarmac.
-            */
             if (m_shooterMode == 0){
             m_ShooterSetpoint = m_ShooterInterpolator.getInterpolatedValue(m_targetDistance) + m_shooterOffset;
             m_Controller.setReference(m_ShooterSetpoint, ControlType.kVelocity);
@@ -175,7 +170,7 @@ public class SUB_Shooter extends SubsystemBase{
             m_Controller.setReference(0, ControlType.kDutyCycle);
         }
         SmartDashboard.putNumber("targetDistance", m_targetDistance);
-        SmartDashboard.putNumber("ShooterOffset", m_shooterOffset);
+        // SmartDashboard.putNumber("ShooterOffset", m_shooterOffset);
         SmartDashboard.putBoolean("Shooting", wantShooter);
         SmartDashboard.putNumber("ShooterVelocity", getVelocity());
         SmartDashboard.putNumber("Interpolated value", m_ShooterSetpoint);

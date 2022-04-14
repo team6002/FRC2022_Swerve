@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.SUB_Climber;
 
 public class CMD_ClimbDeployPrimaryClimber extends CommandBase {
@@ -48,6 +49,6 @@ public class CMD_ClimbDeployPrimaryClimber extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return Math.abs(ClimberConstants.PrimaryClimberDeploy - m_climber.getPrimaryPosition()) < 0.5;
   }
 }

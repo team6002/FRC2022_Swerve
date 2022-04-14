@@ -135,7 +135,7 @@ public class RobotContainer {
     );
 
     new JoystickButton(m_driverController, XboxController.Button.kStart.value)
-      .whenPressed(new CMD_ClimbFull(m_climber)
+      .whenPressed(new CMD_SafeAndSlowClimbFull(m_climber)
     );
     
     new JoystickButton(m_driverController, XboxController.Button.kA.value)

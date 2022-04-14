@@ -21,25 +21,20 @@ public class CMD_SafeAndSlowClimbFull extends SequentialCommandGroup {
 
     m_climber = p_climber;
     addCommands(
-      new CMD_ClimberSecondarySolonoidExtend(m_climber)
-      ,new CMD_ClimberPrimaryArmMove(m_climber, 0, 1.0), //Climber lift to 1st bar
-      // new WaitCommand(0.15),
-      new CMD_ClimberSecondarySolonoidRetract(m_climber)
-      ,new CMD_ClimberSecondaryArmMove(m_climber, 28.809, 1.0) //Climber captures 2nd bar
-
-      ,new ParallelCommandGroup(
-        new CMD_ClimberSecondaryArmMove(m_climber, 35, 2.0),
-        new SequentialCommandGroup(
-          new WaitCommand(0.5),
-          new CMD_ClimberPrimaryArmMove(m_climber, 17.0, 2.0)
-        ) //The partial release
-      )//major swing alert WEEEEEEEEEEEEE
+      new CMD_NotReadyToUnlatch(m_climber)
+      ,new CMD_ClimberPrimaryArmMove(m_climber, 0, 1) //Climber lift to 1st bar
+      ,new CMD_ClimberSecondarySolonoidExtend(m_climber)
+      ,new WaitCommand(0.1)
+      ,new CMD_ClimberSecondarySolonoidRetract(m_climber)
+      ,new CMD_ClimberSecondaryArmMove(m_climber, 33.5, 0.5)
+      ,new CMD_ClimberPrimaryArmMove(m_climber, 20.0, 0.5)
+      // )//major swing alert WEEEEEEEEEEEEE
       // new CMD_ClimberPrimaryArmMove(m_climber, 16.0, 2.0) //put primary arm behind 2nd bar, Surges somtimes
       ,new ParallelCommandGroup(
         new CMD_ClimberSecondaryArmMove(m_climber, 11.88, 1)//pull robot in
       ,new SequentialCommandGroup(
         new WaitCommand(1)
-        ,new CMD_ClimberPrimaryArmMove(m_climber, 25.5, 1) //put primary arm behind 2nd bar
+        ,new CMD_ClimberPrimaryArmMove(m_climber, 26.5, 1) //put primary arm behind 2nd bar
       )
       )
       ,new ParallelCommandGroup(
@@ -53,17 +48,12 @@ public class CMD_SafeAndSlowClimbFull extends SequentialCommandGroup {
       //REPEAT PARTIAL CLIMB
       ,new CMD_ClimberSecondaryArmMove(m_climber, 35, 1) //lay back the 2nd arm before repeating partial
       ,new CMD_ClimberSecondarySolonoidExtend(m_climber)
-      ,new CMD_ClimberPrimaryArmMove(m_climber, 0, 1), //Climber lift to 1st bar
-      new CMD_ClimberSecondarySolonoidRetract(m_climber)
-      ,new CMD_ClimberSecondaryArmMove(m_climber, 28.809, 1.0) //Climber captures 2nd bar
-
-      ,new ParallelCommandGroup(
-        new CMD_ClimberSecondaryArmMove(m_climber, 35, 2.0),
-        new SequentialCommandGroup(
-          new WaitCommand(0.5),
-          new CMD_ClimberPrimaryArmMove(m_climber, 20.0, 2.0)
-        ) //The partial release
-      )//major swing alert WEEEEEEEEEEEEE
+      ,new CMD_ClimberPrimaryArmMove(m_climber, 0, 1) //Climber lift to 1st bar
+      ,new WaitCommand(0.1)
+      ,new CMD_ClimberSecondarySolonoidRetract(m_climber)
+      ,new CMD_ClimberSecondaryArmMove(m_climber, 33.5, 0.5)
+      ,new CMD_ClimberPrimaryArmMove(m_climber, 20.0, 0.5)
+      // )//major swing alert WEEEEEEEEEEEEE
       
     );
   }
